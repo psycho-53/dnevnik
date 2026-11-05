@@ -4,11 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Дневник состояния</title>
+<meta name="theme-color" content="#3f6c8c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Дневник">
 <style>
-:root{--bg:#eef2f4;--card:#fff;--ink:#1f2a30;--mute:#5d6b73;--line:#d5dde1;--m:#3f6c8c;--a:#b87a1c;--p:#3f8a62;--btn:#e4ebee;--on:#fff;
+:root{--bg:#eef2f4;--card:#fff;--ink:#1f2a30;--mute:#5d6b73;--line:#d5dde1;--btn:#e4ebee;--on:#fff;
+--c0:#3f6c8c;--c1:#b87a1c;--c2:#3f8a62;--c3:#8a5a9e;--c4:#c4504a;--c5:#2e8f98;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13191c;--card:#1b2327;--ink:#e6edf0;--mute:#93a3ab;--line:#2e3a40;--m:#7fb0d2;--a:#e0a64e;--p:#6fc296;--btn:#26323818;--on:#10171a;--btn:#263238}}
-:root[data-theme="dark"]{--bg:#13191c;--card:#1b2327;--ink:#e6edf0;--mute:#93a3ab;--line:#2e3a40;--m:#7fb0d2;--a:#e0a64e;--p:#6fc296;--btn:#263238;--on:#10171a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13191c;--card:#1b2327;--ink:#e6edf0;--mute:#93a3ab;--line:#2e3a40;--btn:#263238;--on:#10171a;
+--c0:#7fb0d2;--c1:#e0a64e;--c2:#6fc296;--c3:#bb92cf;--c4:#e8837c;--c5:#62c3cb}}
+:root[data-theme="dark"]{--bg:#13191c;--card:#1b2327;--ink:#e6edf0;--mute:#93a3ab;--line:#2e3a40;--btn:#263238;--on:#10171a;
+--c0:#7fb0d2;--c1:#e0a64e;--c2:#6fc296;--c3:#bb92cf;--c4:#e8837c;--c5:#62c3cb}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -18,62 +28,78 @@ h2{font-size:18px;margin:0 0 12px}
 .sub{color:var(--mute);margin:0 0 20px;font-size:14px}
 section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-input[type=date],textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+input[type=date],input[type=time],input[type=text],select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 textarea{width:100%;min-height:64px;resize:vertical}
 .scale{margin:16px 0}
 .scale b{display:block;margin-bottom:2px}
 .scale small{color:var(--mute);display:block;margin-bottom:8px}
-.opts{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.opts button{font:inherit;border:1px solid var(--line);background:var(--btn);color:var(--ink);border-radius:10px;padding:10px 0 6px;cursor:pointer;min-height:52px}
+.opts{display:grid;gap:6px}
+.opts button{font:inherit;border:1px solid var(--line);background:var(--btn);color:var(--ink);border-radius:10px;padding:10px 0 6px;cursor:pointer;min-height:48px}
 .opts button span{display:block;font-size:11px;color:var(--mute);line-height:1.2;margin-top:2px}
 .opts button[aria-pressed=true]{background:var(--c);border-color:var(--c);color:var(--on)}
 .opts button[aria-pressed=true] span{color:var(--on)}
-.mm{--c:var(--m)}.aa{--c:var(--a)}.pp{--c:var(--p)}
-.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:11px 18px;cursor:pointer;background:var(--m);color:var(--on)}
+.ends{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--mute);margin-top:4px}
+.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:11px 18px;cursor:pointer;background:var(--c0);color:var(--on)}
 .btn.sec{background:var(--btn);color:var(--ink);border:1px solid var(--line)}
-button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--m);outline-offset:2px}
+.btn.sm{padding:7px 12px;font-weight:500}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--c0);outline-offset:2px}
 .tabs button{font:inherit;border:1px solid var(--line);background:var(--btn);color:var(--ink);border-radius:8px;padding:5px 12px;cursor:pointer}
 .tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chart{width:100%;height:auto;display:block;margin-top:10px}
-.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin-top:8px}
-.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend svg{display:block}
 .hist{list-style:none;margin:0;padding:0}
 .hist li{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
 .hist li:first-child{border-top:0}
 .hist .n{color:var(--mute);font-size:14px;margin-top:2px;word-break:break-word}
 .hist .x{font:inherit;background:none;border:0;color:var(--mute);cursor:pointer;padding:4px 8px;font-size:18px}
 .empty{color:var(--mute);margin:8px 0 0}
-.msg{font-size:14px;color:var(--p);min-height:20px;margin:10px 0 0}
+.msg{font-size:14px;color:var(--c2);min-height:20px;margin:10px 0 0}
 .note{font-size:13px;color:var(--mute)}
 .wrap{overflow-x:auto}
+details summary{cursor:pointer;font-weight:600;font-size:18px}
+details[open] summary{margin-bottom:12px}
+.edit{border-top:1px solid var(--line);padding:14px 0;display:grid;gap:8px}
+.f{display:grid;gap:3px;font-size:14px}
+.f span{color:var(--mute)}
+.f input,.f select{width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .priv p{margin:0 0 8px;font-size:14px}
+#banner{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#banner[hidden],[hidden]{display:none!important}
+#banner p{margin:0;font-size:14px}
 #repPrint{display:none}
 @media print{
  body{background:#fff;color:#000}
- main{display:none}
- #repPrint{display:block;white-space:pre-wrap;font:14px/1.5 system-ui,sans-serif;padding:0}
+ main,#banner{display:none!important}
+ #repPrint{display:block;white-space:pre-wrap;font:14px/1.5 system-ui,sans-serif}
 }
 </style>
 </head>
 <body>
+<div id="banner" hidden role="status">
+ <p>Сегодня ещё нет записи. Если будет минутка, отметьте состояние. Пропустить тоже нормально.</p>
+ <button class="btn sec sm" id="snooze" type="button">Не сейчас</button>
+</div>
 <main>
 <h1>Дневник состояния</h1>
-<p class="sub">Запись занимает меньше минуты. Во всех шкалах чем выше, тем лучше. Пропущенные дни ничего не ломают.</p>
+<p class="sub">Запись занимает меньше минуты. Можно отметить не все шкалы. Пропущенные дни ничего не ломают.</p>
 
 <section>
 <div class="row"><label for="d"><b>Дата</b></label><input type="date" id="d"></div>
 <div id="scales"></div>
 <label for="note"><b>Заметка</b> <span class="note">(необязательно)</span></label>
 <textarea id="note" placeholder="Что повлияло: сон, лекарства, события"></textarea>
-<div class="row" style="margin-top:12px"><button class="btn" id="save">Сохранить</button></div>
+<div class="row" style="margin-top:12px"><button class="btn" id="save" type="button">Сохранить</button></div>
 <p class="msg" id="msg" role="status"></p>
 </section>
 
 <section>
 <div class="row" style="justify-content:space-between"><h2 style="margin:0">Динамика</h2>
-<div class="tabs row" id="tabs"><button data-n="7">7 дн.</button><button data-n="14">14 дн.</button><button data-n="30">30 дн.</button></div></div>
-<div class="wrap"><svg class="chart" id="chart" viewBox="0 0 640 240" role="img" aria-label="График настроения, апатии и активности"></svg></div>
-<div class="legend"><span><i style="background:var(--m)"></i>Настроение</span><span><i style="background:var(--a)"></i>Желание что-то делать</span><span><i style="background:var(--p)"></i>Активность</span></div>
+<div class="tabs row" id="tabs"><button type="button" data-n="7">7 дн.</button><button type="button" data-n="14">14 дн.</button><button type="button" data-n="30">30 дн.</button></div></div>
+<div class="wrap"><svg class="chart" id="chart" viewBox="0 0 640 240" role="img" aria-label="График по выбранным шкалам"></svg></div>
+<div class="legend" id="legend"></div>
 <p class="empty" id="chartEmpty"></p>
 </section>
 
@@ -85,17 +111,49 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 
 <section>
 <h2>Отчёт для врача</h2>
-<p class="note" style="margin-top:0">Краткая сводка за выбранный период. Скопируйте и отправьте сообщением или покажите на приёме.</p>
-<textarea id="rep" readonly style="min-height:150px"></textarea>
-<div class="row" style="margin-top:10px"><button class="btn sec" id="copy">Скопировать</button><button class="btn sec" id="print">Печать / PDF</button></div>
+<p class="note" style="margin-top:0">Краткая сводка за период, выбранный на графике. Скопируйте и отправьте сообщением или распечатайте.</p>
+<textarea id="rep" readonly style="min-height:170px"></textarea>
+<div class="row" style="margin-top:10px"><button class="btn sec" id="copy" type="button">Скопировать</button><button class="btn sec" id="print" type="button">Печать / PDF</button></div>
 <p class="msg" id="msg2" role="status"></p>
-<p class="note">Период отчёта совпадает с периодом на графике.</p>
 </section>
+
+<section>
+<details>
+<summary>Настройка шкал</summary>
+<p class="note" style="margin-top:0">Можно переименовать шкалы, поменять число делений, убрать лишние и добавить свои (до 6). Чем выше значение, тем больше того, что названо в шкале.</p>
+<div id="sedit"></div>
+<div class="row" style="margin-top:8px"><button class="btn sec sm" id="addS" type="button">Добавить шкалу</button><button class="btn sec sm" id="resetS" type="button">Вернуть стандартные</button></div>
+<p class="note">Если изменить число делений, старые записи пересчитаются пропорционально.</p>
+</details>
+</section>
+
+<section>
+<details>
+<summary>Напоминание</summary>
+<label class="row" style="margin-bottom:10px"><input type="checkbox" id="rem"> Показывать мягкое напоминание в приложении</label>
+<div class="row"><label for="rtime">Время:</label><input type="time" id="rtime" value="20:00"></div>
+<p class="note">Напоминание в приложении появляется, только если страница открыта и записи за сегодня ещё нет.</p>
+<div class="row"><button class="btn sec sm" id="ics" type="button">Добавить ежедневное напоминание в календарь</button></div>
+<p class="note">Приложение без сервера не может присылать уведомления, когда оно закрыто. Календарь телефона делает это надёжно и ничего о вас не узнаёт. Скачается файл .ics, откройте его, и событие добавится на то же время каждый день. В нём ссылка на этот дневник.</p>
+<p class="msg" id="msg4" role="status"></p>
+</details>
+</section>
+
 <section>
 <h2>Резервная копия</h2>
 <p class="note" style="margin-top:0">Записи лежат только в этом браузере. Сохраняйте копию время от времени и перед очисткой данных браузера. Копию можно загрузить на другом устройстве.</p>
-<div class="row"><button class="btn sec" id="exp">Скачать копию</button><button class="btn sec" id="imp">Загрузить копию</button><input type="file" id="file" accept=".json,application/json" hidden></div>
+<div class="row"><button class="btn sec" id="exp" type="button">Скачать копию</button><button class="btn sec" id="imp" type="button">Загрузить копию</button><input type="file" id="file" accept=".json,application/json" hidden></div>
 <p class="msg" id="msg3" role="status"></p>
+</section>
+
+<section>
+<details>
+<summary>Установка на главный экран</summary>
+<p class="note" style="margin-top:0">После установки дневник открывается как приложение и работает без интернета.</p>
+<div class="row" style="margin-bottom:8px"><button class="btn sm" id="inst" type="button" hidden>Установить приложение</button></div>
+<p class="note">Android (Chrome): меню ⋮ → «Установить приложение». iPhone (Safari): «Поделиться» → «На экран “Домой”».</p>
+<p class="note"><b>Важно:</b> на iPhone установленное приложение хранит данные отдельно от браузера. Перед установкой скачайте копию, а потом загрузите её в установленном приложении.</p>
+</details>
 </section>
 
 <section class="priv">
@@ -109,127 +167,274 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 
 <script>
 (function(){
-var KEY="dnevnik-v1",mem={},days=14;
-var S=[
- {k:"m",cls:"mm",t:"Настроение",s:"Как вы себя чувствовали в целом",l:["очень плохо","плохо","так себе","хорошо","отлично"]},
- {k:"a",cls:"aa",t:"Желание что-то делать",s:"Хотелось ли чем-то заниматься. Низкое желание — это апатия",l:["совсем нет","мало","немного","есть","сильное"]},
- {k:"p",cls:"pp",t:"Физическая активность",s:"Сколько вы двигались, ходили, занимались",l:["почти нет","мало","немного","достаточно","много"]}
-];
-var cur={m:0,a:0,p:0};
-function load(){try{var r=localStorage.getItem(KEY);return r?JSON.parse(r):{}}catch(e){return mem}}
-function store(d){mem=d;try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}
+var KEY="dnevnik-v1",CK="dnevnik-cfg-v1",memS={},days=14,snoozed=false,cur={};
+var DASH=["","6 4","2 4","10 3 2 3","1 5","8 4 2 4"],NS=[3,5,7,10],MAXS=6;
+var $=function(i){return document.getElementById(i)};
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function iso(dt){var z=new Date(dt.getTime()-dt.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)}
 function fmt(s){var p=s.split("-");return p[2]+"."+p[1]}
-var $=function(i){return document.getElementById(i)};
+function rd(k){try{return localStorage.getItem(k)}catch(e){return memS[k]||null}}
+function wr(k,v){memS[k]=v;try{localStorage.setItem(k,v)}catch(e){}}
+
+/* ---------- шкалы и настройки ---------- */
+function defScales(){return [
+ {id:"m",t:"Настроение",s:"Как вы себя чувствовали в целом",n:5,l:["очень плохо","плохо","так себе","хорошо","отлично"]},
+ {id:"a",t:"Желание что-то делать",s:"Хотелось ли чем-то заниматься. Низкое желание — это апатия",n:5,l:["совсем нет","мало","немного","есть","сильное"]},
+ {id:"p",t:"Физическая активность",s:"Сколько вы двигались, ходили, занимались",n:5,l:["почти нет","мало","немного","достаточно","много"]}
+]}
+function validScale(x){
+ if(!x||typeof x.id!=="string"||!/^[\w-]{1,20}$/.test(x.id)||typeof x.t!=="string"||NS.indexOf(x.n)<0)return null;
+ var o={id:x.id,t:x.t.slice(0,40)||"Шкала",s:typeof x.s==="string"?x.s.slice(0,120):"",n:x.n};
+ if(Array.isArray(x.l)&&x.l.length===x.n&&x.l.every(function(a){return typeof a==="string"}))o.l=x.l.map(function(a){return a.slice(0,20)});
+ else{o.lo=typeof x.lo==="string"?x.lo.slice(0,20):"меньше";o.hi=typeof x.hi==="string"?x.hi.slice(0,20):"больше"}
+ return o}
+function loadCfg(){
+ var c={scales:null,remind:false,time:"20:00"};
+ try{var j=JSON.parse(rd(CK)||"null");
+  if(j){if(Array.isArray(j.scales)){var s=j.scales.map(validScale).filter(Boolean).slice(0,MAXS);if(s.length)c.scales=s}
+   c.remind=!!j.remind;if(/^\d\d:\d\d$/.test(j.time))c.time=j.time}}catch(e){}
+ if(!c.scales)c.scales=defScales();return c}
+var cfg=loadCfg();
+function saveCfg(){wr(CK,JSON.stringify(cfg))}
+function full(x){return !!(x.l&&x.l.length===x.n&&x.n<=5)}
+function labelsFor(x){var a=[];for(var i=0;i<x.n;i++)a.push("");if(full(x))return x.l.slice();
+ a[0]=x.lo||(x.l?x.l[0]:"меньше");a[x.n-1]=x.hi||(x.l?x.l[x.l.length-1]:"больше");return a}
+function ends(x){var a=labelsFor(x);return [a[0],a[x.n-1]]}
+function conv(v,d,n){return d===n?v:Math.round((v-1)/(d-1)*(n-1)+1)}
+function frac(v,d){return (v-1)/(d-1)}
+
+/* ---------- записи ---------- */
+function normE(e){
+ if(!e||typeof e!=="object")return null;
+ var v={},d={},any=false;
+ if(e.v&&typeof e.v==="object"){
+  Object.keys(e.v).forEach(function(k){
+   var dd=e.d&&e.d[k]!=null?e.d[k]:5,val=e.v[k];
+   if(/^[\w-]{1,20}$/.test(k)&&NS.indexOf(dd)>=0&&val===Math.floor(val)&&val>=1&&val<=dd){v[k]=val;d[k]=dd;any=true}
+  });
+ }else{
+  ["m","a","p"].forEach(function(k){var val=e[k];if(val===Math.floor(val)&&val>=1&&val<=5){v[k]=val;d[k]=5;any=true}});
+ }
+ return any?{v:v,d:d,note:typeof e.note==="string"?e.note.slice(0,500):""}:null}
+function load(){
+ var o={};
+ try{var j=JSON.parse(rd(KEY)||"{}");
+  Object.keys(j).forEach(function(k){if(/^\d{4}-\d{2}-\d{2}$/.test(k)){var e=normE(j[k]);if(e)o[k]=e}});
+ }catch(e){}
+ return o}
+function store(d){wr(KEY,JSON.stringify(d))}
+
 var dateEl=$("d");dateEl.value=iso(new Date());dateEl.max=iso(new Date());
 
+/* ---------- экран записи ---------- */
 function buildScales(){
- var h="";
- S.forEach(function(x){
-  h+='<div class="scale '+x.cls+'"><b>'+x.t+'</b><small>'+x.s+'</small><div class="opts" data-k="'+x.k+'">';
-  for(var i=1;i<=5;i++)h+='<button type="button" data-v="'+i+'" aria-pressed="false">'+i+'<span>'+x.l[i-1]+'</span></button>';
-  h+='</div></div>';
- });
- $("scales").innerHTML=h;
- $("scales").addEventListener("click",function(e){
-  var b=e.target.closest("button");if(!b)return;
-  var k=b.parentNode.getAttribute("data-k");cur[k]=+b.getAttribute("data-v");paint();
+ var box=$("scales");box.textContent="";
+ cfg.scales.forEach(function(x,i){
+  var w=el("div","scale");w.style.setProperty("--c","var(--c"+i+")");
+  w.appendChild(el("b",null,x.t));
+  if(x.s)w.appendChild(el("small",null,x.s));
+  var o=el("div","opts"),lb=labelsFor(x),fl=full(x);
+  o.dataset.id=x.id;o.style.gridTemplateColumns="repeat("+x.n+",1fr)";if(x.n>5)o.style.gap="4px";
+  for(var k=1;k<=x.n;k++){
+   var b=el("button",null,String(k));b.type="button";b.dataset.v=k;b.setAttribute("aria-pressed","false");
+   if(fl)b.appendChild(el("span",null,lb[k-1]));
+   o.appendChild(b);
+  }
+  w.appendChild(o);
+  if(!fl){var en=el("div","ends"),e2=ends(x);en.appendChild(el("span",null,e2[0]));en.appendChild(el("span",null,e2[1]));w.appendChild(en)}
+  box.appendChild(w);
  });
 }
 function paint(){
- S.forEach(function(x){
-  var bs=document.querySelectorAll('.opts[data-k="'+x.k+'"] button');
-  for(var i=0;i<bs.length;i++)bs[i].setAttribute("aria-pressed",String(+bs[i].getAttribute("data-v")===cur[x.k]));
- });
+ var os=document.querySelectorAll("#scales .opts");
+ for(var i=0;i<os.length;i++){var id=os[i].dataset.id,bs=os[i].children;
+  for(var j=0;j<bs.length;j++)bs[j].setAttribute("aria-pressed",String(+bs[j].dataset.v===cur[id]))}
 }
+$("scales").addEventListener("click",function(e){
+ var b=e.target.closest("button");if(!b)return;
+ var id=b.parentNode.dataset.id,v=+b.dataset.v;
+ cur[id]=cur[id]===v?0:v;paint();
+});
 function loadDay(){
- var e=load()[dateEl.value];
- cur=e?{m:e.m,a:e.a,p:e.p}:{m:0,a:0,p:0};
- $("note").value=e&&e.note?e.note:"";paint();
+ var e=load()[dateEl.value];cur={};
+ if(e)cfg.scales.forEach(function(x){if(e.v[x.id])cur[x.id]=conv(e.v[x.id],e.d[x.id],x.n)});
+ $("note").value=e?e.note:"";paint();
 }
 dateEl.addEventListener("change",function(){if(dateEl.value)loadDay();$("msg").textContent=""});
-
 $("save").addEventListener("click",function(){
  if(!dateEl.value){$("msg").textContent="Выберите дату.";return}
- if(!cur.m||!cur.a||!cur.p){$("msg").textContent="Отметьте все три шкалы, чтобы сохранить запись.";return}
- var d=load();d[dateEl.value]={m:cur.m,a:cur.a,p:cur.p,note:$("note").value.trim()};
+ if(!cfg.scales.some(function(x){return cur[x.id]})){$("msg").textContent="Отметьте хотя бы одну шкалу, чтобы сохранить запись.";return}
+ var d=load(),old=d[dateEl.value]||{v:{},d:{}},v=Object.assign({},old.v),dd=Object.assign({},old.d);
+ cfg.scales.forEach(function(x){if(cur[x.id]){v[x.id]=cur[x.id];dd[x.id]=x.n}else{delete v[x.id];delete dd[x.id]}});
+ d[dateEl.value]={v:v,d:dd,note:$("note").value.trim().slice(0,500)};
  store(d);$("msg").textContent="Запись за "+fmt(dateEl.value)+" сохранена.";render();
 });
 
-$("tabs").addEventListener("click",function(e){
- var b=e.target.closest("button");if(!b)return;days=+b.getAttribute("data-n");render();
-});
-
+/* ---------- график, записи, отчёт ---------- */
+$("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;days=+b.dataset.n;render()});
 function range(){
  var out=[],t=new Date();t.setHours(12,0,0,0);
  for(var i=days-1;i>=0;i--){var x=new Date(t);x.setDate(t.getDate()-i);out.push(iso(x))}
- return out;
-}
+ return out}
 function chart(r,d){
- var W=640,H=240,L=30,R=12,T=12,B=28,pw=W-L-R,ph=H-T-B,svg="";
- for(var v=1;v<=5;v++){var y=T+ph-(v-1)/4*ph;
-  svg+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)"/><text x="'+(L-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="var(--mute)">'+v+'</text>';}
+ var W=640,H=240,L=44,R=12,T=12,B=28,pw=W-L-R,ph=H-T-B,svg="",any=false;
+ [0,.25,.5,.75,1].forEach(function(f){var y=T+ph-f*ph;svg+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)"/>'});
+ svg+='<text x="'+(L-8)+'" y="'+(T+4)+'" text-anchor="end" font-size="11" fill="var(--mute)">выше</text>';
+ svg+='<text x="'+(L-8)+'" y="'+(T+ph+4)+'" text-anchor="end" font-size="11" fill="var(--mute)">ниже</text>';
  var n=r.length,step=Math.max(1,Math.ceil(n/7));
  function X(i){return L+(n===1?pw/2:i/(n-1)*pw)}
  r.forEach(function(s,i){if(i%step===0||i===n-1)svg+='<text x="'+X(i)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11" fill="var(--mute)">'+fmt(s)+'</text>'});
- var cfg=[["m","var(--m)",""],["a","var(--a)","6 4"],["p","var(--p)","2 4"]],any=false;
- cfg.forEach(function(c){
-  var path="",pen=false,dots="";
-  r.forEach(function(s,i){var e=d[s];
-   if(!e){pen=false;return}any=true;
-   var x=X(i),y=T+ph-(e[c[0]]-1)/4*ph;
-   path+=(pen?"L":"M")+x.toFixed(1)+" "+y.toFixed(1)+" ";pen=true;
-   dots+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.5" fill="'+c[1]+'"/>';
+ cfg.scales.forEach(function(x,i){
+  var path="",pen=false,dots="",col="var(--c"+i+")";
+  r.forEach(function(s,j){
+   var e=d[s];if(!e||!e.v[x.id]){pen=false;return}any=true;
+   var px=X(j),py=T+ph-frac(e.v[x.id],e.d[x.id])*ph;
+   path+=(pen?"L":"M")+px.toFixed(1)+" "+py.toFixed(1)+" ";pen=true;
+   dots+='<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="3.5" fill="'+col+'"/>';
   });
-  svg+='<path d="'+path+'" fill="none" stroke="'+c[1]+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"'+(c[2]?' stroke-dasharray="'+c[2]+'"':'')+'/>'+dots;
+  svg+='<path d="'+path+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"'+(DASH[i]?' stroke-dasharray="'+DASH[i]+'"':'')+'/>'+dots;
  });
  $("chart").innerHTML=svg;
  $("chartEmpty").textContent=any?"":"Пока нет записей за этот период. После первой записи здесь появится график.";
+ var lg=$("legend");lg.textContent="";
+ cfg.scales.forEach(function(x,i){
+  var sp=el("span"),ic=el("i");
+  ic.innerHTML='<svg width="24" height="8" aria-hidden="true"><line x1="0" y1="4" x2="24" y2="4" stroke="var(--c'+i+')" stroke-width="3" stroke-linecap="round"'+(DASH[i]?' stroke-dasharray="'+DASH[i]+'"':'')+'/></svg>';
+  sp.appendChild(ic);sp.appendChild(document.createTextNode(x.t));lg.appendChild(sp);
+ });
 }
 function report(r,d){
  var have=r.filter(function(s){return d[s]});
  if(!have.length){$("rep").value="За выбранный период записей нет.";return}
- function avg(k){return (have.reduce(function(a,s){return a+d[s][k]},0)/have.length).toFixed(1)}
  var t="Дневник состояния, "+fmt(r[0])+" — "+fmt(r[r.length-1])+"\n";
- t+="Записей: "+have.length+" из "+r.length+" дней\n";
- t+="Шкалы от 1 до 5, выше — лучше (низкое желание что-то делать соответствует апатии)\n\n";
- t+="Средние значения:\nнастроение "+avg("m")+", желание что-то делать "+avg("a")+", физическая активность "+avg("p")+"\n\nПо дням (настроение / желание что-то делать / активность):\n";
- have.forEach(function(s){var e=d[s];t+=fmt(s)+": "+e.m+" / "+e.a+" / "+e.p+(e.note?" — "+e.note:"")+"\n"});
+ t+="Записей: "+have.length+" из "+r.length+" дней\n\nШкалы:\n";
+ cfg.scales.forEach(function(x){var lb=ends(x);t+="— "+x.t+" (1 — "+lb[0]+", "+x.n+" — "+lb[1]+")\n"});
+ t+="\nСредние значения:\n";
+ cfg.scales.forEach(function(x){
+  var sum=0,c=0;
+  have.forEach(function(s){var e=d[s];if(e.v[x.id]){sum+=frac(e.v[x.id],e.d[x.id]);c++}});
+  if(c)t+=x.t+": "+(sum/c*(x.n-1)+1).toFixed(1)+" из "+x.n+" (записей: "+c+")\n";
+ });
+ t+="\nПо дням:\n";
+ have.forEach(function(s){
+  var e=d[s],p=[];
+  cfg.scales.forEach(function(x){if(e.v[x.id])p.push(x.t+" "+e.v[x.id]+"/"+e.d[x.id])});
+  t+=fmt(s)+": "+p.join(", ")+(e.note?" — "+e.note:"")+"\n";
+ });
  $("rep").value=t.trim();
 }
 function hist(d){
- var ks=Object.keys(d).sort().reverse(),ul=$("hist"),h="";
- ks.slice(0,30).forEach(function(s){var e=d[s];
-  h+='<li><div><b>'+fmt(s)+'</b> &nbsp; настроение '+e.m+', желание '+e.a+', активность '+e.p+(e.note?'<div class="n"></div>':'')+'</div><button class="x" data-d="'+s+'" aria-label="Удалить запись за '+fmt(s)+'">×</button></li>';});
- ul.innerHTML=h;
- var ns=ul.querySelectorAll(".n"),j=0;
- ks.slice(0,30).forEach(function(s){if(d[s].note){ns[j++].textContent=d[s].note}});
+ var ul=$("hist"),ks=Object.keys(d).sort().reverse();ul.textContent="";
+ ks.slice(0,30).forEach(function(s){
+  var e=d[s],li=el("li"),div=el("div"),p=[];
+  div.appendChild(el("b",null,fmt(s)));
+  cfg.scales.forEach(function(x){if(e.v[x.id])p.push(x.t.toLowerCase()+" "+e.v[x.id]+"/"+e.d[x.id])});
+  div.appendChild(document.createTextNode("  "+p.join(", ")));
+  if(e.note)div.appendChild(el("div","n",e.note));
+  li.appendChild(div);
+  var bt=el("button","x","×");bt.type="button";bt.dataset.d=s;bt.setAttribute("aria-label","Удалить запись за "+fmt(s));
+  li.appendChild(bt);ul.appendChild(li);
+ });
  $("histEmpty").textContent=ks.length?"":"Записей пока нет.";
 }
 $("hist").addEventListener("click",function(e){
  var b=e.target.closest(".x");if(!b)return;
- var s=b.getAttribute("data-d");if(!confirm("Удалить запись за "+fmt(s)+"?"))return;
+ var s=b.dataset.d;if(!confirm("Удалить запись за "+fmt(s)+"?"))return;
  var d=load();delete d[s];store(d);render();loadDay();
 });
 $("copy").addEventListener("click",function(){
  var ta=$("rep");ta.focus();ta.select();var ok=false;
  try{ok=document.execCommand("copy")}catch(e){}
- $("msg2").textContent=ok?"Скопировано.":"Текст выделен — нажмите «Копировать» в меню телефона.";
+ $("msg2").textContent=ok?"Скопировано.":"Текст выделен — скопируйте его через меню телефона.";
 });
+$("print").addEventListener("click",function(){$("repPrint").textContent=$("rep").value;window.print()});
 function render(){
- var d=load(),r=range();
- var bs=$("tabs").querySelectorAll("button");
- for(var i=0;i<bs.length;i++)bs[i].setAttribute("aria-pressed",String(+bs[i].getAttribute("data-n")===days));
- chart(r,d);report(r,d);hist(d);
+ var d=load(),r=range(),bs=$("tabs").querySelectorAll("button");
+ for(var i=0;i<bs.length;i++)bs[i].setAttribute("aria-pressed",String(+bs[i].dataset.n===days));
+ chart(r,d);report(r,d);hist(d);checkBanner();
 }
-$("print").addEventListener("click",function(){
- $("repPrint").textContent=$("rep").value;window.print();
+
+/* ---------- настройка шкал ---------- */
+function field(lbl,node){var l=el("label","f");l.appendChild(el("span",null,lbl));l.appendChild(node);return l}
+function inp(i,f,val,max){var n=el("input");n.type="text";n.value=val;n.maxLength=max;n.dataset.i=i;n.dataset.f=f;return n}
+function renderEditor(){
+ var box=$("sedit");box.textContent="";
+ cfg.scales.forEach(function(x,i){
+  var w=el("div","edit"),sel=el("select"),e2=ends(x);
+  NS.forEach(function(n){var o=el("option",null,String(n));o.value=n;if(n===x.n)o.selected=true;sel.appendChild(o)});
+  sel.dataset.i=i;sel.dataset.f="n";
+  w.appendChild(field("Название",inp(i,"t",x.t,40)));
+  w.appendChild(field("Подсказка (необязательно)",inp(i,"s",x.s||"",120)));
+  var two=el("div","two");
+  two.appendChild(field("Подпись у 1",inp(i,"lo",e2[0],20)));
+  two.appendChild(field("Подпись у максимума",inp(i,"hi",e2[1],20)));
+  w.appendChild(two);
+  w.appendChild(field("Число делений",sel));
+  if(cfg.scales.length>1){var db=el("button","btn sec sm","Убрать шкалу");db.type="button";db.dataset.i=i;db.dataset.act="del";w.appendChild(db)}
+  box.appendChild(w);
+ });
+}
+$("sedit").addEventListener("change",function(e){
+ var t=e.target,i=+t.dataset.i,f=t.dataset.f,x=cfg.scales[i];if(!x||!f)return;
+ var val=t.value.trim();
+ if(f==="n"){var n=+t.value;if(x.l&&x.l.length!==n){x.lo=x.l[0];x.hi=x.l[x.l.length-1];delete x.l}x.n=n}
+ else if(f==="lo"||f==="hi"){if(x.l){x.lo=x.l[0];x.hi=x.l[x.l.length-1];delete x.l}x[f]=val}
+ else if(f==="t")x.t=val||"Шкала";
+ else if(f==="s")x.s=val;
+ saveCfg();buildScales();loadDay();render();
 });
+$("sedit").addEventListener("click",function(e){
+ var b=e.target.closest("button");if(!b||b.dataset.act!=="del")return;
+ var i=+b.dataset.i,x=cfg.scales[i];
+ if(!confirm("Убрать шкалу «"+x.t+"»? Она исчезнет из приложения, а старые значения останутся в записях, но видны не будут."))return;
+ cfg.scales.splice(i,1);saveCfg();renderEditor();buildScales();loadDay();render();
+});
+$("addS").addEventListener("click",function(){
+ if(cfg.scales.length>=MAXS){alert("Можно добавить не больше "+MAXS+" шкал.");return}
+ cfg.scales.push({id:"s"+Date.now().toString(36),t:"Новая шкала",s:"",n:5,lo:"меньше",hi:"больше"});
+ saveCfg();renderEditor();buildScales();loadDay();render();
+});
+$("resetS").addEventListener("click",function(){
+ if(!confirm("Вернуть три стандартные шкалы? Свои шкалы исчезнут из приложения."))return;
+ cfg.scales=defScales();saveCfg();renderEditor();buildScales();loadDay();render();
+});
+
+/* ---------- напоминание ---------- */
+$("rem").checked=cfg.remind;$("rtime").value=cfg.time;
+$("rem").addEventListener("change",function(){cfg.remind=this.checked;saveCfg();snoozed=false;checkBanner()});
+$("rtime").addEventListener("change",function(){if(/^\d\d:\d\d$/.test(this.value)){cfg.time=this.value;saveCfg();snoozed=false;checkBanner()}});
+$("snooze").addEventListener("click",function(){snoozed=true;checkBanner()});
+function checkBanner(){
+ var show=false;
+ if(cfg.remind&&!snoozed){
+  var t=new Date(),hm=("0"+t.getHours()).slice(-2)+":"+("0"+t.getMinutes()).slice(-2);
+  show=hm>=cfg.time&&!load()[iso(t)];
+ }
+ $("banner").hidden=!show;
+}
+setInterval(checkBanner,60000);
+$("ics").addEventListener("click",function(){
+ var tm=(/^\d\d:\d\d$/.test($("rtime").value)?$("rtime").value:cfg.time).split(":");
+ var url=location.href.split("#")[0],stamp=new Date().toISOString().replace(/[-:]/g,"").slice(0,15)+"Z";
+ var L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//dnevnik//RU","CALSCALE:GREGORIAN","BEGIN:VEVENT",
+  "UID:dnevnik-"+Date.now()+"@local","DTSTAMP:"+stamp,"DTSTART:"+iso(new Date()).replace(/-/g,"")+"T"+tm[0]+tm[1]+"00",
+  "RRULE:FREQ=DAILY","SUMMARY:Дневник состояния",
+  "DESCRIPTION:Как вы сегодня? Запись занимает минуту. Пропустить тоже можно.\\n"+url,
+  "URL:"+url,"BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Дневник состояния","TRIGGER:PT0S","END:VALARM","END:VEVENT","END:VCALENDAR"];
+ try{
+  var b=new Blob([L.join("\r\n")],{type:"text/calendar;charset=utf-8"});
+  var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dnevnik.ics";
+  document.body.appendChild(a);a.click();a.remove();
+  $("msg4").textContent="Файл скачан. Откройте его, чтобы добавить событие в календарь.";
+ }catch(e){$("msg4").textContent="Не удалось скачать файл в этом браузере."}
+});
+
+/* ---------- резервная копия ---------- */
 $("exp").addEventListener("click",function(){
  var d=load(),n=Object.keys(d).length;
  if(!n){$("msg3").textContent="Пока нечего сохранять: записей нет.";return}
  try{
-  var b=new Blob([JSON.stringify({version:1,entries:d},null,1)],{type:"application/json"});
+  var b=new Blob([JSON.stringify({version:2,scales:cfg.scales,entries:d},null,1)],{type:"application/json"});
   var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dnevnik-"+iso(new Date())+".json";
   document.body.appendChild(a);a.click();a.remove();
   $("msg3").textContent="Копия сохранена. Записей: "+n+".";
@@ -237,28 +442,39 @@ $("exp").addEventListener("click",function(){
 });
 $("imp").addEventListener("click",function(){$("file").click()});
 $("file").addEventListener("change",function(){
- var f=this.files[0];if(!f)return;var inp=this;
- var rd=new FileReader();
- rd.onload=function(){
+ var f=this.files[0];if(!f)return;var inp2=this;
+ var fr=new FileReader();
+ fr.onload=function(){
   try{
-   var j=JSON.parse(rd.result),src=j&&j.entries?j.entries:j,add={},c=0;
+   var j=JSON.parse(fr.result),src=j&&j.entries?j.entries:j,add={},c=0,ns=[];
+   if(j&&Array.isArray(j.scales)){
+    var have={};cfg.scales.forEach(function(x){have[x.id]=1});
+    j.scales.forEach(function(x){var s=validScale(x);if(s&&!have[s.id]&&cfg.scales.length+ns.length<MAXS){ns.push(s);have[s.id]=1}});
+   }
    Object.keys(src).forEach(function(k){
-    var e=src[k];
-    if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&e&&[e.m,e.a,e.p].every(function(v){return v>=1&&v<=5&&v%1===0})){
-     add[k]={m:e.m,a:e.a,p:e.p,note:typeof e.note==="string"?e.note.slice(0,500):""};c++;
-    }
+    if(/^\d{4}-\d{2}-\d{2}$/.test(k)){var e=normE(src[k]);if(e){add[k]=e;c++}}
    });
    if(!c){$("msg3").textContent="В файле нет подходящих записей.";return}
-   if(!confirm("Добавить записей: "+c+". Записи за те же даты будут заменены. Продолжить?"))return;
+   if(!confirm("Добавить записей: "+c+(ns.length?" и шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
    var d=load();Object.keys(add).forEach(function(k){d[k]=add[k]});store(d);
+   if(ns.length){cfg.scales=cfg.scales.concat(ns);saveCfg();renderEditor();buildScales()}
    $("msg3").textContent="Загружено записей: "+c+".";render();loadDay();
   }catch(e){$("msg3").textContent="Не удалось прочитать файл. Нужна копия, скачанная из этого приложения."}
-  inp.value="";
+  inp2.value="";
  };
- rd.readAsText(f);
+ fr.readAsText(f);
 });
+
+/* ---------- установка и офлайн ---------- */
+var dp=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();dp=e;$("inst").hidden=false});
+$("inst").addEventListener("click",function(){if(dp){dp.prompt();dp=null;$("inst").hidden=true}});
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
+ window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){})});
+}
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
-buildScales();loadDay();render();
+
+buildScales();renderEditor();loadDay();render();
 })();
 </script>
 </body>
