@@ -22,7 +22,7 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:640px;margin:0 auto;padding:20px 16px 48px}
+main{max-width:640px;margin:0 auto;padding:20px 16px 96px}
 h1{font-size:26px;margin:8px 0 4px;letter-spacing:-.01em}
 h2{font-size:18px;margin:0 0 12px}
 .sub{color:var(--mute);margin:0 0 20px;font-size:14px}
@@ -70,7 +70,13 @@ details[open] summary{margin-bottom:12px}
 #banner[hidden],[hidden]{display:none!important}
 #banner p{margin:0;font-size:14px}
 #repPrint{display:none}
+#nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+#nav button{flex:1;font:inherit;font-size:14px;background:none;border:0;border-top:3px solid transparent;margin-top:-1px;color:var(--mute);padding:13px 4px;cursor:pointer}
+#nav button[aria-current=page]{color:var(--ink);font-weight:600;border-top-color:var(--c0)}
+dialog{width:min(560px,92vw);max-height:90vh;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px}
+dialog::backdrop{background:rgba(0,0,0,.45)}
 @media print{
+ dialog,#nav{display:none!important}
  body{background:#fff;color:#000}
  main,#banner{display:none!important}
  #repPrint{display:block;white-space:pre-wrap;font:14px/1.5 system-ui,sans-serif}
@@ -83,9 +89,9 @@ details[open] summary{margin-bottom:12px}
  <button class="btn sec sm" id="snooze" type="button">Не сейчас</button>
 </div>
 <main>
-<h1>Дневник состояния</h1>
-<p class="sub">Запись занимает меньше минуты. Можно отметить не все шкалы. Пропущенные дни ничего не ломают.</p>
-
+<div id="tab-today">
+<h1>Как вы сегодня?</h1>
+<p class="sub" id="sub"></p>
 <section>
 <div class="row"><label for="d"><b>Дата</b></label><input type="date" id="d"></div>
 <div id="scales"></div>
@@ -94,29 +100,35 @@ details[open] summary{margin-bottom:12px}
 <div class="row" style="margin-top:12px"><button class="btn" id="save" type="button">Сохранить</button></div>
 <p class="msg" id="msg" role="status"></p>
 </section>
+<section id="after" hidden>
+<h2>Последние 7 дней</h2>
+<div class="wrap"><svg class="chart" id="chart7" viewBox="0 0 640 240" role="img" aria-label="График за последние 7 дней"></svg></div>
+<div class="legend" id="legend7"></div>
+<p class="note" id="wk" style="margin-bottom:0"></p>
+</section>
+</div>
 
+<div id="tab-trend" hidden>
+<h1>Динамика</h1>
 <section>
-<div class="row" style="justify-content:space-between"><h2 style="margin:0">Динамика</h2>
+<div class="row" style="justify-content:space-between"><h2 style="margin:0">График</h2>
 <div class="tabs row" id="tabs"><button type="button" data-n="7">7 дн.</button><button type="button" data-n="14">14 дн.</button><button type="button" data-n="30">30 дн.</button></div></div>
 <div class="wrap"><svg class="chart" id="chart" viewBox="0 0 640 240" role="img" aria-label="График по выбранным шкалам"></svg></div>
 <div class="legend" id="legend"></div>
 <p class="empty" id="chartEmpty"></p>
+<div class="row" style="margin-top:14px"><button class="btn sec" id="openRep" type="button">Отчёт для врача</button></div>
 </section>
-
 <section>
-<h2>Записи</h2>
+<details>
+<summary>История записей</summary>
 <ul class="hist" id="hist"></ul>
 <p class="empty" id="histEmpty"></p>
+</details>
 </section>
+</div>
 
-<section>
-<h2>Отчёт для врача</h2>
-<p class="note" style="margin-top:0">Краткая сводка за период, выбранный на графике. Скопируйте и отправьте сообщением или распечатайте.</p>
-<textarea id="rep" readonly style="min-height:170px"></textarea>
-<div class="row" style="margin-top:10px"><button class="btn sec" id="copy" type="button">Скопировать</button><button class="btn sec" id="print" type="button">Печать / PDF</button></div>
-<p class="msg" id="msg2" role="status"></p>
-</section>
-
+<div id="tab-more" hidden>
+<h1>Ещё</h1>
 <section>
 <details>
 <summary>Настройка шкал</summary>
@@ -126,7 +138,6 @@ details[open] summary{margin-bottom:12px}
 <p class="note">Если изменить число делений, старые записи пересчитаются пропорционально.</p>
 </details>
 </section>
-
 <section>
 <details>
 <summary>Напоминание</summary>
@@ -138,14 +149,14 @@ details[open] summary{margin-bottom:12px}
 <p class="msg" id="msg4" role="status"></p>
 </details>
 </section>
-
 <section>
-<h2>Резервная копия</h2>
+<details>
+<summary>Резервная копия</summary>
 <p class="note" style="margin-top:0">Записи лежат только в этом браузере. Сохраняйте копию время от времени и перед очисткой данных браузера. Копию можно загрузить на другом устройстве.</p>
 <div class="row"><button class="btn sec" id="exp" type="button">Скачать копию</button><button class="btn sec" id="imp" type="button">Загрузить копию</button><input type="file" id="file" accept=".json,application/json" hidden></div>
 <p class="msg" id="msg3" role="status"></p>
+</details>
 </section>
-
 <section>
 <details>
 <summary>Установка на главный экран</summary>
@@ -154,15 +165,29 @@ details[open] summary{margin-bottom:12px}
 <p class="note">Android (Chrome): меню ⋮ → «Установить приложение». iPhone (Safari): «Поделиться» → «На экран “Домой”».</p>
 </details>
 </section>
-
 <section class="priv">
-<h2>Приватность</h2>
+<details>
+<summary>Приватность</summary>
 <p>Все записи хранятся только на вашем устройстве. Страница ничего не отправляет на сервер, не использует аккаунты, аналитику и сторонние сервисы.</p>
 <p>Автор приложения ваших записей не видит и восстановить их не может. Поэтому делайте резервную копию.</p>
 <p>Это дневник самонаблюдения, а не медицинский инструмент и не диагностика. Если вам плохо, обратитесь к врачу или близким.</p>
+</details>
 </section>
+</div>
 </main>
 <div id="repPrint"></div>
+<nav id="nav" aria-label="Разделы">
+<button type="button" data-t="today" aria-current="page">Сегодня</button>
+<button type="button" data-t="trend" aria-current="false">Динамика</button>
+<button type="button" data-t="more" aria-current="false">Ещё</button>
+</nav>
+<dialog id="repDlg" aria-label="Отчёт для врача">
+<h2>Отчёт для врача</h2>
+<p class="note" style="margin-top:0">Сводка за период, выбранный на графике. Скопируйте и отправьте сообщением или распечатайте.</p>
+<textarea id="rep" readonly style="min-height:220px"></textarea>
+<div class="row" style="margin-top:10px"><button class="btn sec" id="copy" type="button">Скопировать</button><button class="btn sec" id="print" type="button">Печать / PDF</button><button class="btn sec" id="closeRep" type="button">Закрыть</button></div>
+<p class="msg" id="msg2" role="status"></p>
+</dialog>
 
 <script>
 (function(){
@@ -267,15 +292,16 @@ $("save").addEventListener("click",function(){
  cfg.scales.forEach(function(x){if(cur[x.id]){v[x.id]=cur[x.id];dd[x.id]=x.n}else{delete v[x.id];delete dd[x.id]}});
  d[dateEl.value]={v:v,d:dd,note:$("note").value.trim().slice(0,500)};
  store(d);$("msg").textContent="Запись за "+fmt(dateEl.value)+" сохранена.";render();
+ try{$("after").scrollIntoView({behavior:"smooth",block:"nearest"})}catch(e){}
 });
 
 /* ---------- график, записи, отчёт ---------- */
 $("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;days=+b.dataset.n;render()});
-function range(){
+function range(k){
  var out=[],t=new Date();t.setHours(12,0,0,0);
- for(var i=days-1;i>=0;i--){var x=new Date(t);x.setDate(t.getDate()-i);out.push(iso(x))}
+ for(var i=k-1;i>=0;i--){var x=new Date(t);x.setDate(t.getDate()-i);out.push(iso(x))}
  return out}
-function chart(r,d){
+function chart(r,d,tg){
  var W=640,H=240,L=44,R=12,T=12,B=28,pw=W-L-R,ph=H-T-B,svg="",any=false;
  [0,.25,.5,.75,1].forEach(function(f){var y=T+ph-f*ph;svg+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)"/>'});
  svg+='<text x="'+(L-8)+'" y="'+(T+4)+'" text-anchor="end" font-size="11" fill="var(--mute)">выше</text>';
@@ -293,9 +319,9 @@ function chart(r,d){
   });
   svg+='<path d="'+path+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"'+(DASH[i]?' stroke-dasharray="'+DASH[i]+'"':'')+'/>'+dots;
  });
- $("chart").innerHTML=svg;
- $("chartEmpty").textContent=any?"":"Пока нет записей за этот период. После первой записи здесь появится график.";
- var lg=$("legend");lg.textContent="";
+ tg.svg.innerHTML=svg;
+ if(tg.empty)tg.empty.textContent=any?"":"Пока нет записей за этот период. После первой записи здесь появится график.";
+ var lg=tg.legend;lg.textContent="";
  cfg.scales.forEach(function(x,i){
   var sp=el("span"),ic=el("i");
   ic.innerHTML='<svg width="24" height="8" aria-hidden="true"><line x1="0" y1="4" x2="24" y2="4" stroke="var(--c'+i+')" stroke-width="3" stroke-linecap="round"'+(DASH[i]?' stroke-dasharray="'+DASH[i]+'"':'')+'/></svg>';
@@ -348,9 +374,14 @@ $("copy").addEventListener("click",function(){
 });
 $("print").addEventListener("click",function(){$("repPrint").textContent=$("rep").value;window.print()});
 function render(){
- var d=load(),r=range(),bs=$("tabs").querySelectorAll("button");
+ var d=load(),r=range(days),r7=range(7),bs=$("tabs").querySelectorAll("button");
  for(var i=0;i<bs.length;i++)bs[i].setAttribute("aria-pressed",String(+bs[i].dataset.n===days));
- chart(r,d);report(r,d);hist(d);checkBanner();
+ chart(r,d,{svg:$("chart"),empty:$("chartEmpty"),legend:$("legend")});
+ var n7=r7.filter(function(s){return d[s]}).length;
+ $("after").hidden=!n7;
+ if(n7){chart(r7,d,{svg:$("chart7"),legend:$("legend7")});$("wk").textContent="Записей за 7 дней: "+n7+" из 7. Пропуски в порядке вещей."}
+ report(r,d);hist(d);checkBanner();
+ $("sub").textContent=Object.keys(d).length?"Можно отметить не все шкалы. Пропущенные дни ничего не ломают.":"Отметьте, как вы себя чувствуете. Это займёт меньше минуты. Записи хранятся только на вашем устройстве.";
 }
 
 /* ---------- настройка шкал ---------- */
@@ -472,6 +503,18 @@ if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
  window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){})});
 }
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+
+/* ---------- разделы и отчёт ---------- */
+function showTab(n){
+ ["today","trend","more"].forEach(function(t){
+  $("tab-"+t).hidden=t!==n;
+  document.querySelector('#nav button[data-t="'+t+'"]').setAttribute("aria-current",t===n?"page":"false");
+ });
+ window.scrollTo(0,0);
+}
+$("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b)showTab(b.dataset.t)});
+$("openRep").addEventListener("click",function(){$("msg2").textContent="";var dl=$("repDlg");if(dl.showModal)dl.showModal();else dl.setAttribute("open","")});
+$("closeRep").addEventListener("click",function(){var dl=$("repDlg");if(dl.close)dl.close();else dl.removeAttribute("open")});
 
 buildScales();renderEditor();loadDay();render();
 })();
