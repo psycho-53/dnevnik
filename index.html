@@ -99,6 +99,15 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 #toast{position:fixed;left:12px;right:12px;bottom:calc(64px + env(safe-area-inset-bottom,0px));max-width:616px;margin:0 auto;z-index:7;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px 16px;font-size:14px;box-shadow:0 4px 18px rgba(0,0,0,.25);cursor:pointer}
 @media print{#toast{display:none!important}}
 
+
+.note-block{margin-top:14px}
+.note-preview{padding:12px 14px;border:1px solid rgba(142,160,218,.18);border-radius:14px;background:rgba(19,29,55,.58)}
+.note-preview-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
+.note-preview-head label{margin:0}
+.note-preview p{margin:0;color:#cbd6f2;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+#addNote{margin-top:0}
+#noteEditor textarea{margin-top:5px}
+
 /* ---------- Космическая тема ---------- */
 body{
  background:
@@ -163,6 +172,48 @@ section{
 }
 .planet:after{content:"";position:absolute;inset:13px 21px 16px 12px;border-radius:50%;border:1px solid rgba(224,233,255,.15);transform:rotate(-28deg)}
 .planet-moon{position:absolute;z-index:3;width:21px;height:21px;right:13px;top:21px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff,#a5b9ef 45%,#57689c 100%);box-shadow:0 0 18px rgba(175,196,255,.55)}
+.planet-scene:after,.universe-art:after{
+ content:"";position:absolute;z-index:4;right:13%;top:17%;width:8px;height:8px;border-radius:50%;
+ background:#e6edff;box-shadow:0 0 12px 4px rgba(187,211,255,.55);opacity:0;transform:scale(.5);
+ transition:opacity .35s ease,transform .35s ease
+}
+.planet-scene[data-stage="1"] .planet,.universe-art[data-stage="1"] .planet,
+.planet-scene[data-stage="2"] .planet,.universe-art[data-stage="2"] .planet,
+.planet-scene[data-stage="3"] .planet,.universe-art[data-stage="3"] .planet,
+.planet-scene[data-stage="4"] .planet,.universe-art[data-stage="4"] .planet,
+.planet-scene[data-stage="5"] .planet,.universe-art[data-stage="5"] .planet,
+.planet-scene[data-stage="6"] .planet,.universe-art[data-stage="6"] .planet{
+ box-shadow:inset -18px -16px 28px rgba(3,8,34,.5),0 0 44px rgba(117,135,255,.52),0 0 100px rgba(96,113,230,.25)
+}
+.planet-scene[data-stage="2"] .planet-moon,.universe-art[data-stage="2"] .planet-moon,
+.planet-scene[data-stage="3"] .planet-moon,.universe-art[data-stage="3"] .planet-moon,
+.planet-scene[data-stage="4"] .planet-moon,.universe-art[data-stage="4"] .planet-moon,
+.planet-scene[data-stage="5"] .planet-moon,.universe-art[data-stage="5"] .planet-moon,
+.planet-scene[data-stage="6"] .planet-moon,.universe-art[data-stage="6"] .planet-moon{
+ transform:scale(1.16);box-shadow:0 0 23px rgba(175,196,255,.72)
+}
+.planet-scene[data-stage="3"] .planet-orbit.second,.universe-art[data-stage="3"] .planet-orbit.second,
+.planet-scene[data-stage="4"] .planet-orbit.second,.universe-art[data-stage="4"] .planet-orbit.second,
+.planet-scene[data-stage="5"] .planet-orbit.second,.universe-art[data-stage="5"] .planet-orbit.second,
+.planet-scene[data-stage="6"] .planet-orbit.second,.universe-art[data-stage="6"] .planet-orbit.second{
+ border-color:rgba(126,208,240,.52);box-shadow:0 0 12px rgba(126,208,240,.12)
+}
+.planet-scene[data-stage="4"]:after,.universe-art[data-stage="4"]:after,
+.planet-scene[data-stage="5"]:after,.universe-art[data-stage="5"]:after,
+.planet-scene[data-stage="6"]:after,.universe-art[data-stage="6"]:after{
+ opacity:1;transform:scale(1)
+}
+.planet-scene[data-stage="5"] .planet,.universe-art[data-stage="5"] .planet,
+.planet-scene[data-stage="6"] .planet,.universe-art[data-stage="6"] .planet{
+ box-shadow:inset -18px -16px 28px rgba(3,8,34,.5),0 0 52px rgba(117,135,255,.68),0 0 120px rgba(96,113,230,.36)
+}
+.planet-scene[data-stage="6"] .planet-orbit,.universe-art[data-stage="6"] .planet-orbit{
+ border-color:rgba(183,197,255,.56);box-shadow:0 0 14px rgba(183,197,255,.12)
+}
+.planet-scene[data-stage="6"] .planet-moon,.universe-art[data-stage="6"] .planet-moon{
+ box-shadow:0 0 28px rgba(175,196,255,.9)
+}
+
 .stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:0 0 16px}
 .stat-card{min-width:0;padding:13px 14px;border-radius:17px;border:1px solid rgba(142,160,218,.15);background:rgba(19,29,55,.82)}
 .stat-value{display:block;font-size:23px;font-weight:750;letter-spacing:-.04em;color:#f1f4ff;line-height:1.15}
@@ -240,6 +291,102 @@ textarea::placeholder{color:#7786aa}
 }
 @media(prefers-reduced-motion:reduce){.progress-fill{transition:none}}
 
+
+
+.current-stage{padding:13px 16px;margin:0 0 14px;border:1px solid rgba(142,160,218,.16);border-radius:16px;background:linear-gradient(120deg,rgba(34,47,83,.78),rgba(15,24,47,.76))}
+.current-stage b{display:block;margin-top:4px;font-size:16px;color:#eef3ff}
+.current-stage p{margin:3px 0 0;color:#aebcdd;font-size:12px;line-height:1.45}
+
+/* ---------- Интерактивная вселенная ---------- */
+.solar-system-panel{
+ position:relative;isolation:isolate;overflow:hidden;padding:0!important;
+ border:1px solid rgba(135,157,230,.26)!important;border-radius:24px!important;
+ background:
+  linear-gradient(180deg,rgba(4,7,18,.06),rgba(4,7,18,.16) 48%,rgba(4,7,18,.68)),
+  url('assets/nebula-sky.jpg') center 48% / cover no-repeat,
+  #070b18!important;
+ box-shadow:0 20px 56px rgba(0,0,0,.34)!important;
+}
+.solar-system-panel:before{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:radial-gradient(ellipse at 50% 48%,transparent 24%,rgba(3,6,15,.24) 100%);
+}
+.solar-top{position:absolute;z-index:4;top:15px;left:18px;right:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;pointer-events:none}
+.solar-top .eyebrow{color:#d3dcff;text-shadow:0 1px 8px #050916}
+.solar-controls{display:flex;gap:7px;pointer-events:auto}
+.solar-control{
+ width:38px;height:38px;border:1px solid rgba(163,180,240,.25);border-radius:12px;
+ background:rgba(8,15,34,.76);color:#eef2ff;cursor:pointer;font:22px/1 system-ui;
+ backdrop-filter:blur(8px);box-shadow:0 5px 16px rgba(0,0,0,.2)
+}
+.solar-control:hover{border-color:rgba(184,194,255,.65);background:rgba(34,45,83,.92)}
+.solar-control:focus-visible,.collection-card:focus-visible{outline:2px solid #a6b0ff;outline-offset:3px}
+.solar-scene-wrap{height:clamp(360px,52vw,510px);min-height:360px;position:relative;z-index:1;touch-action:none}
+#systemSvg{display:block;width:100%;height:100%;touch-action:none;user-select:none}
+.solar-footer{position:relative;z-index:2;display:flex;justify-content:space-between;gap:10px;padding:0 18px 14px;color:#c0cbea;font-size:11px;text-shadow:0 1px 5px #050916}
+.solar-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#80dfcf;box-shadow:0 0 9px #80dfcf;margin-right:7px}
+.drag-hint{position:absolute;bottom:13px;left:50%;transform:translateX(-50%);font-size:11px;color:#d2dcf6;background:rgba(5,10,24,.62);border:1px solid rgba(140,160,220,.18);border-radius:999px;padding:7px 12px;white-space:nowrap;pointer-events:none;text-align:center}
+.orbit{fill:none;stroke:url(#orbitStroke);stroke-width:1.15;opacity:.68}
+.orbit.back{stroke-dasharray:2 7;opacity:.32}
+.central-glow{fill:#8798ff;opacity:.15;filter:url(#blurGlow)}
+.central-halo{fill:none;stroke:#9bb9ff;stroke-width:1.2;opacity:.46;filter:url(#softGlow)}
+.object{cursor:grab;touch-action:none}
+.object:active{cursor:grabbing}
+.object .hit{fill:transparent;stroke:transparent;stroke-width:10}
+.object image,.object text{pointer-events:none}
+.object .select-ring{fill:none;stroke:#e2e8ff;stroke-width:1.2;stroke-dasharray:3 5;opacity:0;transition:opacity .18s}
+.object.selected .select-ring{opacity:.85}
+.object.is-locked{opacity:.15;filter:grayscale(1);pointer-events:none}
+.object-label{font-size:12px;fill:#e2e9ff;paint-order:stroke;stroke:#071020;stroke-width:3px;stroke-linejoin:round}
+.collection-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.collection-card{
+ display:flex;align-items:center;gap:11px;min-width:0;width:100%;padding:11px;
+ border:1px solid rgba(153,174,255,.15);border-radius:15px;
+ background:linear-gradient(145deg,rgba(18,29,55,.88),rgba(10,18,37,.9));
+ color:#eef3ff;text-align:left;font:inherit;cursor:pointer;
+}
+.collection-card.found:hover{border-color:rgba(153,165,255,.55);background:rgba(30,43,79,.94)}
+.collection-card.locked{cursor:default;opacity:.75}
+.collection-thumb{width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;position:relative;border-radius:50%;overflow:hidden;background:rgba(8,14,30,.8);box-shadow:inset 0 0 16px rgba(0,0,0,.35)}
+.collection-thumb img{width:100%;height:100%;object-fit:contain}
+.collection-thumb .unknown-mark{font-size:24px;color:#7f8db3}
+.collection-thumb.auria-thumb{overflow:visible}
+.collection-thumb.auria-thumb:before{content:"";position:absolute;width:58px;height:17px;border:3px solid rgba(210,190,155,.8);border-radius:50%;transform:rotate(-22deg);box-shadow:0 0 8px rgba(220,180,130,.2)}
+.collection-thumb.auria-thumb:after{content:"";width:31px;height:31px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#f8e7c8,#b18c74 42%,#4b3d52 82%);box-shadow:inset -7px -5px 9px rgba(0,0,0,.5);z-index:1}
+.collection-info{display:block;min-width:0;flex:1}
+.collection-name{display:block;font-size:13px;line-height:1.3;overflow-wrap:anywhere}
+.collection-type{display:block;margin-top:3px;color:#aab8dc;font-size:11px}
+.collection-status{display:block;margin-top:5px;color:#8ed9ce;font-size:10px;line-height:1.3}
+.collection-card.locked .collection-status{color:#a0abc9}
+.collection-arrow{color:#9da9ff;font-size:18px}
+.collection-empty{padding:14px;border:1px dashed rgba(153,174,255,.18);border-radius:14px;color:#9eadd0;font-size:13px}
+.object-modal-backdrop{position:fixed;inset:0;z-index:20;background:rgba(2,5,14,.72);backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px}
+.object-modal{width:min(440px,100%);border:1px solid rgba(155,172,245,.26);border-radius:22px;background:linear-gradient(145deg,#172341,#0c1428);box-shadow:0 25px 80px rgba(0,0,0,.55);padding:22px}
+.object-modal[hidden],.object-modal-backdrop[hidden]{display:none}
+.object-modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.object-modal-head span{font-size:11px;color:#aab9dc;text-transform:uppercase;letter-spacing:.1em}
+.object-modal-close{border:1px solid rgba(153,174,255,.2);background:#182443;color:#e9edff;border-radius:10px;width:34px;height:34px;cursor:pointer;font-size:20px}
+.object-modal h3{font-size:25px;margin:12px 0 5px}
+.object-modal p{color:#b1bfdf;line-height:1.55;font-size:14px}
+.object-modal-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.object-pill{padding:6px 10px;border-radius:999px;background:rgba(132,147,255,.12);border:1px solid rgba(132,147,255,.2);color:#cbd4ff;font-size:11px}
+@media(min-width:700px){.collection-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:560px){
+ .solar-scene-wrap{height:360px;min-height:360px}
+ .solar-top{top:11px;left:12px;right:12px}
+ .solar-top .eyebrow{font-size:9px}
+ .solar-control{width:34px;height:34px;border-radius:10px}
+ .solar-footer{padding:0 12px 12px;font-size:10px}
+ .drag-hint{font-size:9px;max-width:88%;white-space:normal;line-height:1.35}
+ .collection-grid{gap:8px}
+ .collection-card{padding:8px;gap:8px}
+ .collection-thumb{width:43px;height:43px;flex-basis:43px}
+ .collection-thumb.auria-thumb:before{width:48px;height:14px}
+ .collection-thumb.auria-thumb:after{width:25px;height:25px}
+ .collection-name{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.object .select-ring{transition:none}}
+
 </style>
 </head>
 <body>
@@ -264,7 +411,7 @@ textarea::placeholder{color:#7786aa}
 <div class="stats-grid" aria-label="Твой прогресс">
  <div class="stat-card"><span class="stat-value" id="totalEntries">0</span><span class="stat-label">дней наблюдений</span></div>
  <div class="stat-card"><span class="stat-value" id="weekEntries">0/7</span><span class="stat-label">за последние 7 дней</span></div>
- <div class="stat-card"><span class="stat-value" id="discoveryCount">0</span><span class="stat-label">открытий</span></div>
+ <div class="stat-card"><span class="stat-value" id="discoveryCount">0</span><span class="stat-label">достижений</span></div>
 </div>
 <div class="prompt-card">
  <div><div class="eyebrow">МИНУТА ДЛЯ СЕБЯ</div><p id="promptText">Что сегодня помогло тебе почувствовать себя лучше?</p></div>
@@ -280,8 +427,17 @@ textarea::placeholder{color:#7786aa}
 <div class="row"><label for="d"><b>Дата</b></label><input type="date" id="d"></div>
 <div id="scales"></div>
 <div class="scale"><b>Что было сегодня</b><small>Необязательно. По отметкам приложение со временем найдёт совпадения</small><div class="chips" id="chips"></div></div>
-<label for="note"><b>Заметка</b> <span class="note">(необязательно)</span></label>
-<textarea id="note" placeholder="Что повлияло: сон, лекарства, события"></textarea>
+<div class="note-block" id="noteBlock">
+ <div class="note-preview" id="notePreview" hidden>
+  <div class="note-preview-head"><b>Заметка</b><button class="btn sec sm" id="editNote" type="button">Изменить</button></div>
+  <p id="notePreviewText"></p>
+ </div>
+ <div id="noteEditor" hidden>
+  <div class="note-preview-head"><label for="note"><b>Заметка</b> <span class="note">(необязательно)</span></label></div>
+  <textarea id="note" placeholder="Что повлияло: сон, лекарства, события"></textarea>
+ </div>
+ <button class="btn sec sm" id="addNote" type="button">＋ Добавить заметку</button>
+</div>
 <div class="row" style="margin-top:12px"><button class="btn" id="save" type="button">Сохранить наблюдение</button></div>
 <p class="msg" id="msg" role="status"></p>
 </section>
@@ -298,18 +454,79 @@ textarea::placeholder{color:#7786aa}
  <div><div class="eyebrow">ТВОЙ ПУТЬ</div><h1>Моя вселенная</h1><p class="sub">Здесь собирается карта твоих наблюдений. Она отражает регулярность записей, а не оценку твоего настроения.</p></div>
  <div class="page-mark" aria-hidden="true">✧</div>
 </div>
-<section class="universe-hero">
- <div class="universe-art" aria-hidden="true"><div class="planet-orbit"></div><div class="planet-orbit second"></div><div class="planet"></div><div class="planet-moon"></div></div>
- <div class="universe-copy">
-  <div class="eyebrow">ТЕКУЩИЙ ЭТАП</div>
-  <h2 id="journeyTitle">Подготовка к экспедиции</h2>
-  <p id="journeyDesc">Каждая запись добавляет новую точку на твою карту. Начни в удобном темпе.</p>
+<section class="solar-system-panel" aria-label="Интерактивная солнечная система">
+ <div class="solar-top">
+  <span class="eyebrow">СОЛНЕЧНАЯ СИСТЕМА</span>
+  <div class="solar-controls">
+   <button class="solar-control" id="zoomIn" type="button" aria-label="Приблизить">+</button>
+   <button class="solar-control" id="zoomOut" type="button" aria-label="Отдалить">−</button>
+   <button class="solar-control" id="resetView" type="button" aria-label="Сбросить ракурс" title="Сбросить ракурс">⟳</button>
+  </div>
+ </div>
+ <div class="solar-scene-wrap">
+  <svg id="systemSvg" viewBox="0 0 1000 620" role="group" aria-label="Центральная планета и четыре орбиты">
+   <defs>
+    <radialGradient id="orbitStroke">
+     <stop offset="0" stop-color="#8298dc" stop-opacity=".12"/>
+     <stop offset=".72" stop-color="#8298dc" stop-opacity=".45"/>
+     <stop offset="1" stop-color="#b5a0ff" stop-opacity=".18"/>
+    </radialGradient>
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+     <feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="blurGlow"><feGaussianBlur stdDeviation="30"/></filter>
+   </defs>
+   <g id="world" transform="translate(500 310)">
+    <ellipse class="orbit back" rx="430" ry="215"/>
+    <ellipse class="orbit" rx="350" ry="175"/>
+    <ellipse class="orbit" rx="265" ry="132"/>
+    <ellipse class="orbit" rx="180" ry="90"/>
+    <circle class="central-glow" r="175"/>
+    <circle class="central-halo" r="137"/>
+    <image href="assets/planet-core.png" x="-135" y="-135" width="270" height="270" preserveAspectRatio="xMidYMid meet" style="filter:drop-shadow(0 0 23px rgba(112,143,255,.38))"/>
+    <circle r="132" fill="none" stroke="#b9d6ff" stroke-opacity=".23" stroke-width="1.2"/>
+
+    <g class="object is-locked" id="obj-volcanic" data-id="noctis" data-orbit="3" data-angle="205" tabindex="0" role="button" aria-label="Ноктис, вулканическая планета">
+     <circle class="hit" r="39"/><circle class="select-ring" r="34"/>
+     <image href="assets/planet-volcanic.png" x="-31" y="-31" width="62" height="62" preserveAspectRatio="xMidYMid meet" style="filter:drop-shadow(0 0 10px rgba(255,139,82,.2))"/>
+     <text class="object-label" y="43" text-anchor="middle">Ноктис</text>
+    </g>
+
+    <g class="object is-locked" id="obj-ice" data-id="selena" data-orbit="2" data-angle="330" tabindex="0" role="button" aria-label="Селена, ледяной спутник">
+     <circle class="hit" r="32"/><circle class="select-ring" r="28"/>
+     <image href="assets/moon-ice.png" x="-25" y="-25" width="50" height="50" preserveAspectRatio="xMidYMid meet" style="filter:drop-shadow(0 0 8px rgba(130,202,255,.2))"/>
+     <text class="object-label" y="37" text-anchor="middle">Селена</text>
+    </g>
+
+    <g class="object is-locked" id="obj-ringed" data-id="auria" data-orbit="4" data-angle="330" tabindex="0" role="button" aria-label="Аурия, кольцевая планета">
+     <circle class="hit" r="49"/><circle class="select-ring" r="45"/>
+     <image href="assets/planet-auria.png" x="-39" y="-39" width="78" height="78" preserveAspectRatio="xMidYMid meet" style="filter:drop-shadow(0 0 11px rgba(221,184,139,.22))"/>
+     <text class="object-label" y="49" text-anchor="middle">Аурия</text>
+    </g>
+
+    <g class="object is-locked" id="obj-artifact" data-id="signal" data-orbit="1" data-angle="150" tabindex="0" role="button" aria-label="Осколок сигнала, артефакт">
+     <circle class="hit" r="37"/><circle class="select-ring" r="32"/>
+     <image href="assets/signal-relic.png" x="-38" y="-43" width="76" height="86" preserveAspectRatio="xMidYMid meet" style="filter:drop-shadow(0 0 13px rgba(170,115,255,.3))"/>
+     <text class="object-label" y="49" text-anchor="middle">Осколок</text>
+    </g>
+   </g>
+  </svg>
+  <div class="drag-hint">Потяни фон, чтобы менять ракурс · перетащи открытый объект вдоль орбиты</div>
+ </div>
+ <div class="solar-footer">
+  <span><i class="solar-dot"></i>Личная система · объекты открываются постепенно</span>
+  <span id="zoomLabel">Масштаб 100%</span>
  </div>
 </section>
 <div class="stats-grid">
  <div class="stat-card"><span class="stat-value" id="uTotalEntries">0</span><span class="stat-label">дней наблюдений</span></div>
  <div class="stat-card"><span class="stat-value" id="uWeekEntries">0/7</span><span class="stat-label">за 7 дней</span></div>
- <div class="stat-card"><span class="stat-value" id="uDiscoveries">0</span><span class="stat-label">достижений</span></div>
+ <div class="stat-card"><span class="stat-value" id="uDiscoveries">0</span><span class="stat-label">объектов открыто</span></div>
+</div>
+<div class="current-stage">
+ <div class="eyebrow">ТЕКУЩИЙ ЭТАП</div>
+ <b id="journeyTitle">Подготовка к экспедиции</b>
+ <p id="journeyDesc">Каждая запись добавляет новую точку на твою карту. Начни в удобном темпе.</p>
 </div>
 <section>
  <div class="section-head"><div><div class="eyebrow">СЛЕДУЮЩАЯ ЦЕЛЬ</div><h2 id="nextMilestoneTitle">Первый сигнал</h2></div><span class="time-chip" id="journeyProgressText">0 / 1</span></div>
@@ -317,8 +534,16 @@ textarea::placeholder{color:#7786aa}
  <p class="note" id="journeyNext" style="margin-bottom:0">Первая запись откроет начало твоего пути.</p>
 </section>
 <section>
- <div class="eyebrow">КОЛЛЕКЦИЯ ЭТАПОВ</div>
- <h2 style="margin-top:5px">Карта исследователя</h2>
+ <div class="section-head">
+  <div><div class="eyebrow">КОЛЛЕКЦИЯ</div><h2 style="margin-top:5px">Объекты системы</h2></div>
+  <span class="time-chip" id="collectionCount">0 / 4 открыто</span>
+ </div>
+ <p class="note" style="margin-top:0">Находки появляются за записи в разные дни. Не нужно вести серию подряд: пропуски ничего не отнимают.</p>
+ <div class="collection-grid" id="collectionGrid"></div>
+</section>
+<section>
+ <div class="eyebrow">ТВОЙ ПУТЬ</div>
+ <h2 style="margin-top:5px">Этапы исследователя</h2>
  <ul class="journey-list" id="journeyMilestones"></ul>
 </section>
 </div>
@@ -426,6 +651,14 @@ textarea::placeholder{color:#7786aa}
 <button type="button" data-t="trend" aria-current="false">Динамика</button>
 <button type="button" data-t="more" aria-current="false">Ещё</button>
 </nav>
+<div class="object-modal-backdrop" id="objectModal" hidden>
+ <section class="object-modal" role="dialog" aria-modal="true" aria-labelledby="objectModalTitle">
+  <div class="object-modal-head"><span id="objectModalCategory">Объект коллекции</span><button class="object-modal-close" id="closeObjectModal" type="button" aria-label="Закрыть">×</button></div>
+  <h3 id="objectModalTitle">Открытие</h3>
+  <p id="objectModalDescription"></p>
+  <div class="object-modal-meta"><span class="object-pill" id="objectModalRarity"></span><span class="object-pill" id="objectModalDate"></span></div>
+ </section>
+</div>
 <dialog id="repDlg" aria-label="Отчёт для врача">
 <h2>Отчёт для врача</h2>
 <p class="note" style="margin-top:0">Сводка за период, выбранный на графике. Скопируйте и отправьте сообщением или распечатайте.</p>
@@ -458,10 +691,10 @@ function validScale(x){
  else{o.lo=typeof x.lo==="string"?x.lo.slice(0,20):"меньше";o.hi=typeof x.hi==="string"?x.hi.slice(0,20):"больше"}
  return o}
 function loadCfg(){
- var c={scales:null,tags:null,hints:false,hintOff:"",achOn:true,remind:false,time:"20:00"};
+ var c={scales:null,tags:null,hints:false,hintOff:"",achOn:true,remind:false,time:"20:00",collection:{}};
  try{var j=JSON.parse(rd(CK)||"null");
   if(j){if(Array.isArray(j.scales)){var s=j.scales.map(validScale).filter(Boolean).slice(0,MAXS);if(s.length)c.scales=s}
-   c.remind=!!j.remind;if(Array.isArray(j.tags))c.tags=j.tags.map(validTag).filter(Boolean).slice(0,MAXT);c.hints=!!j.hints;c.hintOff=typeof j.hintOff==="string"?j.hintOff:"";c.achOn=j.achOn!==false;if(j.ach&&typeof j.ach==="object"){c.ach={};Object.keys(j.ach).forEach(function(k){if(/^[\w-]{1,20}$/.test(k)&&typeof j.ach[k]==="string")c.ach[k]=j.ach[k].slice(0,10)})}if(/^\d\d:\d\d$/.test(j.time))c.time=j.time}}catch(e){}
+   c.remind=!!j.remind;if(Array.isArray(j.tags))c.tags=j.tags.map(validTag).filter(Boolean).slice(0,MAXT);c.hints=!!j.hints;c.hintOff=typeof j.hintOff==="string"?j.hintOff:"";c.achOn=j.achOn!==false;if(j.ach&&typeof j.ach==="object"){c.ach={};Object.keys(j.ach).forEach(function(k){if(/^[\w-]{1,20}$/.test(k)&&typeof j.ach[k]==="string")c.ach[k]=j.ach[k].slice(0,10)})}if(j.collection&&typeof j.collection==="object"){c.collection={};Object.keys(j.collection).forEach(function(k){if(/^[\w-]{1,24}$/.test(k)&&typeof j.collection[k]==="string")c.collection[k]=j.collection[k].slice(0,10)})}if(/^\d\d:\d\d$/.test(j.time))c.time=j.time}}catch(e){}
  if(!c.scales)c.scales=defScales();if(!c.tags)c.tags=defTags();return c}
 function defTags(){return [{id:"sl",t:"Мало сна"},{id:"st",t:"Стресс"},{id:"wk",t:"Прогулка"},{id:"cf",t:"Кофе"},{id:"md",t:"Лекарства приняты"}]}
 function validTag(x){return x&&typeof x.id==="string"&&/^[\w-]{1,20}$/.test(x.id)&&typeof x.t==="string"&&x.t.trim()?{id:x.id,t:x.t.trim().slice(0,30)}:null}
@@ -529,16 +762,25 @@ $("scales").addEventListener("click",function(e){
 function loadDay(){
  var e=load()[dateEl.value];cur={};curT=e?e.g.slice():[];
  if(e)cfg.scales.forEach(function(x){if(e.v[x.id])cur[x.id]=conv(e.v[x.id],e.d[x.id],x.n)});
- $("note").value=e?e.note:"";paint();buildChips();
+ $("note").value=e?e.note:"";paint();buildChips();setNoteView(false);
 }
 dateEl.addEventListener("change",function(){if(dateEl.value)loadDay();$("msg").textContent=""});
+function setNoteView(editing){
+ var value=$("note").value.trim(),has=!!value;
+ $("noteEditor").hidden=!editing;
+ $("notePreview").hidden=editing||!has;
+ $("addNote").hidden=editing||has;
+ $("notePreviewText").textContent=value;
+}
+$("addNote").addEventListener("click",function(){setNoteView(true);$("note").focus()});
+$("editNote").addEventListener("click",function(){setNoteView(true);$("note").focus()});
 $("save").addEventListener("click",function(){
  if(!dateEl.value){$("msg").textContent="Выберите дату.";return}
  if(!cfg.scales.some(function(x){return cur[x.id]})){$("msg").textContent="Отметьте хотя бы одну шкалу, чтобы сохранить запись.";return}
  var d=load(),old=d[dateEl.value]||{v:{},d:{}},v=Object.assign({},old.v),dd=Object.assign({},old.d);
  cfg.scales.forEach(function(x){if(cur[x.id]){v[x.id]=cur[x.id];dd[x.id]=x.n}else{delete v[x.id];delete dd[x.id]}});
  d[dateEl.value]={v:v,d:dd,note:$("note").value.trim().slice(0,500),g:curT.slice()};
- store(d);$("msg").textContent="Наблюдение сохранено. Новый сигнал добавлен на твою карту.";render();
+ store(d);setNoteView(false);$("msg").textContent="Наблюдение сохранено. Новый сигнал добавлен на твою карту.";render();
  try{$("after").scrollIntoView({behavior:"smooth",block:"nearest"})}catch(e){}
 });
 
@@ -637,6 +879,7 @@ function nextPrompt(){
 $("nextPrompt").addEventListener("click",nextPrompt);
 $("usePrompt").addEventListener("click",function(){
  var q=$("promptText").textContent,n=$("note"),prefix="Вопрос: "+q;
+ setNoteView(true);
  if(n.value.indexOf(prefix)<0)n.value=(n.value.trim()?n.value.trim()+"\\n\\n":"")+prefix+"\\n";
  n.focus();
 });
@@ -648,12 +891,207 @@ var JOURNEY=[
  {n:60,t:"Хранитель карты",d:"Шестьдесят дней наблюдений — большая личная история."},
  {n:100,t:"Мастер наблюдений",d:"Сто дней записей — впечатляющая карта твоего опыта."}
 ];
+
+/* ---------- Коллекция объектов ---------- */
+var COLLECTION=[
+ {id:"signal",name:"Осколок сигнала",category:"Артефакт",rarity:"Особый",need:1,orbit:1,angle:150,image:"assets/signal-relic.png",description:"Фрагмент неизвестного происхождения. Внутри него обнаружен слабый сигнал, который повторяется с каждым новым наблюдением."},
+ {id:"selena",name:"Селена",category:"Спутник",rarity:"Обычный",need:7,orbit:2,angle:330,image:"assets/moon-ice.png",description:"Холодный спутник с ледяной поверхностью и глубокими кратерами. Его свет помогает ориентироваться в дальней части системы."},
+ {id:"noctis",name:"Ноктис",category:"Планета",rarity:"Редкий",need:14,orbit:3,angle:205,image:"assets/planet-volcanic.png",description:"Тёмный вулканический мир. На ночной стороне видны тонкие линии раскалённых разломов."},
+ {id:"auria",name:"Аурия",category:"Планета",rarity:"Эпический",need:30,orbit:4,angle:330,image:"assets/planet-auria.png",description:"Газовый гигант с широкими кольцами и золотистыми облачными слоями. Его орбита открывает внешний край системы."}
+];
+var SYSTEM_KEY="dnevnik-universe-layout-v1";
+var SYSTEM_DEFAULTS={noctis:205,selena:330,auria:330,signal:150};
+var SYSTEM_ORBITS={1:[180,90],2:[265,132],3:[350,175],4:[430,215]};
+var systemYaw=0,systemPitch=.38,systemZoom=1,systemAngles=Object.assign({},SYSTEM_DEFAULTS);
+var activePointer=null,draggingObject=null,dragMoved=false;
+
+function collectionToast(ids){
+ var first=COLLECTION.filter(function(x){return x.id===ids[0]})[0];if(!first)return;
+ var t=$("toast");t.textContent="Новое открытие: «"+first.name+"». "+first.description+(ids.length>1?" Ещё открытий: "+(ids.length-1):"");
+ t.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){t.hidden=true},6500);
+}
+function checkCollection(d,quiet){
+ if(!cfg.collection)cfg.collection={};
+ var count=Object.keys(d).length,found=[];
+ COLLECTION.forEach(function(item){
+  if(count>=item.need&&!cfg.collection[item.id]){
+   cfg.collection[item.id]=iso(new Date());found.push(item.id);
+  }
+ });
+ if(found.length){
+  saveCfg();
+  if(!quiet)collectionToast(found);
+ }
+}
+function initCollection(){
+ if(!cfg.collection)cfg.collection={};
+ checkCollection(load(),true);
+}
+function renderSceneObjects(){
+ COLLECTION.forEach(function(item){
+  var node=document.querySelector('.object[data-id="'+item.id+'"]');
+  if(!node)return;
+  var found=!!(cfg.collection&&cfg.collection[item.id]);
+  node.classList.toggle("is-locked",!found);
+  node.setAttribute("aria-disabled",found?"false":"true");
+  node.setAttribute("aria-label",found?item.name+", "+item.category:"Закрытый объект коллекции");
+ });
+}
+function renderCollection(){
+ var grid=$("collectionGrid");if(!grid)return;
+ grid.textContent="";
+ var count=Object.keys(load()).length,unlockedCount=COLLECTION.filter(function(item){return !!(cfg.collection&&cfg.collection[item.id])}).length;
+ $("collectionCount").textContent=unlockedCount+" / "+COLLECTION.length+" открыто";
+ COLLECTION.forEach(function(item){
+  var found=!!(cfg.collection&&cfg.collection[item.id]);
+  var card=el("button","collection-card "+(found?"found":"locked"));
+  card.type="button";card.disabled=!found;
+  if(found)card.dataset.objectOpen=item.id;
+  var thumb=el("span","collection-thumb");
+  if(found){
+   var im=el("img");im.src=item.image;im.alt="";im.loading="lazy";thumb.appendChild(im);
+  }else{
+   thumb.appendChild(el("span","unknown-mark","?"));
+  }
+  var info=el("span","collection-info");
+  info.appendChild(el("b","collection-name",found?item.name:"Неизвестный объект"));
+  info.appendChild(el("small","collection-type",found?item.category+" · "+item.rarity:"Скрытая находка"));
+  var remaining=Math.max(0,item.need-count);
+  info.appendChild(el("span","collection-status",found?"Открыто · "+fmt(cfg.collection[item.id]):"Ещё "+remaining+" наблюд. до открытия"));
+  card.appendChild(thumb);card.appendChild(info);
+  if(found)card.appendChild(el("span","collection-arrow","↗"));
+  grid.appendChild(card);
+ });
+ renderSceneObjects();
+}
+function openObject(id){
+ var item=COLLECTION.filter(function(x){return x.id===id})[0];
+ if(!item||!cfg.collection||!cfg.collection[id])return;
+ $("objectModalCategory").textContent=item.category;
+ $("objectModalTitle").textContent=item.name;
+ $("objectModalDescription").textContent=item.description;
+ $("objectModalRarity").textContent=item.rarity;
+ $("objectModalDate").textContent="Открыто · "+fmt(cfg.collection[id]);
+ $("objectModal").hidden=false;
+}
+function closeObject(){ $("objectModal").hidden=true; }
+
+function systemProjection(){
+ var cy=Math.cos(systemYaw),sy=Math.sin(systemYaw),cp=Math.cos(systemPitch);
+ return {a:cy,b:-Math.sin(systemPitch)*sy,c:0,d:cp};
+}
+function saveSystemLayout(){
+ wr(SYSTEM_KEY,JSON.stringify({yaw:systemYaw,pitch:systemPitch,zoom:systemZoom,angles:systemAngles}));
+}
+function renderSystem(save){
+ var svg=$("systemSvg"),world=$("world");if(!svg||!world)return;
+ world.setAttribute("transform","translate(500 310) scale("+systemZoom+")");
+ var m=systemProjection();
+ document.querySelectorAll("#world .orbit").forEach(function(node){
+  node.setAttribute("transform","matrix("+m.a+" "+m.b+" "+m.c+" "+m.d+" 0 0)");
+ });
+ Object.keys(systemAngles).forEach(function(id){
+  var node=document.querySelector('.object[data-id="'+id+'"]');
+  if(!node)return;
+  var orbit=Number(node.dataset.orbit),r=SYSTEM_ORBITS[orbit],a=systemAngles[id]*Math.PI/180;
+  var x0=r[0]*Math.cos(a),y0=r[1]*Math.sin(a);
+  var x=m.a*x0+m.c*y0,y=m.b*x0+m.d*y0;
+  node.setAttribute("transform","translate("+x.toFixed(2)+" "+y.toFixed(2)+")");
+ });
+ $("zoomLabel").textContent="Масштаб "+Math.round(systemZoom*100)+"%";
+ if(save)saveSystemLayout();
+}
+function systemPoint(e){
+ var p=$("systemSvg").createSVGPoint();p.x=e.clientX;p.y=e.clientY;
+ var m=$("world").getScreenCTM();return p.matrixTransform(m.inverse());
+}
+function angleOnOrbit(point,id){
+ var node=document.querySelector('.object[data-id="'+id+'"]');
+ var orbit=Number(node.dataset.orbit),r=SYSTEM_ORBITS[orbit],m=systemProjection();
+ var x0=point.x/m.a,y0=(point.y-m.b*x0)/m.d;
+ return Math.atan2(y0/r[1],x0/r[0])*180/Math.PI;
+}
+function initSystem(){
+ try{
+  var saved=JSON.parse(rd(SYSTEM_KEY)||"null");
+  if(saved){
+   systemYaw=Math.max(-1,Math.min(1,Number(saved.yaw)||0));
+   systemPitch=Math.max(.12,Math.min(.9,Number(saved.pitch)||.38));
+   systemZoom=Math.max(.72,Math.min(1.35,Number(saved.zoom)||1));
+   if(saved.angles&&typeof saved.angles==="object"){
+    Object.keys(SYSTEM_DEFAULTS).forEach(function(id){
+     var v=Number(saved.angles[id]);if(Number.isFinite(v))systemAngles[id]=v;
+    });
+   }
+  }
+ }catch(e){}
+ $("zoomIn").addEventListener("click",function(){systemZoom=Math.min(1.35,systemZoom+.1);renderSystem(true)});
+ $("zoomOut").addEventListener("click",function(){systemZoom=Math.max(.72,systemZoom-.1);renderSystem(true)});
+ $("resetView").addEventListener("click",function(){systemYaw=0;systemPitch=.38;systemZoom=1;renderSystem(true)});
+ var svg=$("systemSvg");
+ svg.addEventListener("pointerdown",function(e){
+  var obj=e.target.closest(".object");
+  if(obj){
+   if(!cfg.collection||!cfg.collection[obj.dataset.id]){e.preventDefault();return}
+   e.preventDefault();draggingObject=obj.dataset.id;dragMoved=false;activePointer=e.pointerId;
+   obj.classList.add("selected");
+  }else{
+   draggingObject=null;dragMoved=false;activePointer=e.pointerId;
+   svg.dataset.startX=e.clientX;svg.dataset.startY=e.clientY;
+   svg.dataset.startYaw=systemYaw;svg.dataset.startPitch=systemPitch;
+  }
+  try{svg.setPointerCapture(e.pointerId)}catch(_){}
+ });
+ svg.addEventListener("pointermove",function(e){
+  if(activePointer!==e.pointerId)return;
+  if(draggingObject){
+   var p=systemPoint(e);systemAngles[draggingObject]=angleOnOrbit(p,draggingObject);
+   dragMoved=true;renderSystem(false);
+  }else{
+   var dx=e.clientX-Number(svg.dataset.startX||e.clientX);
+   var dy=e.clientY-Number(svg.dataset.startY||e.clientY);
+   if(Math.abs(dx)>3||Math.abs(dy)>3)dragMoved=true;
+   systemYaw=Math.max(-1,Math.min(1,Number(svg.dataset.startYaw||0)+dx*.0025));
+   systemPitch=Math.max(.12,Math.min(.9,Number(svg.dataset.startPitch||.38)-dy*.0022));
+   renderSystem(false);
+  }
+ });
+ function finishPointer(e,cancelled){
+  if(activePointer!==e.pointerId)return;
+  if(draggingObject){
+   var id=draggingObject,node=document.querySelector('.object[data-id="'+id+'"]');
+   if(node)node.classList.remove("selected");
+   if(!cancelled&&!dragMoved)openObject(id);
+  }
+  try{if(svg.hasPointerCapture(e.pointerId))svg.releasePointerCapture(e.pointerId)}catch(_){}
+  saveSystemLayout();activePointer=null;draggingObject=null;dragMoved=false;
+ }
+ svg.addEventListener("pointerup",function(e){finishPointer(e,false)});
+ svg.addEventListener("pointercancel",function(e){finishPointer(e,true)});
+ svg.querySelectorAll(".object").forEach(function(node){
+  node.addEventListener("keydown",function(e){
+   if((e.key==="Enter"||e.key===" ")&&cfg.collection&&cfg.collection[node.dataset.id]){
+    e.preventDefault();openObject(node.dataset.id);
+   }
+  });
+ });
+ $("collectionGrid").addEventListener("click",function(e){
+  var card=e.target.closest("[data-object-open]");if(card)openObject(card.dataset.objectOpen);
+ });
+ $("closeObjectModal").addEventListener("click",closeObject);
+ $("objectModal").addEventListener("click",function(e){if(e.target.id==="objectModal")closeObject()});
+ document.addEventListener("keydown",function(e){if(e.key==="Escape")closeObject()});
+ renderSystem(false);
+}
 function renderJourney(d){
  var count=Object.keys(d).length,week=range(7).filter(function(x){return !!d[x]}).length;
- var unlocked=Object.keys(cfg.ach||{}).length;
+ var unlocked=Object.keys(cfg.ach||{}).length,collected=COLLECTION.filter(function(item){return !!(cfg.collection&&cfg.collection[item.id])}).length;
+ var stage=count>=100?6:count>=60?5:count>=30?4:count>=14?3:count>=7?2:count>=1?1:0;
+ var planets=document.querySelectorAll(".planet-scene,.universe-art,.solar-system-panel");
+ for(var pi=0;pi<planets.length;pi++)planets[pi].setAttribute("data-stage",String(stage));
  ["totalEntries","uTotalEntries"].forEach(function(id){$(id).textContent=count});
  $("weekEntries").textContent=week+"/7";$("uWeekEntries").textContent=week+"/7";
- $("discoveryCount").textContent=unlocked;$("uDiscoveries").textContent=unlocked;
+ $("discoveryCount").textContent=unlocked;$("uDiscoveries").textContent=collected;
  var level=JOURNEY[0];
  for(var i=0;i<JOURNEY.length;i++){if(count>=JOURNEY[i].n)level=JOURNEY[i]}
  $("journeyTitle").textContent=count?level.t:"Подготовка к экспедиции";
@@ -688,7 +1126,7 @@ function render(){
  var n7=r7.filter(function(s){return d[s]}).length;
  $("after").hidden=!n7;
  if(n7){chart(r7,d,{svg:$("chart7"),legend:$("legend7"),pulse:true});$("wk").textContent="Записей за 7 дней: "+n7+" из 7. Пропуски в порядке вещей."}
- report(r,d);hist(d);renderIns(d);hintUpdate(d);checkAch();renderJourney(d);checkBanner();
+ report(r,d);hist(d);renderIns(d);hintUpdate(d);checkAch();checkCollection(d,false);renderCollection();renderJourney(d);checkBanner();
  $("sub").textContent=Object.keys(d).length?"Можно отмечать не все шкалы. Пропущенные дни ничего не ломают.":"Отметь состояние в удобном темпе. Пропущенные дни ничего не ломают. Записи хранятся только на твоём устройстве.";
 }
 
@@ -772,7 +1210,7 @@ $("exp").addEventListener("click",function(){
  var d=load(),n=Object.keys(d).length;
  if(!n){$("msg3").textContent="Пока нечего сохранять: записей нет.";return}
  try{
-  var b=new Blob([JSON.stringify({version:3,scales:cfg.scales,tags:cfg.tags,entries:d},null,1)],{type:"application/json"});
+  var b=new Blob([JSON.stringify({version:4,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d},null,1)],{type:"application/json"});
   var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dnevnik-"+iso(new Date())+".json";
   document.body.appendChild(a);a.click();a.remove();
   $("msg3").textContent="Копия сохранена. Записей: "+n+".";unlock(["backup"]);
@@ -796,6 +1234,17 @@ $("file").addEventListener("change",function(){
    if(!c){$("msg3").textContent="В файле нет подходящих записей.";return}
    if(!confirm("Добавить записей: "+c+(ns.length?" и шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
    var d=load();Object.keys(add).forEach(function(k){d[k]=add[k]});store(d);
+   if(j.progress&&typeof j.progress==="object"){
+    if(j.progress.ach&&typeof j.progress.ach==="object"){
+     if(!cfg.ach)cfg.ach={};
+     Object.keys(j.progress.ach).forEach(function(k){if(/^[\w-]{1,20}$/.test(k)&&typeof j.progress.ach[k]==="string")cfg.ach[k]=j.progress.ach[k].slice(0,10)});
+    }
+    if(j.progress.collection&&typeof j.progress.collection==="object"){
+     if(!cfg.collection)cfg.collection={};
+     Object.keys(j.progress.collection).forEach(function(k){if(/^[\w-]{1,24}$/.test(k)&&typeof j.progress.collection[k]==="string")cfg.collection[k]=j.progress.collection[k].slice(0,10)});
+    }
+    saveCfg();
+   }
    if(ns.length){cfg.scales=cfg.scales.concat(ns);saveCfg();renderEditor();buildScales()}
    if(nt.length){cfg.tags=cfg.tags.concat(nt);saveCfg();renderTagEditor();buildChips()}
    $("msg3").textContent="Загружено записей: "+c+".";render();loadDay();
@@ -956,7 +1405,7 @@ $("nav").addEventListener("click",function(e){var b=e.target.closest("button");i
 $("openRep").addEventListener("click",function(){$("msg2").textContent="";if(Object.keys(load()).length)unlock(["report"]);var dl=$("repDlg");if(dl.showModal)dl.showModal();else dl.setAttribute("open","")});
 $("closeRep").addEventListener("click",function(){var dl=$("repDlg");if(dl.close)dl.close();else dl.removeAttribute("open")});
 
-initAch();buildScales();renderEditor();renderTagEditor();loadDay();render();renderAch();
+initAch();initCollection();initSystem();buildScales();renderEditor();renderTagEditor();loadDay();render();renderAch();
 })();
 </script>
 </body>

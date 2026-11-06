@@ -1,5 +1,5 @@
-var C = "dnevnik-v7";
-var FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
+var C = "dnevnik-v9";
+var FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./assets/nebula-sky.jpg", "./assets/planet-core.png", "./assets/planet-volcanic.png", "./assets/moon-ice.png", "./assets/planet-auria.png", "./assets/signal-relic.png"];
 
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(C).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
