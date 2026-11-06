@@ -28,23 +28,25 @@ h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
 .rank .star{font-size:20px;color:#e8c078;text-shadow:0 0 15px rgba(232,192,120,.7)}
 .rank strong{display:block;font-size:13px}.rank small{color:var(--muted)}
 .scene-card{
- position:relative;overflow:hidden;border:1px solid rgba(135,157,230,.19);border-radius:25px;
+ position:relative;overflow:hidden;border:1px solid rgba(135,157,230,.24);border-radius:25px;
  background:
-  radial-gradient(ellipse at 50% 42%,rgba(39,55,105,.28),transparent 52%),
-  radial-gradient(ellipse at 82% 12%,rgba(114,61,145,.15),transparent 38%),
-  linear-gradient(150deg,#0b1329,#080e1e 58%,#070c19);
- box-shadow:0 22px 65px rgba(0,0,0,.28);
+  linear-gradient(180deg,rgba(4,7,18,.08),rgba(4,7,18,.16) 48%,rgba(4,7,18,.72)),
+  url('assets/nebula-sky.jpg') center 48% / cover no-repeat,
+  #070b18;
+ box-shadow:0 22px 65px rgba(0,0,0,.34);
 }
 .scene-card:before{
- content:"";position:absolute;inset:0;pointer-events:none;opacity:.6;
- background-image:
-  radial-gradient(1.5px 1.5px at 8% 18%,#fff 55%,transparent 70%),
+ content:"";position:absolute;inset:0;pointer-events:none;opacity:.2;
+ background:
+  radial-gradient(1px 1px at 8% 18%,#fff 55%,transparent 70%),
   radial-gradient(1px 1px at 17% 72%,#d9e1ff 55%,transparent 70%),
-  radial-gradient(1.5px 1.5px at 27% 32%,#fff 55%,transparent 70%),
-  radial-gradient(1px 1px at 42% 12%,#fff 55%,transparent 70%),
-  radial-gradient(1.5px 1.5px at 58% 80%,#d9e1ff 55%,transparent 70%),
+  radial-gradient(1.5px 1.5px at 42% 12%,#fff 55%,transparent 70%),
   radial-gradient(1px 1px at 72% 22%,#fff 55%,transparent 70%),
-  radial-gradient(1.5px 1.5px at 91% 65%,#fff 55%,transparent 70%);
+  radial-gradient(1px 1px at 91% 65%,#fff 55%,transparent 70%);
+}
+.scene-card:after{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background:radial-gradient(ellipse at 50% 48%,transparent 25%,rgba(3,6,15,.16) 100%);
 }
 .scene-top{position:absolute;z-index:3;top:18px;left:20px;right:20px;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
 .scene-label{font-size:11px;letter-spacing:.12em;color:#aab9e8;font-weight:800}
@@ -100,7 +102,7 @@ h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
 .mini-blue{background:radial-gradient(circle at 30% 25%,#d4e9ff 0,#6f9bd0 20%,#31517d 58%,#0b1730 100%)}
 .mini-ice{background:radial-gradient(circle at 32% 25%,#fff 0,#cbd8e7 24%,#647b9e 58%,#1a2941 100%)}
 .mini-gold{background:radial-gradient(circle at 30% 28%,#ffe2a3 0,#d28c3c 27%,#743c28 64%,#1c1728 100%)}
-.mini-ring{background:radial-gradient(circle at 32% 25%,#e3d0b0 0,#9e846b 38%,#342d36 76%,#101525 100%)}
+.mini-ring{background-image:url('assets/signal-relic.png');background-size:92%;background-position:center;background-repeat:no-repeat;background-color:rgba(16,24,44,.9)}
 .recent-card strong{display:block;font-size:12px}.recent-card small{display:block;color:#98a7cb;font-size:11px;margin-top:3px}
 .journal{display:flex;align-items:center;justify-content:center;gap:13px;padding:16px;color:#dfe4ff;text-decoration:none;background:linear-gradient(135deg,rgba(75,70,142,.3),rgba(20,29,58,.94));border-color:rgba(145,137,255,.46);box-shadow:0 0 24px rgba(116,105,255,.12)}
 .journal .book{font-size:28px;color:#a8a2ff}
@@ -240,19 +242,17 @@ h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
       <ellipse cx="0" cy="1" rx="48" ry="13" transform="rotate(-20)" fill="none" stroke="url(#ringGrad)" stroke-width="5" opacity=".7"/>
      </g>
 
-     <g class="object" id="obj-artifact" data-id="signal" data-orbit="1" data-angle="150" tabindex="0" role="button" aria-label="Капсула сигнала, артефакт">
-      <circle class="hit" r="28"/>
-      <circle class="select-ring" r="25"/>
-      <path d="M0 -18 L13 -8 L13 8 L0 18 L-13 8 L-13 -8 Z" fill="#173d5a" stroke="#83d9ef" stroke-width="1.5" filter="url(#softGlow)"/>
-      <path d="M0 -13 L7 -5 L5 7 L0 13 L-6 5 L-5 -6 Z" fill="#9beaff" opacity=".85"/>
-      <path d="M-13 -8 L0 -18 L13 -8" fill="none" stroke="#c3f5ff" stroke-opacity=".65"/>
+     <g class="object" id="obj-artifact" data-id="signal" data-orbit="1" data-angle="150" tabindex="0" role="button" aria-label="Осколок сигнала, артефакт">
+      <circle class="hit" r="37"/>
+      <circle class="select-ring" r="32"/>
+      <image class="planet-surface" href="assets/signal-relic.png" x="-38" y="-43" width="76" height="86" preserveAspectRatio="xMidYMid meet" style="filter:drop-shadow(0 0 13px rgba(170,115,255,.3))"/>
      </g>
     </g>
    </svg>
    <div class="drag-hint">Потяни фон, чтобы менять ракурс · перетащи объект вдоль орбиты</div>
   </div>
   <div class="scene-footer">
-   <span><i class="legend-dot"></i>Сцена прототипа · 4 демонстрационных объекта</span>
+   <span><i class="legend-dot"></i>Сцена прототипа · звёздная туманность · 4 демонстрационных объекта</span>
    <span id="zoomLabel">Масштаб 100%</span>
   </div>
  </section>
@@ -279,7 +279,7 @@ h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
     <button class="recent-card" data-open="noctis"><span class="mini-planet mini-blue"></span><span><strong>Ноктис</strong><small>Планета · редкая</small></span></button>
     <button class="recent-card" data-open="selena"><span class="mini-planet mini-ice"></span><span><strong>Селена</strong><small>Спутник · обычный</small></span></button>
     <button class="recent-card" data-open="auria"><span class="mini-planet mini-gold"></span><span><strong>Аурия</strong><small>Планета · редкая</small></span></button>
-    <button class="recent-card" data-open="signal"><span class="mini-planet mini-ring"></span><span><strong>Капсула сигнала</strong><small>Артефакт · обычный</small></span></button>
+    <button class="recent-card" data-open="signal"><span class="mini-planet mini-ring"></span><span><strong>Осколок сигнала</strong><small>Артефакт · обычный</small></span></button>
    </div>
   </div>
   <a class="journal" href="#journal" id="journalLink">
@@ -310,7 +310,7 @@ h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
   noctis:{name:"Ноктис",category:"Планета",rarity:"Редкая",orbit:3,description:"Тёмный вулканический мир. На ночной стороне видны тонкие линии раскалённых разломов. В полной версии объект будет открываться за исследовательские достижения."},
   selena:{name:"Селена",category:"Спутник",rarity:"Обычный",orbit:2,description:"Холодный спутник с ледяной поверхностью и глубокими кратерами. Его можно будет разместить на любой доступной орбите."},
   auria:{name:"Аурия",category:"Планета",rarity:"Редкая",orbit:4,description:"Газовый гигант с широкими кольцами и мягкими золотистыми облачными слоями."},
-  signal:{name:"Капсула сигнала",category:"Артефакт",rarity:"Обычный",orbit:1,description:"Небольшой артефакт первой экспедиции. В полной версии будет хранить историю одного из важных открытий."}
+  signal:{name:"Капсула сигнала",category:"Артефакт",rarity:"Обычный",orbit:1,description:"Фрагмент неизвестного происхождения с заключённым внутри сигналом. Его происхождение пока остаётся загадкой."}
  };
  let yaw=0,pitch=.38,zoom=1,angles={...defaults},activePointer=null,draggingObject=null,moved=false;
  const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
