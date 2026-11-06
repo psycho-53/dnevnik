@@ -165,7 +165,7 @@ h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
    <div class="scene-controls">
     <button class="control" id="zoomIn" aria-label="Приблизить">+</button>
     <button class="control" id="zoomOut" aria-label="Отдалить">−</button>
-    <button class="control" id="resetView" aria-label="Сбросить вид" title="Сбросить вид">⟳</button>
+    <button class="control" id="resetView" aria-label="Сбросить ракурс" title="Сбросить ракурс">⟳</button>
    </div>
   </div>
   <div class="scene-wrap">
@@ -249,7 +249,7 @@ h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
      </g>
     </g>
    </svg>
-   <div class="drag-hint">Потяни фон, чтобы вращать систему · перетащи объект по орбите</div>
+   <div class="drag-hint">Потяни фон, чтобы менять ракурс · перетащи объект вдоль орбиты</div>
   </div>
   <div class="scene-footer">
    <span><i class="legend-dot"></i>Сцена прототипа · 4 демонстрационных объекта</span>
@@ -312,27 +312,44 @@ h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
   auria:{name:"Аурия",category:"Планета",rarity:"Редкая",orbit:4,description:"Газовый гигант с широкими кольцами и мягкими золотистыми облачными слоями."},
   signal:{name:"Капсула сигнала",category:"Артефакт",rarity:"Обычный",orbit:1,description:"Небольшой артефакт первой экспедиции. В полной версии будет хранить историю одного из важных открытий."}
  };
- let rotation=0,zoom=1,angles={...defaults},activePointer=null,draggingObject=null,moved=false;
+ let yaw=0,pitch=.38,zoom=1,angles={...defaults},activePointer=null,draggingObject=null,moved=false;
+ const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
  try{
   const saved=JSON.parse(localStorage.getItem("kosmos2-prototype-layout")||"null");
-  if(saved){rotation=Number(saved.rotation)||0;zoom=Math.min(1.35,Math.max(.72,Number(saved.zoom)||1));angles={...angles,...saved.angles};}
+  if(saved){
+   yaw=clamp(Number(saved.yaw)||0,-1,1);
+   pitch=clamp(Number(saved.pitch)||.38,.12,.9);
+   zoom=Math.min(1.35,Math.max(.72,Number(saved.zoom)||1));
+   angles={...angles,...saved.angles};
+  }
  }catch(e){}
+ function projection(){
+  const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+  // Проекция наклонённой орбитальной плоскости:
+  // горизонтальный свайп меняет азимут камеры, вертикальный — её высоту.
+  return {a:cy,b:-sp*sy,c:0,d:cp,det:cy*cp};
+ }
  function render(){
-  world.setAttribute("transform","translate(500 310) rotate("+rotation+") scale("+zoom+")");
+  world.setAttribute("transform","translate(500 310) scale("+zoom+")");
+  const m=projection();
+  document.querySelectorAll(".orbit").forEach(el=>{
+   el.setAttribute("transform","matrix("+m.a+" "+m.b+" "+m.c+" "+m.d+" 0 0)");
+  });
   Object.keys(angles).forEach(id=>{
    const el=document.querySelector('[data-id="'+id+'"]');
    const orbit=Number(el.dataset.orbit),r=orbitRadii[orbit],a=angles[id]*Math.PI/180;
-   const x=r[0]*Math.cos(a),y=r[1]*Math.sin(a);
+   const x0=r[0]*Math.cos(a),y0=r[1]*Math.sin(a);
+   const x=m.a*x0+m.c*y0,y=m.b*x0+m.d*y0;
    el.setAttribute("transform","translate("+x.toFixed(2)+" "+y.toFixed(2)+")");
   });
   zoomLabel.textContent="Масштаб "+Math.round(zoom*100)+"%";
-  try{localStorage.setItem("kosmos2-prototype-layout",JSON.stringify({rotation,zoom,angles}));}catch(e){}
+  try{localStorage.setItem("kosmos2-prototype-layout",JSON.stringify({yaw,pitch,zoom,angles}));}catch(e){}
  }
  function setZoom(value){zoom=Math.min(1.35,Math.max(.72,value));render();}
  document.getElementById("zoomIn").addEventListener("click",()=>setZoom(zoom+.1));
  document.getElementById("zoomOut").addEventListener("click",()=>setZoom(zoom-.1));
  document.getElementById("resetView").addEventListener("click",()=>{
-  rotation=0;zoom=1;angles={...defaults};render();
+  yaw=0;pitch=.38;zoom=1;render();
  });
  function openDetails(id){
   const d=details[id];if(!d)return;
@@ -353,6 +370,14 @@ h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
   const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;
   const m=world.getScreenCTM();return p.matrixTransform(m.inverse());
  }
+ function projectedPointToOrbit(point,orbit){
+  const m=projection(),r=orbitRadii[orbit];
+  // Обратная проекция нужна, чтобы объект оставался привязанным к своей орбите
+  // даже когда пользователь смотрит на систему под углом.
+  const x0=point.x/m.a;
+  const y0=(point.y-m.b*x0)/m.d;
+  return Math.atan2(y0/r[1],x0/r[0])*180/Math.PI;
+ }
  svg.addEventListener("pointerdown",e=>{
   const obj=e.target.closest(".object");
   if(obj){
@@ -363,18 +388,26 @@ h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
   }
   activePointer=e.pointerId;draggingObject=null;moved=false;
   svg.setPointerCapture(e.pointerId);
-  svg.dataset.startX=e.clientX;svg.dataset.startRotation=rotation;
+  svg.dataset.startX=e.clientX;
+  svg.dataset.startY=e.clientY;
+  svg.dataset.startYaw=yaw;
+  svg.dataset.startPitch=pitch;
  });
  svg.addEventListener("pointermove",e=>{
   if(activePointer!==e.pointerId)return;
   if(draggingObject){
-   const p=pointInWorld(e),orbit=Number(document.querySelector('[data-id="'+draggingObject+'"]').dataset.orbit),r=orbitRadii[orbit];
-   angles[draggingObject]=Math.atan2(p.y/r[1],p.x/r[0])*180/Math.PI;
+   const p=pointInWorld(e);
+   const orbit=Number(document.querySelector('[data-id="'+draggingObject+'"]').dataset.orbit);
+   angles[draggingObject]=projectedPointToOrbit(p,orbit);
    moved=true;render();
   }else if(svg.hasPointerCapture(e.pointerId)){
    const dx=e.clientX-Number(svg.dataset.startX||e.clientX);
-   if(Math.abs(dx)>2)moved=true;
-   rotation=Number(svg.dataset.startRotation||0)+dx*.32;render();
+   const dy=e.clientY-Number(svg.dataset.startY||e.clientY);
+   if(Math.abs(dx)>2||Math.abs(dy)>2)moved=true;
+   // Не крутим плоскую картинку: меняем положение условной камеры вокруг системы.
+   yaw=clamp(Number(svg.dataset.startYaw||0)+dx*.0025,-1,1);
+   pitch=clamp(Number(svg.dataset.startPitch||.38)-dy*.0022,.12,.9);
+   render();
   }
  });
  function endPointer(e){
