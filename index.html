@@ -81,6 +81,17 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
  main,#banner{display:none!important}
  #repPrint{display:block;white-space:pre-wrap;font:14px/1.5 system-ui,sans-serif}
 }
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+.chips button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--btn);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
+.chips button[aria-pressed=true]{background:var(--c0);border-color:var(--c0);color:var(--on)}
+.chips .add{background:none;border-style:dashed;color:var(--mute)}
+.card2{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c1);border-radius:14px;padding:14px 16px;margin-bottom:16px}
+.card2 p{margin:0 0 6px;font-size:15px}
+.ins{padding-left:18px;margin:0}
+.ins li{margin-bottom:8px}
+@keyframes pl{0%{r:3.5px}50%{r:8px}100%{r:3.5px}}
+.pulse{animation:pl 1.1s ease-out 1}
+@media (prefers-reduced-motion:reduce){.pulse{animation:none}}
 </style>
 </head>
 <body>
@@ -92,9 +103,15 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 <div id="tab-today">
 <h1>Как вы сегодня?</h1>
 <p class="sub" id="sub"></p>
+<div class="card2" id="hint" hidden role="status">
+<p id="hintT"></p>
+<p class="note" style="margin:0">Это не диагноз, а заметка, которую можно показать врачу.</p>
+<div class="row" style="margin-top:8px"><button class="btn sec sm" id="hintX" type="button">Скрыть на сегодня</button></div>
+</div>
 <section>
 <div class="row"><label for="d"><b>Дата</b></label><input type="date" id="d"></div>
 <div id="scales"></div>
+<div class="scale"><b>Что было сегодня</b><small>Необязательно. По отметкам приложение со временем найдёт совпадения</small><div class="chips" id="chips"></div></div>
 <label for="note"><b>Заметка</b> <span class="note">(необязательно)</span></label>
 <textarea id="note" placeholder="Что повлияло: сон, лекарства, события"></textarea>
 <div class="row" style="margin-top:12px"><button class="btn" id="save" type="button">Сохранить</button></div>
@@ -119,6 +136,11 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 <div class="row" style="margin-top:14px"><button class="btn sec" id="openRep" type="button">Отчёт для врача</button></div>
 </section>
 <section>
+<h2>Что замечено</h2>
+<ul class="ins" id="ins"></ul>
+<p class="note" id="insNote" style="margin-bottom:0"></p>
+</section>
+<section>
 <details>
 <summary>История записей</summary>
 <ul class="hist" id="hist"></ul>
@@ -136,6 +158,21 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 <div id="sedit"></div>
 <div class="row" style="margin-top:8px"><button class="btn sec sm" id="addS" type="button">Добавить шкалу</button><button class="btn sec sm" id="resetS" type="button">Вернуть стандартные</button></div>
 <p class="note">Если изменить число делений, старые записи пересчитаются пропорционально.</p>
+</details>
+</section>
+<section>
+<details>
+<summary>Факторы</summary>
+<p class="note" style="margin-top:0">То, что можно отметить за день: сон, стресс, прогулка и так далее. Переименуйте или уберите лишнее, новые можно добавить.</p>
+<div id="tedit"></div>
+<div class="row"><button class="btn sec sm" id="addT" type="button">Добавить фактор</button></div>
+</details>
+</section>
+<section>
+<details>
+<summary>Мягкие подсказки (экспериментально)</summary>
+<label class="row" style="margin-bottom:10px"><input type="checkbox" id="hintsOn"> Показывать мягкие подсказки</label>
+<p class="note">Приложение сравнивает последние дни с вашим обычным уровнем за предыдущие две недели. Если отличие заметное и держится, на экране «Сегодня» появляется одна спокойная строка. Подсказки ничего не диагностируют. Они появляются, когда накопится не меньше 10 записей, и не чаще раза в день.</p>
 </details>
 </section>
 <section>
@@ -191,8 +228,8 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 
 <script>
 (function(){
-var KEY="dnevnik-v1",CK="dnevnik-cfg-v1",memS={},days=14,snoozed=false,cur={};
-var DASH=["","6 4","2 4","10 3 2 3","1 5","8 4 2 4"],NS=[3,5,7,10],MAXS=6;
+var KEY="dnevnik-v1",CK="dnevnik-cfg-v1",memS={},days=14,snoozed=false,cur={},curT=[];
+var DASH=["","6 4","2 4","10 3 2 3","1 5","8 4 2 4"],NS=[3,5,7,10],MAXS=6,MAXT=12;
 var $=function(i){return document.getElementById(i)};
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function iso(dt){var z=new Date(dt.getTime()-dt.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)}
@@ -213,11 +250,13 @@ function validScale(x){
  else{o.lo=typeof x.lo==="string"?x.lo.slice(0,20):"меньше";o.hi=typeof x.hi==="string"?x.hi.slice(0,20):"больше"}
  return o}
 function loadCfg(){
- var c={scales:null,remind:false,time:"20:00"};
+ var c={scales:null,tags:null,hints:false,hintOff:"",remind:false,time:"20:00"};
  try{var j=JSON.parse(rd(CK)||"null");
   if(j){if(Array.isArray(j.scales)){var s=j.scales.map(validScale).filter(Boolean).slice(0,MAXS);if(s.length)c.scales=s}
-   c.remind=!!j.remind;if(/^\d\d:\d\d$/.test(j.time))c.time=j.time}}catch(e){}
- if(!c.scales)c.scales=defScales();return c}
+   c.remind=!!j.remind;if(Array.isArray(j.tags))c.tags=j.tags.map(validTag).filter(Boolean).slice(0,MAXT);c.hints=!!j.hints;c.hintOff=typeof j.hintOff==="string"?j.hintOff:"";if(/^\d\d:\d\d$/.test(j.time))c.time=j.time}}catch(e){}
+ if(!c.scales)c.scales=defScales();if(!c.tags)c.tags=defTags();return c}
+function defTags(){return [{id:"sl",t:"Мало сна"},{id:"st",t:"Стресс"},{id:"wk",t:"Прогулка"},{id:"cf",t:"Кофе"},{id:"md",t:"Лекарства приняты"}]}
+function validTag(x){return x&&typeof x.id==="string"&&/^[\w-]{1,20}$/.test(x.id)&&typeof x.t==="string"&&x.t.trim()?{id:x.id,t:x.t.trim().slice(0,30)}:null}
 var cfg=loadCfg();
 function saveCfg(){wr(CK,JSON.stringify(cfg))}
 function full(x){return !!(x.l&&x.l.length===x.n&&x.n<=5)}
@@ -239,7 +278,7 @@ function normE(e){
  }else{
   ["m","a","p"].forEach(function(k){var val=e[k];if(val===Math.floor(val)&&val>=1&&val<=5){v[k]=val;d[k]=5;any=true}});
  }
- return any?{v:v,d:d,note:typeof e.note==="string"?e.note.slice(0,500):""}:null}
+ return any?{v:v,d:d,note:typeof e.note==="string"?e.note.slice(0,500):"",g:Array.isArray(e.g)?e.g.filter(function(k){return typeof k==="string"&&/^[\w-]{1,20}$/.test(k)}).slice(0,24):[]}:null}
 function load(){
  var o={};
  try{var j=JSON.parse(rd(KEY)||"{}");
@@ -280,9 +319,9 @@ $("scales").addEventListener("click",function(e){
  cur[id]=cur[id]===v?0:v;paint();
 });
 function loadDay(){
- var e=load()[dateEl.value];cur={};
+ var e=load()[dateEl.value];cur={};curT=e?e.g.slice():[];
  if(e)cfg.scales.forEach(function(x){if(e.v[x.id])cur[x.id]=conv(e.v[x.id],e.d[x.id],x.n)});
- $("note").value=e?e.note:"";paint();
+ $("note").value=e?e.note:"";paint();buildChips();
 }
 dateEl.addEventListener("change",function(){if(dateEl.value)loadDay();$("msg").textContent=""});
 $("save").addEventListener("click",function(){
@@ -290,8 +329,8 @@ $("save").addEventListener("click",function(){
  if(!cfg.scales.some(function(x){return cur[x.id]})){$("msg").textContent="Отметьте хотя бы одну шкалу, чтобы сохранить запись.";return}
  var d=load(),old=d[dateEl.value]||{v:{},d:{}},v=Object.assign({},old.v),dd=Object.assign({},old.d);
  cfg.scales.forEach(function(x){if(cur[x.id]){v[x.id]=cur[x.id];dd[x.id]=x.n}else{delete v[x.id];delete dd[x.id]}});
- d[dateEl.value]={v:v,d:dd,note:$("note").value.trim().slice(0,500)};
- store(d);$("msg").textContent="Запись за "+fmt(dateEl.value)+" сохранена.";render();
+ d[dateEl.value]={v:v,d:dd,note:$("note").value.trim().slice(0,500),g:curT.slice()};
+ store(d);$("msg").textContent="Записано. Спасибо, что отметили.";render();
  try{$("after").scrollIntoView({behavior:"smooth",block:"nearest"})}catch(e){}
 });
 
@@ -315,7 +354,7 @@ function chart(r,d,tg){
    var e=d[s];if(!e||!e.v[x.id]){pen=false;return}any=true;
    var px=X(j),py=T+ph-frac(e.v[x.id],e.d[x.id])*ph;
    path+=(pen?"L":"M")+px.toFixed(1)+" "+py.toFixed(1)+" ";pen=true;
-   dots+='<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="3.5" fill="'+col+'"/>';
+   dots+='<circle'+(tg.pulse&&j===n-1?' class="pulse"':'')+' cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="3.5" fill="'+col+'"/>';
   });
   svg+='<path d="'+path+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"'+(DASH[i]?' stroke-dasharray="'+DASH[i]+'"':'')+'/>'+dots;
  });
@@ -344,7 +383,7 @@ function report(r,d){
  have.forEach(function(s){
   var e=d[s],p=[];
   cfg.scales.forEach(function(x){if(e.v[x.id])p.push(x.t+" "+e.v[x.id]+"/"+e.d[x.id])});
-  t+=fmt(s)+": "+p.join(", ")+(e.note?" — "+e.note:"")+"\n";
+  t+=fmt(s)+": "+p.join(", ")+tagsStr(e)+(e.note?" — "+e.note:"")+"\n";
  });
  $("rep").value=t.trim();
 }
@@ -354,7 +393,7 @@ function hist(d){
   var e=d[s],li=el("li"),div=el("div"),p=[];
   div.appendChild(el("b",null,fmt(s)));
   cfg.scales.forEach(function(x){if(e.v[x.id])p.push(x.t.toLowerCase()+" "+e.v[x.id]+"/"+e.d[x.id])});
-  div.appendChild(document.createTextNode("  "+p.join(", ")));
+  div.appendChild(document.createTextNode("  "+p.join(", ")+tagsStr(e)));
   if(e.note)div.appendChild(el("div","n",e.note));
   li.appendChild(div);
   var bt=el("button","x","×");bt.type="button";bt.dataset.d=s;bt.setAttribute("aria-label","Удалить запись за "+fmt(s));
@@ -379,8 +418,8 @@ function render(){
  chart(r,d,{svg:$("chart"),empty:$("chartEmpty"),legend:$("legend")});
  var n7=r7.filter(function(s){return d[s]}).length;
  $("after").hidden=!n7;
- if(n7){chart(r7,d,{svg:$("chart7"),legend:$("legend7")});$("wk").textContent="Записей за 7 дней: "+n7+" из 7. Пропуски в порядке вещей."}
- report(r,d);hist(d);checkBanner();
+ if(n7){chart(r7,d,{svg:$("chart7"),legend:$("legend7"),pulse:true});$("wk").textContent="Записей за 7 дней: "+n7+" из 7. Пропуски в порядке вещей."}
+ report(r,d);hist(d);renderIns(d);hintUpdate(d);checkBanner();
  $("sub").textContent=Object.keys(d).length?"Можно отметить не все шкалы. Пропущенные дни ничего не ломают.":"Отметьте, как вы себя чувствуете. Это займёт меньше минуты. Записи хранятся только на вашем устройстве.";
 }
 
@@ -464,7 +503,7 @@ $("exp").addEventListener("click",function(){
  var d=load(),n=Object.keys(d).length;
  if(!n){$("msg3").textContent="Пока нечего сохранять: записей нет.";return}
  try{
-  var b=new Blob([JSON.stringify({version:2,scales:cfg.scales,entries:d},null,1)],{type:"application/json"});
+  var b=new Blob([JSON.stringify({version:3,scales:cfg.scales,tags:cfg.tags,entries:d},null,1)],{type:"application/json"});
   var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dnevnik-"+iso(new Date())+".json";
   document.body.appendChild(a);a.click();a.remove();
   $("msg3").textContent="Копия сохранена. Записей: "+n+".";
@@ -476,11 +515,12 @@ $("file").addEventListener("change",function(){
  var fr=new FileReader();
  fr.onload=function(){
   try{
-   var j=JSON.parse(fr.result),src=j&&j.entries?j.entries:j,add={},c=0,ns=[];
+   var j=JSON.parse(fr.result),src=j&&j.entries?j.entries:j,add={},c=0,ns=[],nt=[];
    if(j&&Array.isArray(j.scales)){
     var have={};cfg.scales.forEach(function(x){have[x.id]=1});
     j.scales.forEach(function(x){var s=validScale(x);if(s&&!have[s.id]&&cfg.scales.length+ns.length<MAXS){ns.push(s);have[s.id]=1}});
    }
+   if(j&&Array.isArray(j.tags)){var ht={};cfg.tags.forEach(function(t){ht[t.id]=1});j.tags.forEach(function(x){var t=validTag(x);if(t&&!ht[t.id]&&cfg.tags.length+nt.length<MAXT){nt.push(t);ht[t.id]=1}})}
    Object.keys(src).forEach(function(k){
     if(/^\d{4}-\d{2}-\d{2}$/.test(k)){var e=normE(src[k]);if(e){add[k]=e;c++}}
    });
@@ -488,6 +528,7 @@ $("file").addEventListener("change",function(){
    if(!confirm("Добавить записей: "+c+(ns.length?" и шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
    var d=load();Object.keys(add).forEach(function(k){d[k]=add[k]});store(d);
    if(ns.length){cfg.scales=cfg.scales.concat(ns);saveCfg();renderEditor();buildScales()}
+   if(nt.length){cfg.tags=cfg.tags.concat(nt);saveCfg();renderTagEditor();buildChips()}
    $("msg3").textContent="Загружено записей: "+c+".";render();loadDay();
   }catch(e){$("msg3").textContent="Не удалось прочитать файл. Нужна копия, скачанная из этого приложения."}
   inp2.value="";
@@ -504,6 +545,91 @@ if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
 }
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
 
+/* ---------- факторы, совпадения, подсказки ---------- */
+function mean(a){return a.reduce(function(p,q){return p+q},0)/a.length}
+function median(a){var s=a.slice().sort(function(p,q){return p-q}),m=Math.floor(s.length/2);return s.length%2?s[m]:(s[m-1]+s[m])/2}
+function tn(id){for(var i=0;i<cfg.tags.length;i++)if(cfg.tags[i].id===id)return cfg.tags[i].t;return ""}
+function tagsStr(e){var g=(e.g||[]).map(tn).filter(Boolean);return g.length?" ["+g.join(", ")+"]":""}
+function buildChips(){
+ var b=$("chips");b.textContent="";
+ cfg.tags.forEach(function(t){
+  var c=el("button",null,t.t);c.type="button";c.dataset.id=t.id;c.setAttribute("aria-pressed",String(curT.indexOf(t.id)>=0));b.appendChild(c);
+ });
+ if(cfg.tags.length<MAXT){var a=el("button","add","+ свой");a.type="button";a.dataset.add="1";b.appendChild(a)}
+}
+$("chips").addEventListener("click",function(e){
+ var b=e.target.closest("button");if(!b)return;
+ if(b.dataset.add){
+  var n=(prompt("Название фактора, например «Прогулка»")||"").trim().slice(0,30);if(!n)return;
+  var t={id:"t"+Date.now().toString(36),t:n};cfg.tags.push(t);curT.push(t.id);saveCfg();buildChips();renderTagEditor();return;
+ }
+ var i=curT.indexOf(b.dataset.id);if(i>=0)curT.splice(i,1);else curT.push(b.dataset.id);buildChips();
+});
+function renderTagEditor(){
+ var b=$("tedit");b.textContent="";
+ cfg.tags.forEach(function(t,i){
+  var r=el("div","row"),n=el("input"),x=el("button","btn sec sm","Убрать");
+  r.style.marginBottom="8px";n.type="text";n.value=t.t;n.maxLength=30;n.dataset.i=i;n.style.flex="1";n.setAttribute("aria-label","Название фактора");
+  x.type="button";x.dataset.i=i;r.appendChild(n);r.appendChild(x);b.appendChild(r);
+ });
+}
+$("tedit").addEventListener("change",function(e){
+ var i=+e.target.dataset.i;if(!cfg.tags[i])return;
+ cfg.tags[i].t=e.target.value.trim().slice(0,30)||cfg.tags[i].t;saveCfg();buildChips();render();
+});
+$("tedit").addEventListener("click",function(e){
+ var b=e.target.closest("button");if(!b)return;
+ var i=+b.dataset.i,t=cfg.tags[i];
+ if(!t||!confirm("Убрать фактор «"+t.t+"»? Он исчезнет из приложения, а старые отметки останутся в записях, но видны не будут."))return;
+ cfg.tags.splice(i,1);saveCfg();renderTagEditor();buildChips();render();
+});
+$("addT").addEventListener("click",function(){
+ if(cfg.tags.length>=MAXT){alert("Можно добавить не больше "+MAXT+" факторов.");return}
+ var n=(prompt("Название фактора, например «Прогулка»")||"").trim().slice(0,30);if(!n)return;
+ cfg.tags.push({id:"t"+Date.now().toString(36),t:n});saveCfg();renderTagEditor();buildChips();
+});
+function insights(d){
+ var ks=Object.keys(d),out=[];
+ cfg.tags.forEach(function(t){cfg.scales.forEach(function(x){
+  var a=[],b=[];
+  ks.forEach(function(s){var e=d[s];if(!e.v[x.id])return;var f=frac(e.v[x.id],e.d[x.id]);((e.g||[]).indexOf(t.id)>=0?a:b).push(f)});
+  if(a.length<3||b.length<3)return;
+  var ma=mean(a),mb=mean(b);if(Math.abs(ma-mb)<.15)return;
+  out.push({t:t,x:x,ma:ma,mb:mb,na:a.length,nb:b.length});
+ })});
+ out.sort(function(p,q){return Math.abs(q.ma-q.mb)-Math.abs(p.ma-p.mb)});
+ return out.slice(0,3);
+}
+function renderIns(d){
+ var ul=$("ins"),r=insights(d);ul.textContent="";
+ r.forEach(function(o){var n=o.x.n;
+  ul.appendChild(el("li",null,"В дни с отметкой «"+o.t.t+"» значение «"+o.x.t+"» было в среднем "+(o.ma<o.mb?"ниже":"выше")+": "+(o.ma*(n-1)+1).toFixed(1)+" против "+(o.mb*(n-1)+1).toFixed(1)+" из "+n+" (дней: "+o.na+" и "+o.nb+")."));
+ });
+ $("insNote").textContent=r.length?"Это совпадения, а не причины. Решения о лечении принимайте с врачом.":"Пока мало данных. Заметки появятся, когда у фактора будет хотя бы 3 дня с отметкой и 3 дня без неё.";
+}
+function findHint(d){
+ var rec=range(4),base=range(18).slice(0,14),best=null;
+ cfg.scales.forEach(function(x){
+  var R=[],B=[];
+  rec.forEach(function(s){var e=d[s];if(e&&e.v[x.id])R.push(frac(e.v[x.id],e.d[x.id]))});
+  base.forEach(function(s){var e=d[s];if(e&&e.v[x.id])B.push(frac(e.v[x.id],e.d[x.id]))});
+  if(R.length<3||B.length<7)return;
+  var md=median(B),sh=mean(R)-md;
+  if(Math.abs(sh)<.25)return;
+  if(!R.every(function(v){return sh>0?v>md:v<md}))return;
+  if(!best||Math.abs(sh)>Math.abs(best.sh))best={x:x,sh:sh};
+ });
+ return best;
+}
+function hintUpdate(d){
+ var h=cfg.hints&&cfg.hintOff!==iso(new Date())?findHint(d):null;
+ $("hint").hidden=!h;
+ if(h)$("hintT").textContent="Последние дни значение «"+h.x.t+"» "+(h.sh>0?"выше":"ниже")+" вашего обычного уровня. Если это держится или вас беспокоит, стоит обсудить это с врачом.";
+}
+$("hintsOn").checked=cfg.hints;
+$("hintsOn").addEventListener("change",function(){cfg.hints=this.checked;saveCfg();render()});
+$("hintX").addEventListener("click",function(){cfg.hintOff=iso(new Date());saveCfg();render()});
+
 /* ---------- разделы и отчёт ---------- */
 function showTab(n){
  ["today","trend","more"].forEach(function(t){
@@ -516,7 +642,7 @@ $("nav").addEventListener("click",function(e){var b=e.target.closest("button");i
 $("openRep").addEventListener("click",function(){$("msg2").textContent="";var dl=$("repDlg");if(dl.showModal)dl.showModal();else dl.setAttribute("open","")});
 $("closeRep").addEventListener("click",function(){var dl=$("repDlg");if(dl.close)dl.close();else dl.removeAttribute("open")});
 
-buildScales();renderEditor();loadDay();render();
+buildScales();renderEditor();renderTagEditor();loadDay();render();
 })();
 </script>
 </body>
