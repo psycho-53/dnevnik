@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Дневник состояния</title>
-<meta name="theme-color" content="#3f6c8c">
+<title>Дневник состояния — Моя вселенная</title>
+<meta name="theme-color" content="#080d1c">
+<meta name="description" content="Личный дневник самонаблюдения: состояние, динамика и бережные открытия о себе.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -12,13 +13,13 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Дневник">
 <style>
-:root{--bg:#eef2f4;--card:#fff;--ink:#1f2a30;--mute:#5d6b73;--line:#d5dde1;--btn:#e4ebee;--on:#fff;
---c0:#3f6c8c;--c1:#b87a1c;--c2:#3f8a62;--c3:#8a5a9e;--c4:#c4504a;--c5:#2e8f98;
+:root{--bg:#080d1c;--card:#111a31;--ink:#eef3ff;--mute:#9ba9c8;--line:#29365a;--btn:#1b2746;--on:#080d1c;
+--c0:#8b9cff;--c1:#f3bd72;--c2:#68d6c1;--c3:#c69cff;--c4:#ff8b9b;--c5:#64c7f2;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13191c;--card:#1b2327;--ink:#e6edf0;--mute:#93a3ab;--line:#2e3a40;--btn:#263238;--on:#10171a;
---c0:#7fb0d2;--c1:#e0a64e;--c2:#6fc296;--c3:#bb92cf;--c4:#e8837c;--c5:#62c3cb}}
-:root[data-theme="dark"]{--bg:#13191c;--card:#1b2327;--ink:#e6edf0;--mute:#93a3ab;--line:#2e3a40;--btn:#263238;--on:#10171a;
---c0:#7fb0d2;--c1:#e0a64e;--c2:#6fc296;--c3:#bb92cf;--c4:#e8837c;--c5:#62c3cb}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080d1c;--card:#111a31;--ink:#eef3ff;--mute:#9ba9c8;--line:#29365a;--btn:#1b2746;--on:#080d1c;
+--c0:#8b9cff;--c1:#f3bd72;--c2:#68d6c1;--c3:#c69cff;--c4:#ff8b9b;--c5:#64c7f2}}
+:root[data-theme="dark"]{--bg:#080d1c;--card:#111a31;--ink:#eef3ff;--mute:#9ba9c8;--line:#29365a;--btn:#1b2746;--on:#080d1c;
+--c0:#8b9cff;--c1:#f3bd72;--c2:#68d6c1;--c3:#c69cff;--c4:#ff8b9b;--c5:#64c7f2}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -97,6 +98,148 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 .ach li.lock{opacity:.6}
 #toast{position:fixed;left:12px;right:12px;bottom:calc(64px + env(safe-area-inset-bottom,0px));max-width:616px;margin:0 auto;z-index:7;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px 16px;font-size:14px;box-shadow:0 4px 18px rgba(0,0,0,.25);cursor:pointer}
 @media print{#toast{display:none!important}}
+
+/* ---------- Космическая тема ---------- */
+body{
+ background:
+  radial-gradient(900px 520px at 8% -12%,rgba(93,91,190,.22),transparent 65%),
+  radial-gradient(760px 480px at 100% 18%,rgba(42,127,170,.13),transparent 62%),
+  var(--bg);
+ color:var(--ink);
+}
+main{max-width:780px;padding:24px 16px 112px}
+h1{font-size:30px;letter-spacing:-.035em}
+h2{letter-spacing:-.02em}
+.sub{max-width:560px;color:#a8b5d5}
+section{
+ background:linear-gradient(145deg,rgba(20,30,57,.97),rgba(14,22,43,.97));
+ border:1px solid rgba(142,160,218,.17);
+ border-radius:20px;
+ box-shadow:0 12px 34px rgba(0,0,0,.16);
+}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin:4px 0 18px}
+.page-head h1{margin:3px 0 4px}
+.eyebrow{font-size:10px;line-height:1.4;letter-spacing:.16em;font-weight:800;color:#9eaddb}
+.page-mark{
+ width:44px;height:44px;flex:0 0 44px;border-radius:15px;
+ display:grid;place-items:center;color:#c8d2ff;
+ background:linear-gradient(145deg,rgba(139,156,255,.24),rgba(100,199,242,.12));
+ border:1px solid rgba(160,177,255,.22)
+}
+.space-hero{
+ position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:1.2fr .8fr;
+ align-items:center;gap:10px;min-height:220px;padding:22px;margin:0 0 14px;
+ border:1px solid rgba(147,163,240,.25);border-radius:24px;
+ background:
+  radial-gradient(360px 220px at 76% 48%,rgba(103,117,230,.23),transparent 70%),
+  linear-gradient(135deg,#18244a 0%,#121b39 54%,#111a31 100%);
+ box-shadow:0 18px 44px rgba(0,0,0,.2)
+}
+.space-hero:before,.universe-art:before{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.7;
+ background-image:
+  radial-gradient(2px 2px at 12% 22%,#fff 55%,transparent 65%),
+  radial-gradient(1.5px 1.5px at 31% 74%,#dbe3ff 55%,transparent 65%),
+  radial-gradient(2px 2px at 53% 18%,#fff 55%,transparent 65%),
+  radial-gradient(1px 1px at 82% 25%,#fff 55%,transparent 65%),
+  radial-gradient(1.5px 1.5px at 91% 72%,#dbe3ff 55%,transparent 65%),
+  radial-gradient(1px 1px at 67% 84%,#fff 55%,transparent 65%)
+}
+.hero-copy{position:relative;z-index:1}
+.space-hero>.planet-scene{z-index:1}
+.hero-copy h2{font-size:23px;line-height:1.2;margin:7px 0}
+.hero-copy p{color:#b6c2e2;margin:0;max-width:330px;font-size:14px}
+.hero-label{display:inline-flex;align-items:center;gap:7px;color:#c8d4ff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.hero-label:before{content:"";width:7px;height:7px;border-radius:50%;background:#7edacb;box-shadow:0 0 12px #7edacb}
+.planet-scene{position:relative;min-height:170px;display:grid;place-items:center}
+.planet-orbit{position:absolute;z-index:1;width:188px;height:72px;border:1px solid rgba(183,197,255,.34);border-radius:50%;transform:rotate(-27deg)}
+.planet-orbit.second{width:210px;height:92px;transform:rotate(34deg);border-color:rgba(126,208,240,.18)}
+.planet{
+ position:relative;z-index:2;width:126px;height:126px;border-radius:50%;
+ background:
+  radial-gradient(circle at 31% 25%,rgba(255,255,255,.75),transparent 8%),
+  radial-gradient(circle at 34% 28%,#a9c7ff 0%,#7389f5 22%,#4852b0 52%,#20265e 78%,#10183b 100%);
+ box-shadow:inset -18px -16px 28px rgba(3,8,34,.5),0 0 38px rgba(117,135,255,.4),0 0 90px rgba(96,113,230,.2)
+}
+.planet:after{content:"";position:absolute;inset:13px 21px 16px 12px;border-radius:50%;border:1px solid rgba(224,233,255,.15);transform:rotate(-28deg)}
+.planet-moon{position:absolute;z-index:3;width:21px;height:21px;right:13px;top:21px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff,#a5b9ef 45%,#57689c 100%);box-shadow:0 0 18px rgba(175,196,255,.55)}
+.stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:0 0 16px}
+.stat-card{min-width:0;padding:13px 14px;border-radius:17px;border:1px solid rgba(142,160,218,.15);background:rgba(19,29,55,.82)}
+.stat-value{display:block;font-size:23px;font-weight:750;letter-spacing:-.04em;color:#f1f4ff;line-height:1.15}
+.stat-label{display:block;margin-top:5px;color:#9eadd0;font-size:11px;line-height:1.3}
+.prompt-card{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ padding:14px 16px;margin:0 0 16px;border:1px solid rgba(142,160,218,.16);
+ border-radius:18px;background:linear-gradient(120deg,rgba(34,47,83,.9),rgba(20,31,58,.85))
+}
+.prompt-card p{margin:4px 0 0;font-size:14px;color:#e6ebff}
+.prompt-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.prompt-actions button{font:inherit;font-size:12px;padding:7px 10px;border-radius:10px;border:1px solid rgba(163,179,235,.22);background:rgba(117,137,210,.12);color:#d9e1ff;cursor:pointer}
+.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px}
+.section-head h2{margin:3px 0 0}
+.time-chip{white-space:nowrap;border:1px solid rgba(142,160,218,.18);border-radius:999px;padding:5px 9px;color:#aebbe0;font-size:11px}
+.scale{margin:18px 0}
+.scale b{font-size:15px}
+.scale small{color:#9eadd0}
+.opts button{background:#1b2746;border-color:#34436c;color:#e8edff}
+.opts button span{color:#aab8da}
+.opts button[aria-pressed=true]{background:linear-gradient(135deg,#778cff,#5966d2);border-color:#8fa0ff;color:#fff;box-shadow:0 5px 16px rgba(92,111,225,.2)}
+.opts button[aria-pressed=true] span{color:#fff}
+input[type=date],input[type=time],input[type=text],select,textarea{background:#0c1429;border-color:#34436c;color:#eef3ff}
+textarea::placeholder{color:#7786aa}
+.btn{background:linear-gradient(135deg,#8294ff,#6572db);color:#fff;box-shadow:0 6px 18px rgba(88,105,216,.2)}
+.btn.sec{background:#1b2746;color:#dce5ff;border-color:#34436c;box-shadow:none}
+.chips button{background:#1b2746;border-color:#34436c;color:#dce5ff}
+.chips button[aria-pressed=true]{background:#6879df;border-color:#8d9cff;color:white}
+.card2{background:rgba(27,39,70,.8);border-color:#e0a64e}
+#banner{background:#111a31;border-color:#29365a;color:#eef3ff}
+#nav{background:rgba(12,19,38,.96);border-color:#29365a;backdrop-filter:blur(16px)}
+#nav button{color:#8f9fc4}
+#nav button[aria-current=page]{color:#dce4ff;border-top-color:#8b9cff}
+#toast{background:#e8edff;color:#151d3a}
+.chart{filter:drop-shadow(0 2px 5px rgba(0,0,0,.12))}
+.legend{color:#a8b5d5}
+.hist li,.ach li{border-color:#29365a}
+.note,.f span,.empty{color:#9ba9c8}
+.tabs button{background:#1b2746;border-color:#34436c;color:#dce5ff}
+.tabs button[aria-pressed=true]{background:#8294ff;border-color:#8294ff;color:#fff}
+.universe-hero{
+ position:relative;overflow:hidden;display:grid;grid-template-columns:180px 1fr;align-items:center;gap:20px;
+ padding:22px;border:1px solid rgba(147,163,240,.25);border-radius:24px;
+ background:radial-gradient(300px 200px at 24% 50%,rgba(103,117,230,.24),transparent 72%),linear-gradient(135deg,#18244a,#111a31)
+}
+.universe-art{position:relative;isolation:isolate;min-height:160px;display:grid;place-items:center}
+.universe-art .planet{width:116px;height:116px}
+.universe-copy h2{font-size:22px;margin:6px 0}
+.universe-copy p{margin:0;color:#b6c2e2;font-size:14px}
+.progress-track{height:9px;border-radius:99px;background:#253354;overflow:hidden;margin:12px 0 7px}
+.progress-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#6d83f5,#73d6d1);transition:width .35s ease}
+.journey-list{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px}
+.journey-list li{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid #29365a;border-radius:13px;background:rgba(15,24,47,.58)}
+.journey-dot{width:25px;height:25px;flex:0 0 25px;display:grid;place-items:center;border-radius:50%;background:#243354;color:#9fb0d8;font-size:12px}
+.journey-list li.done .journey-dot{background:rgba(104,214,193,.17);color:#7de0ca}
+.journey-list b{display:block;font-size:13px}
+.journey-list small{display:block;color:#9ba9c8;font-size:12px;margin-top:2px}
+@media(max-width:560px){
+ main{padding:18px 12px 104px}
+ .space-hero{grid-template-columns:1fr;min-height:200px;padding:19px}
+ .hero-copy{max-width:72%}
+ .planet-scene{position:absolute;right:-8px;top:14px;width:46%;min-height:160px;opacity:.92}
+ .planet{width:105px;height:105px}
+ .planet-orbit{width:160px;height:60px}
+ .planet-orbit.second{width:176px;height:76px}
+ .stats-grid{gap:7px}
+ .stat-card{padding:11px 9px}
+ .stat-value{font-size:20px}
+ .stat-label{font-size:10px}
+ .prompt-card{align-items:flex-start;flex-direction:column}
+ .prompt-actions{justify-content:flex-start}
+ .universe-hero{grid-template-columns:1fr;gap:4px}
+ .universe-art{min-height:135px}
+ .universe-copy{text-align:center}
+}
+@media(prefers-reduced-motion:reduce){.progress-fill{transition:none}}
+
 </style>
 </head>
 <body>
@@ -106,20 +249,40 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 </div>
 <main>
 <div id="tab-today">
-<h1>Как вы сегодня?</h1>
-<p class="sub" id="sub"></p>
+<div class="page-head">
+ <div><div class="eyebrow">ЛИЧНАЯ КАРТА СОСТОЯНИЯ</div><h1>Твоя вселенная</h1><p class="sub" id="sub"></p></div>
+ <div class="page-mark" aria-hidden="true">✦</div>
+</div>
+<div class="space-hero">
+ <div class="hero-copy">
+  <div class="hero-label">Экспедиция дня</div>
+  <h2>Как ты сегодня?</h2>
+  <p>Остановись на минуту, чтобы отметить своё состояние. Каждый сигнал помогает лучше узнать себя.</p>
+ </div>
+ <div class="planet-scene" aria-hidden="true"><div class="planet-orbit"></div><div class="planet-orbit second"></div><div class="planet"></div><div class="planet-moon"></div></div>
+</div>
+<div class="stats-grid" aria-label="Твой прогресс">
+ <div class="stat-card"><span class="stat-value" id="totalEntries">0</span><span class="stat-label">дней наблюдений</span></div>
+ <div class="stat-card"><span class="stat-value" id="weekEntries">0/7</span><span class="stat-label">за последние 7 дней</span></div>
+ <div class="stat-card"><span class="stat-value" id="discoveryCount">0</span><span class="stat-label">открытий</span></div>
+</div>
+<div class="prompt-card">
+ <div><div class="eyebrow">МИНУТА ДЛЯ СЕБЯ</div><p id="promptText">Что сегодня помогло тебе почувствовать себя лучше?</p></div>
+ <div class="prompt-actions"><button type="button" id="nextPrompt">Другой вопрос</button><button type="button" id="usePrompt">В заметку</button></div>
+</div>
 <div class="card2" id="hint" hidden role="status">
 <p id="hintT"></p>
 <p class="note" style="margin:0">Это не диагноз, а заметка, которую можно показать врачу.</p>
 <div class="row" style="margin-top:8px"><button class="btn sec sm" id="hintX" type="button">Скрыть на сегодня</button></div>
 </div>
 <section>
+<div class="section-head"><div><div class="eyebrow">01 / СИГНАЛ ДНЯ</div><h2>Отметь своё состояние</h2></div><span class="time-chip">≈ 1 минута</span></div>
 <div class="row"><label for="d"><b>Дата</b></label><input type="date" id="d"></div>
 <div id="scales"></div>
 <div class="scale"><b>Что было сегодня</b><small>Необязательно. По отметкам приложение со временем найдёт совпадения</small><div class="chips" id="chips"></div></div>
 <label for="note"><b>Заметка</b> <span class="note">(необязательно)</span></label>
 <textarea id="note" placeholder="Что повлияло: сон, лекарства, события"></textarea>
-<div class="row" style="margin-top:12px"><button class="btn" id="save" type="button">Сохранить</button></div>
+<div class="row" style="margin-top:12px"><button class="btn" id="save" type="button">Сохранить наблюдение</button></div>
 <p class="msg" id="msg" role="status"></p>
 </section>
 <section id="after" hidden>
@@ -127,6 +290,36 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 <div class="wrap"><svg class="chart" id="chart7" viewBox="0 0 640 240" role="img" aria-label="График за последние 7 дней"></svg></div>
 <div class="legend" id="legend7"></div>
 <p class="note" id="wk" style="margin-bottom:0"></p>
+</section>
+</div>
+
+<div id="tab-universe" hidden>
+<div class="page-head">
+ <div><div class="eyebrow">ТВОЙ ПУТЬ</div><h1>Моя вселенная</h1><p class="sub">Здесь собирается карта твоих наблюдений. Она отражает регулярность записей, а не оценку твоего настроения.</p></div>
+ <div class="page-mark" aria-hidden="true">✧</div>
+</div>
+<section class="universe-hero">
+ <div class="universe-art" aria-hidden="true"><div class="planet-orbit"></div><div class="planet-orbit second"></div><div class="planet"></div><div class="planet-moon"></div></div>
+ <div class="universe-copy">
+  <div class="eyebrow">ТЕКУЩИЙ ЭТАП</div>
+  <h2 id="journeyTitle">Подготовка к экспедиции</h2>
+  <p id="journeyDesc">Каждая запись добавляет новую точку на твою карту. Начни в удобном темпе.</p>
+ </div>
+</section>
+<div class="stats-grid">
+ <div class="stat-card"><span class="stat-value" id="uTotalEntries">0</span><span class="stat-label">дней наблюдений</span></div>
+ <div class="stat-card"><span class="stat-value" id="uWeekEntries">0/7</span><span class="stat-label">за 7 дней</span></div>
+ <div class="stat-card"><span class="stat-value" id="uDiscoveries">0</span><span class="stat-label">достижений</span></div>
+</div>
+<section>
+ <div class="section-head"><div><div class="eyebrow">СЛЕДУЮЩАЯ ЦЕЛЬ</div><h2 id="nextMilestoneTitle">Первый сигнал</h2></div><span class="time-chip" id="journeyProgressText">0 / 1</span></div>
+ <div class="progress-track" role="progressbar" aria-label="Прогресс до следующего этапа" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="journeyProgress"></div></div>
+ <p class="note" id="journeyNext" style="margin-bottom:0">Первая запись откроет начало твоего пути.</p>
+</section>
+<section>
+ <div class="eyebrow">КОЛЛЕКЦИЯ ЭТАПОВ</div>
+ <h2 style="margin-top:5px">Карта исследователя</h2>
+ <ul class="journey-list" id="journeyMilestones"></ul>
 </section>
 </div>
 
@@ -229,6 +422,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 <div id="toast" role="status" hidden></div>
 <nav id="nav" aria-label="Разделы">
 <button type="button" data-t="today" aria-current="page">Сегодня</button>
+<button type="button" data-t="universe" aria-current="false">Вселенная</button>
 <button type="button" data-t="trend" aria-current="false">Динамика</button>
 <button type="button" data-t="more" aria-current="false">Ещё</button>
 </nav>
@@ -344,7 +538,7 @@ $("save").addEventListener("click",function(){
  var d=load(),old=d[dateEl.value]||{v:{},d:{}},v=Object.assign({},old.v),dd=Object.assign({},old.d);
  cfg.scales.forEach(function(x){if(cur[x.id]){v[x.id]=cur[x.id];dd[x.id]=x.n}else{delete v[x.id];delete dd[x.id]}});
  d[dateEl.value]={v:v,d:dd,note:$("note").value.trim().slice(0,500),g:curT.slice()};
- store(d);$("msg").textContent="Записано. Спасибо, что отметили.";render();
+ store(d);$("msg").textContent="Наблюдение сохранено. Новый сигнал добавлен на твою карту.";render();
  try{$("after").scrollIntoView({behavior:"smooth",block:"nearest"})}catch(e){}
 });
 
@@ -426,6 +620,67 @@ $("copy").addEventListener("click",function(){
  $("msg2").textContent=ok?"Скопировано.":"Текст выделен — скопируйте его через меню телефона.";
 });
 $("print").addEventListener("click",function(){$("repPrint").textContent=$("rep").value;window.print()});
+/* ---------- ежедневные вопросы и космический прогресс ---------- */
+var PROMPTS=[
+ "Что сегодня помогло тебе почувствовать себя лучше?",
+ "Что сегодня отняло больше всего сил?",
+ "Какой небольшой момент сегодня хотелось бы запомнить?",
+ "Что помогло тебе справиться с трудностью?",
+ "Чего тебе сегодня не хватило?",
+ "За что ты можешь себя сегодня поблагодарить?",
+ "Что сегодня было важным именно для тебя?"
+];
+function nextPrompt(){
+ var current=$("promptText").textContent,choices=PROMPTS.filter(function(x){return x!==current});
+ $("promptText").textContent=choices[Math.floor(Math.random()*choices.length)]||PROMPTS[0];
+}
+$("nextPrompt").addEventListener("click",nextPrompt);
+$("usePrompt").addEventListener("click",function(){
+ var q=$("promptText").textContent,n=$("note"),prefix="Вопрос: "+q;
+ if(n.value.indexOf(prefix)<0)n.value=(n.value.trim()?n.value.trim()+"\\n\\n":"")+prefix+"\\n";
+ n.focus();
+});
+var JOURNEY=[
+ {n:1,t:"Первый сигнал",d:"Первая запись — начало твоей карты наблюдений."},
+ {n:7,t:"Картограф",d:"Семь дней наблюдений — уже можно увидеть первые ориентиры."},
+ {n:14,t:"Исследователь",d:"Две недели наблюдений помогают замечать больше деталей."},
+ {n:30,t:"Навигатор",d:"Месяц наблюдений — заметный путь и больше контекста."},
+ {n:60,t:"Хранитель карты",d:"Шестьдесят дней наблюдений — большая личная история."},
+ {n:100,t:"Мастер наблюдений",d:"Сто дней записей — впечатляющая карта твоего опыта."}
+];
+function renderJourney(d){
+ var count=Object.keys(d).length,week=range(7).filter(function(x){return !!d[x]}).length;
+ var unlocked=Object.keys(cfg.ach||{}).length;
+ ["totalEntries","uTotalEntries"].forEach(function(id){$(id).textContent=count});
+ $("weekEntries").textContent=week+"/7";$("uWeekEntries").textContent=week+"/7";
+ $("discoveryCount").textContent=unlocked;$("uDiscoveries").textContent=unlocked;
+ var level=JOURNEY[0];
+ for(var i=0;i<JOURNEY.length;i++){if(count>=JOURNEY[i].n)level=JOURNEY[i]}
+ $("journeyTitle").textContent=count?level.t:"Подготовка к экспедиции";
+ $("journeyDesc").textContent=count?level.d:"Каждая запись добавляет новую точку на твою карту. Начни в удобном темпе.";
+ var next=null,prev=0;
+ for(var j=0;j<JOURNEY.length;j++){if(count<JOURNEY[j].n){next=JOURNEY[j];prev=j?JOURNEY[j-1].n:0;break}}
+ var pct=next?Math.max(0,Math.min(100,(count-prev)/(next.n-prev)*100)):100;
+ if(next){
+  $("nextMilestoneTitle").textContent=next.t;
+  $("journeyProgressText").textContent=count+" / "+next.n;
+  $("journeyNext").textContent="Осталось записей до этапа: "+Math.max(0,next.n-count)+". Можно двигаться в своём темпе.";
+ }else{
+  $("nextMilestoneTitle").textContent="Карта продолжает расти";
+  $("journeyProgressText").textContent=count+"+";
+  $("journeyNext").textContent="Все основные этапы пройдены. Продолжай наблюдать за собой, если это тебе полезно.";
+ }
+ $("journeyProgress").style.width=pct+"%";
+ $("journeyProgress").parentNode.setAttribute("aria-valuenow",String(Math.round(pct)));
+ var ul=$("journeyMilestones");ul.textContent="";
+ JOURNEY.forEach(function(m){
+  var done=count>=m.n,li=el("li",done?"done":"");
+  li.appendChild(el("span","journey-dot",done?"✓":"✦"));
+  var box=el("div");box.appendChild(el("b",null,m.t));box.appendChild(el("small",null,m.d));
+  li.appendChild(box);ul.appendChild(li);
+ });
+}
+
 function render(){
  var d=load(),r=range(days),r7=range(7),bs=$("tabs").querySelectorAll("button");
  for(var i=0;i<bs.length;i++)bs[i].setAttribute("aria-pressed",String(+bs[i].dataset.n===days));
@@ -433,8 +688,8 @@ function render(){
  var n7=r7.filter(function(s){return d[s]}).length;
  $("after").hidden=!n7;
  if(n7){chart(r7,d,{svg:$("chart7"),legend:$("legend7"),pulse:true});$("wk").textContent="Записей за 7 дней: "+n7+" из 7. Пропуски в порядке вещей."}
- report(r,d);hist(d);renderIns(d);hintUpdate(d);checkAch();checkBanner();
- $("sub").textContent=Object.keys(d).length?"Можно отметить не все шкалы. Пропущенные дни ничего не ломают.":"Отметьте, как вы себя чувствуете. Это займёт меньше минуты. Записи хранятся только на вашем устройстве.";
+ report(r,d);hist(d);renderIns(d);hintUpdate(d);checkAch();renderJourney(d);checkBanner();
+ $("sub").textContent=Object.keys(d).length?"Можно отмечать не все шкалы. Пропущенные дни ничего не ломают.":"Отметь состояние в удобном темпе. Пропущенные дни ничего не ломают. Записи хранятся только на твоём устройстве.";
 }
 
 /* ---------- настройка шкал ---------- */
@@ -691,7 +946,7 @@ $("achOn").addEventListener("change",function(){cfg.achOn=this.checked;saveCfg()
 
 /* ---------- разделы и отчёт ---------- */
 function showTab(n){
- ["today","trend","more"].forEach(function(t){
+ ["today","universe","trend","more"].forEach(function(t){
   $("tab-"+t).hidden=t!==n;
   document.querySelector('#nav button[data-t="'+t+'"]').setAttribute("aria-current",t===n?"page":"false");
  });

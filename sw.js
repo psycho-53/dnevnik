@@ -1,4 +1,4 @@
-var C = "dnevnik-v6";
+var C = "dnevnik-v7";
 var FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", function (e) {
@@ -8,7 +8,7 @@ self.addEventListener("install", function (e) {
 self.addEventListener("activate", function (e) {
   e.waitUntil(
     caches.keys()
-      .then(function (ks) { return Promise.all(ks.filter(function (k) { return k !== C; }).map(function (k) { return caches.delete(k); })); })
+      .then(function (ks) { return Promise.all(ks.filter(function (k) { return k.indexOf("dnevnik-") === 0 && k !== C; }).map(function (k) { return caches.delete(k); })); })
       .then(function () { return self.clients.claim(); })
   );
 });
