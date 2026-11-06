@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070b18">
+<title>Космос 2.0 — прототип вселенной</title>
+<style>
+:root{
+ --bg:#070b18;--panel:#10182d;--panel2:#121d36;--line:rgba(153,174,255,.18);
+ --text:#eef2ff;--muted:#9aa9cc;--violet:#9292ff;--cyan:#83d9ef;--gold:#e9bd7b;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{
+ background:
+  radial-gradient(900px 560px at 75% -8%,rgba(89,71,168,.18),transparent 68%),
+  radial-gradient(700px 520px at 4% 24%,rgba(42,106,157,.12),transparent 70%),
+  #070b18;
+}
+button{font:inherit}
+.app{max-width:1320px;margin:0 auto;padding:26px 28px 34px}
+.header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}
+.kicker{font-size:11px;letter-spacing:.17em;text-transform:uppercase;font-weight:800;color:#a8b6e8}
+h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:7px 0 5px}
+.subtitle{color:var(--muted);font-size:14px;margin:0}
+.rank{display:flex;align-items:center;gap:10px;padding:11px 15px;border:1px solid var(--line);border-radius:999px;background:rgba(19,28,52,.72);white-space:nowrap}
+.rank .star{font-size:20px;color:#e8c078;text-shadow:0 0 15px rgba(232,192,120,.7)}
+.rank strong{display:block;font-size:13px}.rank small{color:var(--muted)}
+.scene-card{
+ position:relative;overflow:hidden;border:1px solid rgba(135,157,230,.19);border-radius:25px;
+ background:
+  radial-gradient(ellipse at 50% 42%,rgba(39,55,105,.28),transparent 52%),
+  radial-gradient(ellipse at 82% 12%,rgba(114,61,145,.15),transparent 38%),
+  linear-gradient(150deg,#0b1329,#080e1e 58%,#070c19);
+ box-shadow:0 22px 65px rgba(0,0,0,.28);
+}
+.scene-card:before{
+ content:"";position:absolute;inset:0;pointer-events:none;opacity:.6;
+ background-image:
+  radial-gradient(1.5px 1.5px at 8% 18%,#fff 55%,transparent 70%),
+  radial-gradient(1px 1px at 17% 72%,#d9e1ff 55%,transparent 70%),
+  radial-gradient(1.5px 1.5px at 27% 32%,#fff 55%,transparent 70%),
+  radial-gradient(1px 1px at 42% 12%,#fff 55%,transparent 70%),
+  radial-gradient(1.5px 1.5px at 58% 80%,#d9e1ff 55%,transparent 70%),
+  radial-gradient(1px 1px at 72% 22%,#fff 55%,transparent 70%),
+  radial-gradient(1.5px 1.5px at 91% 65%,#fff 55%,transparent 70%);
+}
+.scene-top{position:absolute;z-index:3;top:18px;left:20px;right:20px;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
+.scene-label{font-size:11px;letter-spacing:.12em;color:#aab9e8;font-weight:800}
+.scene-controls{display:flex;gap:7px;pointer-events:auto}
+.control{
+ width:39px;height:39px;border:1px solid rgba(163,180,240,.2);border-radius:13px;
+ background:rgba(11,19,40,.76);color:#e7edff;cursor:pointer;font-size:20px;
+ box-shadow:0 5px 16px rgba(0,0,0,.16);backdrop-filter:blur(8px)
+}
+.control:hover{border-color:rgba(164,177,255,.55);background:rgba(37,49,88,.9)}
+.control:focus-visible,.object:focus-visible,.recent-card:focus-visible{outline:2px solid #9ca7ff;outline-offset:3px}
+.scene-wrap{height:clamp(390px,52vw,610px);min-height:390px;position:relative;z-index:1;touch-action:none}
+#systemSvg{width:100%;height:100%;display:block;touch-action:none;user-select:none}
+.orbit{fill:none;stroke:url(#orbitStroke);stroke-width:1.15;opacity:.66}
+.orbit.back{stroke-dasharray:2 7;opacity:.27}
+.central-glow{fill:#8798ff;opacity:.12;filter:url(#blurGlow)}
+.central-halo{fill:none;stroke:#9bb9ff;stroke-width:1.2;opacity:.4;filter:url(#softGlow)}
+.object{cursor:grab;touch-action:none}
+.object:active{cursor:grabbing}
+.object .hit{fill:transparent;stroke:transparent;stroke-width:10}
+.object .planet-surface{filter:url(#planetShadow)}
+.object .select-ring{fill:none;stroke:#d5dcff;stroke-width:1.2;stroke-dasharray:3 5;opacity:0;transition:opacity .18s}
+.object.selected .select-ring{opacity:.8}
+.object-label{font-size:12px;fill:#d8e1ff;paint-order:stroke;stroke:#081020;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.drag-hint{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-size:12px;color:#aebce0;background:rgba(8,14,30,.62);border:1px solid rgba(140,160,220,.14);border-radius:999px;padding:8px 13px;white-space:nowrap;pointer-events:none}
+.scene-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 20px 17px;color:#8e9fc7;font-size:11px;position:relative;z-index:2}
+.legend-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#81d8ca;box-shadow:0 0 9px #81d8ca;margin-right:7px}
+.stats{display:grid;grid-template-columns:1.05fr 2fr;gap:12px;margin-top:14px}
+.progress-card,.categories,.recent,.journal{
+ border:1px solid var(--line);border-radius:19px;background:linear-gradient(145deg,rgba(17,27,51,.94),rgba(12,20,40,.94));
+}
+.progress-card{padding:17px 19px}
+.card-kicker{font-size:11px;letter-spacing:.11em;color:#9eafe0;font-weight:800}
+.progress-row{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:5px 0 10px}
+.progress-value{font-size:30px;letter-spacing:-.04em;font-weight:800}
+.progress-percent{color:#aab7dd;font-size:13px}
+.track{height:8px;background:#263253;border-radius:99px;overflow:hidden}
+.fill{height:100%;width:20%;background:linear-gradient(90deg,#7e86ff,#9a8bff);border-radius:99px}
+.categories{display:grid;grid-template-columns:repeat(5,1fr);padding:13px 8px}
+.category{display:flex;align-items:center;justify-content:center;gap:9px;padding:4px 8px;border-right:1px solid rgba(153,174,255,.11);min-width:0}
+.category:last-child{border:0}
+.cat-icon{font-size:20px;color:#a5a9ff}
+.cat-name{font-size:12px;color:#dce4ff;white-space:nowrap}
+.cat-count{font-size:12px;color:#99a9d0;margin-top:3px}
+.bottom-grid{display:grid;grid-template-columns:1fr 270px;gap:13px;margin-top:20px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px}
+.section-head h2{font-size:17px;margin:0;letter-spacing:-.02em}
+.section-head span{font-size:12px;color:#9baad0}
+.recent{padding:15px}
+.recent-list{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.recent-card{display:flex;align-items:center;gap:10px;min-width:0;padding:10px;border-radius:14px;border:1px solid rgba(153,174,255,.13);background:rgba(18,29,55,.74);cursor:pointer;color:var(--text);text-align:left}
+.mini-planet{width:42px;height:42px;flex:0 0 42px;border-radius:50%;box-shadow:inset -8px -5px 12px rgba(0,0,0,.5),0 0 13px rgba(124,151,255,.16)}
+.mini-blue{background:radial-gradient(circle at 30% 25%,#d4e9ff 0,#6f9bd0 20%,#31517d 58%,#0b1730 100%)}
+.mini-ice{background:radial-gradient(circle at 32% 25%,#fff 0,#cbd8e7 24%,#647b9e 58%,#1a2941 100%)}
+.mini-gold{background:radial-gradient(circle at 30% 28%,#ffe2a3 0,#d28c3c 27%,#743c28 64%,#1c1728 100%)}
+.mini-ring{background:radial-gradient(circle at 32% 25%,#e3d0b0 0,#9e846b 38%,#342d36 76%,#101525 100%)}
+.recent-card strong{display:block;font-size:12px}.recent-card small{display:block;color:#98a7cb;font-size:11px;margin-top:3px}
+.journal{display:flex;align-items:center;justify-content:center;gap:13px;padding:16px;color:#dfe4ff;text-decoration:none;background:linear-gradient(135deg,rgba(75,70,142,.3),rgba(20,29,58,.94));border-color:rgba(145,137,255,.46);box-shadow:0 0 24px rgba(116,105,255,.12)}
+.journal .book{font-size:28px;color:#a8a2ff}
+.journal strong{display:block;font-size:14px}.journal small{display:block;color:#9eadd0;font-size:11px;margin-top:3px}
+.journal:hover{border-color:#aaa4ff;box-shadow:0 0 28px rgba(116,105,255,.23)}
+.footer-note{font-size:11px;color:#7282a8;text-align:center;margin:16px 0 0}
+.modal-backdrop{position:fixed;inset:0;z-index:10;background:rgba(2,5,14,.68);backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px}
+.modal{width:min(440px,100%);border:1px solid rgba(155,172,245,.24);border-radius:22px;background:linear-gradient(145deg,#172341,#0c1428);box-shadow:0 25px 80px rgba(0,0,0,.5);padding:22px}
+.modal[hidden],.modal-backdrop[hidden]{display:none}
+.modal-head{display:flex;justify-content:space-between;align-items:center}
+.modal-head span{font-size:11px;color:#9eadd0;text-transform:uppercase;letter-spacing:.1em}
+.close{border:1px solid var(--line);background:#182443;color:#e9edff;border-radius:10px;width:34px;height:34px;cursor:pointer}
+.modal h3{font-size:25px;margin:12px 0 5px}
+.modal p{color:#b1bfdf;line-height:1.55;font-size:14px}
+.modal-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.pill{padding:6px 10px;border-radius:999px;background:rgba(132,147,255,.12);border:1px solid rgba(132,147,255,.2);color:#cbd4ff;font-size:11px}
+@media(max-width:800px){
+ .app{padding:19px 15px 26px}
+ .stats{grid-template-columns:1fr}
+ .bottom-grid{grid-template-columns:1fr}
+ .journal{min-height:82px}
+ .scene-wrap{height:clamp(350px,68vw,490px)}
+ .categories{padding:10px 4px}
+ .category{flex-direction:column;gap:3px;padding:5px 2px}
+ .cat-name{font-size:10px}
+}
+@media(max-width:520px){
+ .header{align-items:center}
+ .rank{padding:8px 10px;gap:7px}
+ .rank strong{font-size:11px}.rank small{font-size:10px}
+ .subtitle{font-size:12px;max-width:230px;line-height:1.45}
+ .scene-wrap{height:360px;min-height:360px}
+ .scene-top{top:12px;left:12px;right:12px}
+ .scene-label{font-size:9px}
+ .control{width:34px;height:34px;border-radius:11px}
+ .drag-hint{font-size:10px;bottom:10px}
+ .scene-footer{padding:0 12px 12px;font-size:10px}
+ .recent-list{grid-template-columns:repeat(2,1fr)}
+ .recent-card{padding:8px}
+ .mini-planet{width:34px;height:34px;flex-basis:34px}
+ .progress-card{padding:14px}
+ .cat-icon{font-size:17px}
+ .cat-count{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+ <header class="header">
+  <div>
+   <div class="kicker">ЛИЧНАЯ КАРТА ОТКРЫТИЙ</div>
+   <h1>Моя вселенная</h1>
+   <p class="subtitle">Твоя система наблюдений. Новые миры появляются по мере исследования себя.</p>
+  </div>
+  <div class="rank"><span class="star">✦</span><div><strong>Исследователь</strong><small>Визуальный прототип</small></div></div>
+ </header>
+
+ <section class="scene-card" aria-label="Интерактивная солнечная система">
+  <div class="scene-top">
+   <span class="scene-label">СОЛНЕЧНАЯ СИСТЕМА</span>
+   <div class="scene-controls">
+    <button class="control" id="zoomIn" aria-label="Приблизить">+</button>
+    <button class="control" id="zoomOut" aria-label="Отдалить">−</button>
+    <button class="control" id="resetView" aria-label="Сбросить вид" title="Сбросить вид">⟳</button>
+   </div>
+  </div>
+  <div class="scene-wrap">
+   <svg id="systemSvg" viewBox="0 0 1000 620" role="img" aria-label="Центральная планета и четыре орбиты">
+    <defs>
+     <radialGradient id="orbitStroke">
+      <stop offset="0" stop-color="#8298dc" stop-opacity=".12"/>
+      <stop offset=".72" stop-color="#8298dc" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#b5a0ff" stop-opacity=".18"/>
+     </radialGradient>
+     <radialGradient id="volcanicGrad" cx="29%" cy="24%">
+      <stop offset="0" stop-color="#ffdca4"/><stop offset=".2" stop-color="#b76d3d"/>
+      <stop offset=".48" stop-color="#4c2930"/><stop offset=".78" stop-color="#1c1726"/><stop offset="1" stop-color="#080d19"/>
+     </radialGradient>
+     <radialGradient id="iceGrad" cx="30%" cy="24%">
+      <stop offset="0" stop-color="#f4fbff"/><stop offset=".25" stop-color="#a9c8df"/>
+      <stop offset=".58" stop-color="#506d91"/><stop offset=".86" stop-color="#1a2c48"/><stop offset="1" stop-color="#080f20"/>
+     </radialGradient>
+     <radialGradient id="gasGrad" cx="28%" cy="25%">
+      <stop offset="0" stop-color="#f4e2c2"/><stop offset=".24" stop-color="#b9a18a"/>
+      <stop offset=".52" stop-color="#746070"/><stop offset=".8" stop-color="#2c2b43"/><stop offset="1" stop-color="#0b1224"/>
+     </radialGradient>
+     <linearGradient id="ringGrad">
+      <stop offset="0" stop-color="#9a826c" stop-opacity="0"/>
+      <stop offset=".25" stop-color="#d5c1a4" stop-opacity=".85"/>
+      <stop offset=".48" stop-color="#776b78" stop-opacity=".6"/>
+      <stop offset=".7" stop-color="#d9c9ad" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#9a826c" stop-opacity="0"/>
+     </linearGradient>
+     <filter id="planetShadow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="blur"/>
+      <feOffset dx="5" dy="8" result="offset"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".45"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+     </filter>
+     <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+     </filter>
+     <filter id="blurGlow"><feGaussianBlur stdDeviation="30"/></filter>
+     <clipPath id="coreClip"><circle r="132"/></clipPath>
+    </defs>
+
+    <g id="world" transform="translate(500 310)">
+     <ellipse class="orbit back" rx="430" ry="215"/>
+     <ellipse class="orbit" rx="350" ry="175"/>
+     <ellipse class="orbit" rx="265" ry="132"/>
+     <ellipse class="orbit" rx="180" ry="90"/>
+     <circle class="central-glow" r="175"/>
+     <circle class="central-halo" r="137"/>
+     <image href="assets/planet-core.png" x="-135" y="-135" width="270" height="270" preserveAspectRatio="xMidYMid meet" style="filter:drop-shadow(0 0 23px rgba(112,143,255,.38))"/>
+     <circle r="132" fill="none" stroke="#b9d6ff" stroke-opacity=".23" stroke-width="1.2"/>
+
+     <g class="object" id="obj-volcanic" data-id="noctis" data-orbit="3" data-angle="205" tabindex="0" role="button" aria-label="Ноктис, вулканическая планета">
+      <circle class="hit" r="39"/>
+      <circle class="select-ring" r="34"/>
+      <image class="planet-surface" href="assets/planet-volcanic.png" x="-31" y="-31" width="62" height="62" preserveAspectRatio="xMidYMid meet" style="filter:drop-shadow(0 0 10px rgba(255,139,82,.2))"/>
+     </g>
+
+     <g class="object" id="obj-ice" data-id="selena" data-orbit="2" data-angle="330" tabindex="0" role="button" aria-label="Селена, ледяной спутник">
+      <circle class="hit" r="32"/>
+      <circle class="select-ring" r="28"/>
+      <image class="planet-surface" href="assets/moon-ice.png" x="-25" y="-25" width="50" height="50" preserveAspectRatio="xMidYMid meet" style="filter:drop-shadow(0 0 8px rgba(130,202,255,.2))"/>
+     </g>
+
+     <g class="object" id="obj-ringed" data-id="auria" data-orbit="4" data-angle="330" tabindex="0" role="button" aria-label="Аурия, кольцевая планета">
+      <circle class="hit" r="49"/>
+      <circle class="select-ring" r="45"/>
+      <ellipse cx="0" cy="1" rx="48" ry="13" transform="rotate(-20)" fill="none" stroke="url(#ringGrad)" stroke-width="8" opacity=".85"/>
+      <ellipse cx="0" cy="1" rx="42" ry="10" transform="rotate(-20)" fill="none" stroke="#d9c8aa" stroke-opacity=".25" stroke-width="1.5"/>
+      <circle class="planet-surface" r="27" fill="url(#gasGrad)"/>
+      <path d="M-22 -5 Q-4 -12 19 -2 M-19 5 Q0 0 20 8" stroke="#e1c8a7" stroke-opacity=".28" stroke-width="2" fill="none"/>
+      <ellipse cx="0" cy="1" rx="48" ry="13" transform="rotate(-20)" fill="none" stroke="url(#ringGrad)" stroke-width="5" opacity=".7"/>
+     </g>
+
+     <g class="object" id="obj-artifact" data-id="signal" data-orbit="1" data-angle="150" tabindex="0" role="button" aria-label="Капсула сигнала, артефакт">
+      <circle class="hit" r="28"/>
+      <circle class="select-ring" r="25"/>
+      <path d="M0 -18 L13 -8 L13 8 L0 18 L-13 8 L-13 -8 Z" fill="#173d5a" stroke="#83d9ef" stroke-width="1.5" filter="url(#softGlow)"/>
+      <path d="M0 -13 L7 -5 L5 7 L0 13 L-6 5 L-5 -6 Z" fill="#9beaff" opacity=".85"/>
+      <path d="M-13 -8 L0 -18 L13 -8" fill="none" stroke="#c3f5ff" stroke-opacity=".65"/>
+     </g>
+    </g>
+   </svg>
+   <div class="drag-hint">Потяни фон, чтобы вращать систему · перетащи объект по орбите</div>
+  </div>
+  <div class="scene-footer">
+   <span><i class="legend-dot"></i>Сцена прототипа · 4 демонстрационных объекта</span>
+   <span id="zoomLabel">Масштаб 100%</span>
+  </div>
+ </section>
+
+ <section class="stats">
+  <div class="progress-card">
+   <div class="card-kicker">КОЛЛЕКЦИЯ · ДЕМО</div>
+   <div class="progress-row"><div class="progress-value">4 / 20</div><div class="progress-percent">20%</div></div>
+   <div class="track"><div class="fill"></div></div>
+  </div>
+  <div class="categories">
+   <div class="category"><span class="cat-icon">◉</span><div><div class="cat-name">Планеты</div><div class="cat-count">2 / 4</div></div></div>
+   <div class="category"><span class="cat-icon">☾</span><div><div class="cat-name">Спутники</div><div class="cat-count">1 / 4</div></div></div>
+   <div class="category"><span class="cat-icon">✧</span><div><div class="cat-name">Созвездия</div><div class="cat-count">0 / 4</div></div></div>
+   <div class="category"><span class="cat-icon">✺</span><div><div class="cat-name">Аномалии</div><div class="cat-count">0 / 4</div></div></div>
+   <div class="category"><span class="cat-icon">◇</span><div><div class="cat-name">Артефакты</div><div class="cat-count">1 / 4</div></div></div>
+  </div>
+ </section>
+
+ <section class="bottom-grid">
+  <div class="recent">
+   <div class="section-head"><h2>Объекты в системе</h2><span>Нажми, чтобы изучить</span></div>
+   <div class="recent-list">
+    <button class="recent-card" data-open="noctis"><span class="mini-planet mini-blue"></span><span><strong>Ноктис</strong><small>Планета · редкая</small></span></button>
+    <button class="recent-card" data-open="selena"><span class="mini-planet mini-ice"></span><span><strong>Селена</strong><small>Спутник · обычный</small></span></button>
+    <button class="recent-card" data-open="auria"><span class="mini-planet mini-gold"></span><span><strong>Аурия</strong><small>Планета · редкая</small></span></button>
+    <button class="recent-card" data-open="signal"><span class="mini-planet mini-ring"></span><span><strong>Капсула сигнала</strong><small>Артефакт · обычный</small></span></button>
+   </div>
+  </div>
+  <a class="journal" href="#journal" id="journalLink">
+   <span class="book">▤</span><span><strong>Журнал исследователя</strong><small>Коллекция и история открытий</small></span><span>→</span>
+  </a>
+ </section>
+ <p class="footer-note">Демонстрационный экран · прогресс и объекты пока не связаны с записями дневника.</p>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+ <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-head"><span id="modalCategory">Планета</span><button class="close" id="closeModal" aria-label="Закрыть">×</button></div>
+  <h3 id="modalTitle">Ноктис</h3>
+  <p id="modalDescription"></p>
+  <div class="modal-meta"><span class="pill" id="modalRarity">Редкая</span><span class="pill" id="modalOrbit">Орбита 3</span><span class="pill">Демо-объект</span></div>
+ </section>
+</div>
+
+<script>
+(function(){
+ "use strict";
+ const svg=document.getElementById("systemSvg");
+ const world=document.getElementById("world");
+ const zoomLabel=document.getElementById("zoomLabel");
+ const defaults={noctis:205,selena:330,auria:330,signal:150};
+ const orbitRadii={1:[180,90],2:[265,132],3:[350,175],4:[430,215]};
+ const details={
+  noctis:{name:"Ноктис",category:"Планета",rarity:"Редкая",orbit:3,description:"Тёмный вулканический мир. На ночной стороне видны тонкие линии раскалённых разломов. В полной версии объект будет открываться за исследовательские достижения."},
+  selena:{name:"Селена",category:"Спутник",rarity:"Обычный",orbit:2,description:"Холодный спутник с ледяной поверхностью и глубокими кратерами. Его можно будет разместить на любой доступной орбите."},
+  auria:{name:"Аурия",category:"Планета",rarity:"Редкая",orbit:4,description:"Газовый гигант с широкими кольцами и мягкими золотистыми облачными слоями."},
+  signal:{name:"Капсула сигнала",category:"Артефакт",rarity:"Обычный",orbit:1,description:"Небольшой артефакт первой экспедиции. В полной версии будет хранить историю одного из важных открытий."}
+ };
+ let rotation=0,zoom=1,angles={...defaults},activePointer=null,draggingObject=null,moved=false;
+ try{
+  const saved=JSON.parse(localStorage.getItem("kosmos2-prototype-layout")||"null");
+  if(saved){rotation=Number(saved.rotation)||0;zoom=Math.min(1.35,Math.max(.72,Number(saved.zoom)||1));angles={...angles,...saved.angles};}
+ }catch(e){}
+ function render(){
+  world.setAttribute("transform","translate(500 310) rotate("+rotation+") scale("+zoom+")");
+  Object.keys(angles).forEach(id=>{
+   const el=document.querySelector('[data-id="'+id+'"]');
+   const orbit=Number(el.dataset.orbit),r=orbitRadii[orbit],a=angles[id]*Math.PI/180;
+   const x=r[0]*Math.cos(a),y=r[1]*Math.sin(a);
+   el.setAttribute("transform","translate("+x.toFixed(2)+" "+y.toFixed(2)+")");
+  });
+  zoomLabel.textContent="Масштаб "+Math.round(zoom*100)+"%";
+  try{localStorage.setItem("kosmos2-prototype-layout",JSON.stringify({rotation,zoom,angles}));}catch(e){}
+ }
+ function setZoom(value){zoom=Math.min(1.35,Math.max(.72,value));render();}
+ document.getElementById("zoomIn").addEventListener("click",()=>setZoom(zoom+.1));
+ document.getElementById("zoomOut").addEventListener("click",()=>setZoom(zoom-.1));
+ document.getElementById("resetView").addEventListener("click",()=>{
+  rotation=0;zoom=1;angles={...defaults};render();
+ });
+ function openDetails(id){
+  const d=details[id];if(!d)return;
+  document.getElementById("modalCategory").textContent=d.category;
+  document.getElementById("modalTitle").textContent=d.name;
+  document.getElementById("modalDescription").textContent=d.description;
+  document.getElementById("modalRarity").textContent=d.rarity;
+  document.getElementById("modalOrbit").textContent="Орбита "+d.orbit;
+  document.getElementById("modalBackdrop").hidden=false;
+ }
+ function closeDetails(){document.getElementById("modalBackdrop").hidden=true;}
+ document.getElementById("closeModal").addEventListener("click",closeDetails);
+ document.getElementById("modalBackdrop").addEventListener("click",e=>{if(e.target.id==="modalBackdrop")closeDetails();});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDetails();});
+ document.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>openDetails(b.dataset.open)));
+
+ function pointInWorld(e){
+  const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;
+  const m=world.getScreenCTM();return p.matrixTransform(m.inverse());
+ }
+ svg.addEventListener("pointerdown",e=>{
+  const obj=e.target.closest(".object");
+  if(obj){
+   e.preventDefault();e.stopPropagation();
+   draggingObject=obj.dataset.id;moved=false;activePointer=e.pointerId;
+   obj.classList.add("selected");obj.setPointerCapture(e.pointerId);
+   return;
+  }
+  activePointer=e.pointerId;draggingObject=null;moved=false;
+  svg.setPointerCapture(e.pointerId);
+  svg.dataset.startX=e.clientX;svg.dataset.startRotation=rotation;
+ });
+ svg.addEventListener("pointermove",e=>{
+  if(activePointer!==e.pointerId)return;
+  if(draggingObject){
+   const p=pointInWorld(e),orbit=Number(document.querySelector('[data-id="'+draggingObject+'"]').dataset.orbit),r=orbitRadii[orbit];
+   angles[draggingObject]=Math.atan2(p.y/r[1],p.x/r[0])*180/Math.PI;
+   moved=true;render();
+  }else if(svg.hasPointerCapture(e.pointerId)){
+   const dx=e.clientX-Number(svg.dataset.startX||e.clientX);
+   if(Math.abs(dx)>2)moved=true;
+   rotation=Number(svg.dataset.startRotation||0)+dx*.32;render();
+  }
+ });
+ function endPointer(e){
+  if(activePointer!==e.pointerId)return;
+  if(draggingObject){
+   const id=draggingObject,el=document.querySelector('[data-id="'+id+'"]');
+   el.classList.remove("selected");
+   if(!moved)openDetails(id);
+  }
+  try{if(svg.hasPointerCapture(e.pointerId))svg.releasePointerCapture(e.pointerId);}catch(_){}
+  activePointer=null;draggingObject=null;moved=false;
+ }
+ svg.addEventListener("pointerup",endPointer);
+ svg.addEventListener("pointercancel",endPointer);
+ svg.querySelectorAll(".object").forEach(el=>{
+  el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openDetails(el.dataset.id);}});
+ });
+ render();
+})();
+</script>
+</body>
+</html>
