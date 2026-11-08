@@ -1,10 +1,10 @@
-/* Дневник состояния · кэш v11
+/* Дневник состояния · кэш v12
    Для HTML сначала сеть: обновления интерфейса не застревают в старом кэше.
    При отсутствии сети — сохранённая страница. */
-const CACHE = 'dnevnik-v11';
+const CACHE = 'dnevnik-v12';
 const PRECACHE = [
   './', './index.html', './universe-prototype.html',
-  './manifest.webmanifest', './icon-192.png', './icon-512.png',
+  './manifest.webmanifest', './favicon-32.png', './icon-192.png', './icon-512.png',
   './apple-touch-icon.png', './assets/nebula-sky.jpg',
   './assets/planet-core.png', './assets/planet-volcanic.png',
   './assets/moon-ice.png', './assets/planet-auria.png',
