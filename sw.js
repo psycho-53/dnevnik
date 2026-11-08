@@ -1,32 +1,50 @@
-var C = "dnevnik-v9";
-var FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./assets/nebula-sky.jpg", "./assets/planet-core.png", "./assets/planet-volcanic.png", "./assets/moon-ice.png", "./assets/planet-auria.png", "./assets/signal-relic.png"];
-
-self.addEventListener("install", function (e) {
-  e.waitUntil(caches.open(C).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
+/* Дневник состояния · кэш v10
+   Для HTML сначала сеть: обновления интерфейса не застревают в старом кэше.
+   При отсутствии сети — сохранённая страница. */
+const CACHE = 'dnevnik-v10';
+const PRECACHE = [
+  './', './index.html', './universe-prototype.html',
+  './manifest.webmanifest', './icon-192.png', './icon-512.png',
+  './apple-touch-icon.png', './assets/nebula-sky.jpg',
+  './assets/planet-core.png', './assets/planet-volcanic.png',
+  './assets/moon-ice.png', './assets/planet-auria.png',
+  './assets/signal-relic.png'
+];
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(PRECACHE)).then(() => self.skipWaiting()));
 });
-
-self.addEventListener("activate", function (e) {
-  e.waitUntil(
+self.addEventListener('activate', event => {
+  event.waitUntil(
     caches.keys()
-      .then(function (ks) { return Promise.all(ks.filter(function (k) { return k.indexOf("dnevnik-") === 0 && k !== C; }).map(function (k) { return caches.delete(k); })); })
-      .then(function () { return self.clients.claim(); })
+      .then(keys => Promise.all(keys.filter(key => key.startsWith('dnevnik-') && key !== CACHE).map(key => caches.delete(key))))
+      .then(() => self.clients.claim())
   );
 });
-
-// Сначала отдаём из кэша (работает без интернета), в фоне обновляем.
-self.addEventListener("fetch", function (e) {
-  if (e.request.method !== "GET") return;
-  if (new URL(e.request.url).origin !== self.location.origin) return;
-  e.respondWith(
-    caches.match(e.request, { ignoreSearch: true }).then(function (cached) {
-      var net = fetch(e.request).then(function (res) {
-        if (res && res.ok) {
-          var copy = res.clone();
-          caches.open(C).then(function (c) { c.put(e.request, copy); });
+self.addEventListener('fetch', event => {
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
+  const isPage = req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('/');
+  if (isPage) {
+    event.respondWith(
+      fetch(req).then(res => {
+        if (res.ok) {
+          const copy = res.clone();
+          event.waitUntil(caches.open(CACHE).then(cache => cache.put(req, copy)));
         }
         return res;
-      }).catch(function () { return cached || caches.match("./index.html"); });
-      return cached || net;
-    })
-  );
+      }).catch(() => caches.match(req, {ignoreSearch: true}).then(cached => cached || caches.match('./index.html')))
+    );
+  } else {
+    event.respondWith(
+      caches.match(req, {ignoreSearch: true}).then(cached => cached || fetch(req).then(res => {
+        if (res.ok) {
+          const copy = res.clone();
+          event.waitUntil(caches.open(CACHE).then(cache => cache.put(req, copy)));
+        }
+        return res;
+      }))
+    );
+  }
 });
