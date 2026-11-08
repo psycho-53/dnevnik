@@ -387,6 +387,81 @@ textarea::placeholder{color:#7786aa}
 }
 @media(prefers-reduced-motion:reduce){.object .select-ring{transition:none}}
 
+
+/* ---------- Главная: сначала состояние, космос вторичен ---------- */
+.checkin-primary{padding:22px!important;margin-top:4px}
+.checkin-primary .section-head{margin-bottom:16px}
+.checkin-primary .section-head h2{font-size:21px}
+.space-hero-secondary{min-height:138px!important;grid-template-columns:1fr 170px!important;gap:8px!important;padding:15px 19px!important;margin:18px 0 14px!important;background:radial-gradient(260px 150px at 78% 52%,rgba(103,117,230,.14),transparent 72%),linear-gradient(135deg,rgba(20,31,59,.76),rgba(12,19,38,.86))!important;box-shadow:0 10px 28px rgba(0,0,0,.12)!important;border-color:rgba(147,163,240,.15)!important}
+.space-hero-secondary .hero-label{font-size:9px;color:#aebde0}
+.space-hero-secondary .hero-label:before{background:#8f9cff;box-shadow:0 0 9px #8f9cff}
+.space-hero-secondary .hero-copy h2{font-size:18px;margin:4px 0}
+.space-hero-secondary .hero-copy p{font-size:11px;line-height:1.5;color:#9eaccb;max-width:420px}
+.space-hero-secondary .planet-scene{min-height:105px;opacity:.76}
+.space-hero-secondary .planet{width:78px;height:78px;box-shadow:inset -13px -12px 22px rgba(3,8,34,.55),0 0 24px rgba(117,135,255,.25),0 0 58px rgba(96,113,230,.12)}
+.space-hero-secondary .planet-orbit{width:130px;height:48px}
+.space-hero-secondary .planet-orbit.second{width:146px;height:60px}
+.space-hero-secondary .planet-moon{width:14px;height:14px;right:27px;top:16px}
+.scale.mood-scale{margin:20px 0 24px}
+.scale.mood-scale>b{font-size:16px}
+.scale.mood-scale .opts{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important}
+.scale.mood-scale .opts button{min-width:0;min-height:116px;padding:8px 3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border-radius:15px;background:rgba(5,12,26,.34);border:1px solid rgba(165,184,233,.15);color:#c5d0e8;font-size:11px;line-height:1.2;transition:transform .2s,border-color .2s,background .2s,box-shadow .2s}
+.scale.mood-scale .opts button:hover{transform:translateY(-2px);background:rgba(53,67,106,.3);border-color:rgba(179,190,255,.4)}
+.scale.mood-scale .opts button span.mood-label{font-size:10px;color:inherit;line-height:1.25;margin:0;white-space:normal}
+.scale.mood-scale .opts button[aria-pressed=true]{background:linear-gradient(180deg,rgba(111,106,194,.2),rgba(41,57,97,.36));border-color:rgba(188,190,255,.78);color:#fff;box-shadow:inset 0 0 0 1px rgba(190,187,255,.08),0 0 22px rgba(131,132,235,.1)}
+.mood-art{position:relative;display:block;width:74px;height:61px;flex:0 0 61px;isolation:isolate}
+.mood-art:before,.mood-art:after,.mood-art i,.mood-art b,.mood-art em{content:"";position:absolute;display:block;pointer-events:none}
+.mood-art:before{inset:5px 8px;border-radius:50%;filter:blur(9px);opacity:.65}
+.mood-art i,.mood-art b{border-radius:50%}
+.mood-art em{width:3px;height:3px;border-radius:50%;background:#e8f1ff;box-shadow:19px 7px 0 rgba(226,237,255,.8),-17px 18px 0 rgba(226,237,255,.55),25px 28px 0 rgba(226,237,255,.45)}
+.scale.mood-scale .opts button:nth-child(1) .mood-art:before{background:radial-gradient(ellipse,#a92e58 0%,rgba(163,49,80,.4) 48%,transparent 72%)}
+.scale.mood-scale .opts button:nth-child(1) .mood-art i{width:55px;height:29px;left:10px;top:19px;background:radial-gradient(ellipse at 40% 42%,#ffb5a0 0%,#e56c76 25%,#a72f5d 57%,rgba(88,25,62,.1) 76%,transparent 80%);filter:blur(3px);transform:rotate(-17deg)}
+.scale.mood-scale .opts button:nth-child(1) .mood-art b{width:37px;height:23px;left:29px;top:11px;background:radial-gradient(ellipse,#f5a1a0 0%,rgba(197,65,99,.65) 48%,transparent 75%);filter:blur(5px);transform:rotate(24deg)}
+.scale.mood-scale .opts button:nth-child(1) .mood-art em{left:16px;top:13px}
+.scale.mood-scale .opts button:nth-child(2) .mood-art:before{background:radial-gradient(ellipse,rgba(131,81,177,.55),transparent 70%)}
+.scale.mood-scale .opts button:nth-child(2) .mood-art i{width:48px;height:35px;left:15px;top:15px;background:radial-gradient(ellipse at 42% 42%,#c3a5e4 0%,#8062b3 35%,#382b69 69%,transparent 78%);filter:blur(3px);transform:rotate(26deg)}
+.scale.mood-scale .opts button:nth-child(2) .mood-art b{width:57px;height:18px;left:10px;top:24px;border:2px solid rgba(183,148,225,.65);border-left-color:transparent;border-bottom-color:rgba(116,88,174,.45);transform:rotate(-22deg);filter:blur(1px)}
+.scale.mood-scale .opts button:nth-child(2) .mood-art em{left:21px;top:9px;opacity:.7}
+.scale.mood-scale .opts button:nth-child(3) .mood-art:before{background:radial-gradient(circle,rgba(89,157,211,.52),transparent 69%)}
+.scale.mood-scale .opts button:nth-child(3) .mood-art i{width:34px;height:34px;left:22px;top:15px;background:radial-gradient(circle at 30% 25%,#d9efff,#78afd2 38%,#315f91 76%,#152d56);box-shadow:inset -8px -5px 10px rgba(4,17,42,.65),0 0 13px rgba(111,182,237,.3);z-index:2}
+.scale.mood-scale .opts button:nth-child(3) .mood-art b{width:64px;height:22px;left:7px;top:22px;border:2px solid rgba(174,220,255,.78);border-left-color:rgba(174,220,255,.18);border-right-color:rgba(174,220,255,.28);transform:rotate(-19deg);z-index:3;box-shadow:0 0 8px rgba(113,183,233,.2)}
+.scale.mood-scale .opts button:nth-child(3) .mood-art em{left:11px;top:8px}
+.scale.mood-scale .opts button:nth-child(4) .mood-art:before{background:radial-gradient(ellipse,rgba(65,194,177,.5),transparent 70%)}
+.scale.mood-scale .opts button:nth-child(4) .mood-art i{width:18px;height:43px;left:15px;top:10px;border-radius:70% 30% 55% 45%;background:linear-gradient(180deg,transparent,#83f1d7 30%,rgba(58,187,175,.2) 85%,transparent);filter:blur(3px);transform:rotate(19deg)}
+.scale.mood-scale .opts button:nth-child(4) .mood-art b{width:22px;height:48px;left:35px;top:5px;border-radius:70% 30% 55% 45%;background:linear-gradient(180deg,transparent,#a0f3d9 25%,rgba(62,185,196,.12) 83%,transparent);filter:blur(3px);transform:rotate(-17deg)}
+.scale.mood-scale .opts button:nth-child(4) .mood-art:after{width:38px;height:30px;left:22px;top:15px;border-radius:50%;border-top:2px solid rgba(164,255,224,.55);filter:blur(1px);transform:rotate(-12deg)}
+.scale.mood-scale .opts button:nth-child(4) .mood-art em{left:12px;top:9px}
+.scale.mood-scale .opts button:nth-child(5) .mood-art:before{background:radial-gradient(circle,rgba(244,193,119,.58),transparent 70%)}
+.scale.mood-scale .opts button:nth-child(5) .mood-art i{width:26px;height:26px;left:26px;top:16px;background:radial-gradient(circle,#fff9df 0%,#ffe3a1 28%,#e8aa65 55%,rgba(214,133,82,.1) 76%);clip-path:polygon(50% 0%,61% 35%,98% 50%,61% 62%,50% 100%,39% 62%,2% 50%,39% 35%);filter:drop-shadow(0 0 7px rgba(255,207,132,.8));border-radius:0}
+.scale.mood-scale .opts button:nth-child(5) .mood-art b{width:48px;height:48px;left:15px;top:5px;border:1px solid rgba(255,215,153,.35);border-radius:50%;box-shadow:0 0 14px rgba(242,188,117,.22)}
+.scale.mood-scale .opts button:nth-child(5) .mood-art em{left:9px;top:13px;background:#fff0c7;box-shadow:54px 4px 0 #fff0c7,12px 37px 0 rgba(255,225,178,.8),44px 34px 0 rgba(255,225,178,.65)}
+.scale.mood-scale .opts button:nth-child(1)[aria-pressed=true]{border-color:rgba(235,123,139,.72);box-shadow:0 0 22px rgba(194,66,98,.13)}
+.scale.mood-scale .opts button:nth-child(2)[aria-pressed=true]{border-color:rgba(184,146,232,.72);box-shadow:0 0 22px rgba(129,91,184,.13)}
+.scale.mood-scale .opts button:nth-child(3)[aria-pressed=true]{border-color:rgba(133,196,239,.72);box-shadow:0 0 22px rgba(84,158,214,.13)}
+.scale.mood-scale .opts button:nth-child(4)[aria-pressed=true]{border-color:rgba(116,223,196,.72);box-shadow:0 0 22px rgba(67,189,163,.13)}
+.scale.mood-scale .opts button:nth-child(5)[aria-pressed=true]{border-color:rgba(245,206,139,.75);box-shadow:0 0 22px rgba(223,164,89,.13)}
+@keyframes mood-drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.scale.mood-scale .opts button[aria-pressed=true] .mood-art{animation:mood-drift 4s ease-in-out infinite}
+@media(max-width:560px){
+ .checkin-primary{padding:17px 13px!important}
+ .scale.mood-scale .opts{gap:5px!important}
+ .scale.mood-scale .opts button{min-height:106px;padding:6px 1px;gap:5px}
+ .mood-art{width:58px;height:54px;flex:0 0 54px;transform:scale(.78);margin:-5px -8px}
+ .scale.mood-scale .opts button span.mood-label{font-size:9px}
+ .space-hero-secondary{grid-template-columns:1fr!important;min-height:118px!important;padding:14px!important}
+ .space-hero-secondary .hero-copy{max-width:74%}
+ .space-hero-secondary .planet-scene{position:absolute;right:-10px;top:0;width:43%;min-height:118px;opacity:.65}
+ .space-hero-secondary .planet{width:68px;height:68px}
+ .space-hero-secondary .planet-orbit{width:112px;height:42px}
+ .space-hero-secondary .planet-orbit.second{width:126px;height:53px}
+}
+@media(max-width:370px){
+ .scale.mood-scale .opts button{min-height:98px}
+ .mood-art{width:54px;height:50px;flex-basis:50px;transform:scale(.72);margin:-7px -10px}
+ .scale.mood-scale .opts button span.mood-label{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){.scale.mood-scale .opts button[aria-pressed=true] .mood-art{animation:none}}
+
 </style>
 </head>
 <body>
@@ -397,15 +472,32 @@ textarea::placeholder{color:#7786aa}
 <main>
 <div id="tab-today">
 <div class="page-head">
- <div><div class="eyebrow">ЛИЧНАЯ КАРТА СОСТОЯНИЯ</div><h1>Твоя вселенная</h1><p class="sub" id="sub"></p></div>
+ <div><div class="eyebrow">ПРОСТРАНСТВО ДЛЯ СЕБЯ</div><h1>Как ты сегодня?</h1><p class="sub" id="sub">Не нужно подбирать правильный ответ. Просто отметь, как ты себя чувствуешь.</p></div>
  <div class="page-mark" aria-hidden="true">✦</div>
 </div>
-<div class="space-hero">
- <div class="hero-copy">
-  <div class="hero-label">Экспедиция дня</div>
-  <h2>Как ты сегодня?</h2>
-  <p>Остановись на минуту, чтобы отметить своё состояние. Каждый сигнал помогает лучше узнать себя.</p>
+<div class="card2" id="hint" hidden role="status">
+ <p id="hintT"></p><p class="note" style="margin:0">Это не диагноз, а заметка, которую можно показать врачу.</p>
+ <div class="row" style="margin-top:8px"><button class="btn sec sm" id="hintX" type="button">Скрыть на сегодня</button></div>
+</div>
+<section class="checkin-primary">
+ <div class="section-head"><div><div class="eyebrow">01 / СИГНАЛ ДНЯ</div><h2>Отметь своё состояние</h2></div><span class="time-chip">≈ 1 минута</span></div>
+ <div class="row"><label for="d"><b>Дата</b></label><input type="date" id="d"></div>
+ <div id="scales"></div>
+ <div class="scale"><b>Что было сегодня</b><small>Необязательно. По отметкам приложение со временем найдёт совпадения</small><div class="chips" id="chips"></div></div>
+ <div class="note-block" id="noteBlock">
+  <div class="note-preview" id="notePreview" hidden><div class="note-preview-head"><b>Заметка</b><button class="btn sec sm" id="editNote" type="button">Изменить</button></div><p id="notePreviewText"></p></div>
+  <div id="noteEditor" hidden><div class="note-preview-head"><label for="note"><b>Заметка</b> <span class="note">(необязательно)</span></label></div><textarea id="note" placeholder="Что повлияло: сон, лекарства, события"></textarea></div>
+  <button class="btn sec sm" id="addNote" type="button">＋ Добавить заметку</button>
  </div>
+ <div class="row" style="margin-top:12px"><button class="btn" id="save" type="button">Сохранить наблюдение</button></div>
+ <p class="msg" id="msg" role="status"></p>
+</section>
+<section id="after" hidden>
+ <h2>Последние 7 дней</h2><div class="wrap"><svg class="chart" id="chart7" viewBox="0 0 640 240" role="img" aria-label="График за последние 7 дней"></svg></div>
+ <div class="legend" id="legend7"></div><p class="note" id="wk" style="margin-bottom:0"></p>
+</section>
+<div class="space-hero space-hero-secondary">
+ <div class="hero-copy"><div class="hero-label">Тихий визуальный отклик</div><h2>Твоя вселенная</h2><p>Небольшое отражение твоего пути. Здесь не нужно ничего достигать — можно просто наблюдать.</p></div>
  <div class="planet-scene" aria-hidden="true"><div class="planet-orbit"></div><div class="planet-orbit second"></div><div class="planet"></div><div class="planet-moon"></div></div>
 </div>
 <div class="stats-grid" aria-label="Твой прогресс">
@@ -417,36 +509,6 @@ textarea::placeholder{color:#7786aa}
  <div><div class="eyebrow">МИНУТА ДЛЯ СЕБЯ</div><p id="promptText">Что сегодня помогло тебе почувствовать себя лучше?</p></div>
  <div class="prompt-actions"><button type="button" id="nextPrompt">Другой вопрос</button><button type="button" id="usePrompt">В заметку</button></div>
 </div>
-<div class="card2" id="hint" hidden role="status">
-<p id="hintT"></p>
-<p class="note" style="margin:0">Это не диагноз, а заметка, которую можно показать врачу.</p>
-<div class="row" style="margin-top:8px"><button class="btn sec sm" id="hintX" type="button">Скрыть на сегодня</button></div>
-</div>
-<section>
-<div class="section-head"><div><div class="eyebrow">01 / СИГНАЛ ДНЯ</div><h2>Отметь своё состояние</h2></div><span class="time-chip">≈ 1 минута</span></div>
-<div class="row"><label for="d"><b>Дата</b></label><input type="date" id="d"></div>
-<div id="scales"></div>
-<div class="scale"><b>Что было сегодня</b><small>Необязательно. По отметкам приложение со временем найдёт совпадения</small><div class="chips" id="chips"></div></div>
-<div class="note-block" id="noteBlock">
- <div class="note-preview" id="notePreview" hidden>
-  <div class="note-preview-head"><b>Заметка</b><button class="btn sec sm" id="editNote" type="button">Изменить</button></div>
-  <p id="notePreviewText"></p>
- </div>
- <div id="noteEditor" hidden>
-  <div class="note-preview-head"><label for="note"><b>Заметка</b> <span class="note">(необязательно)</span></label></div>
-  <textarea id="note" placeholder="Что повлияло: сон, лекарства, события"></textarea>
- </div>
- <button class="btn sec sm" id="addNote" type="button">＋ Добавить заметку</button>
-</div>
-<div class="row" style="margin-top:12px"><button class="btn" id="save" type="button">Сохранить наблюдение</button></div>
-<p class="msg" id="msg" role="status"></p>
-</section>
-<section id="after" hidden>
-<h2>Последние 7 дней</h2>
-<div class="wrap"><svg class="chart" id="chart7" viewBox="0 0 640 240" role="img" aria-label="График за последние 7 дней"></svg></div>
-<div class="legend" id="legend7"></div>
-<p class="note" id="wk" style="margin-bottom:0"></p>
-</section>
 </div>
 
 <div id="tab-universe" hidden>
@@ -680,7 +742,7 @@ function wr(k,v){memS[k]=v;try{localStorage.setItem(k,v)}catch(e){}}
 
 /* ---------- шкалы и настройки ---------- */
 function defScales(){return [
- {id:"m",t:"Настроение",s:"Как вы себя чувствовали в целом",n:5,l:["очень плохо","плохо","так себе","хорошо","отлично"]},
+ {id:"m",t:"Настроение",s:"Выбери то, что ближе к твоему состоянию сейчас",n:5,l:["очень тяжело","тяжело","нейтрально","хорошо","отлично"]},
  {id:"a",t:"Желание что-то делать",s:"Хотелось ли чем-то заниматься. Низкое желание — это апатия",n:5,l:["совсем нет","мало","немного","есть","сильное"]},
  {id:"p",t:"Физическая активность",s:"Сколько вы двигались, ходили, занимались",n:5,l:["почти нет","мало","немного","достаточно","много"]}
 ]}
@@ -733,19 +795,29 @@ var dateEl=$("d");dateEl.value=iso(new Date());dateEl.max=iso(new Date());
 /* ---------- экран записи ---------- */
 function buildScales(){
  var box=$("scales");box.textContent="";
+ var oldMoodLabels=["очень плохо","плохо","так себе","хорошо","отлично"];
+ var newMoodLabels=["Очень тяжело","Тяжело","Нейтрально","Хорошо","Отлично"];
  cfg.scales.forEach(function(x,i){
-  var w=el("div","scale");w.style.setProperty("--c","var(--c"+i+")");
+  var isMood=x.id==="m"&&x.n===5;
+  var w=el("div","scale"+(isMood?" mood-scale":""));w.style.setProperty("--c","var(--c"+i+")");
   w.appendChild(el("b",null,x.t));
   if(x.s)w.appendChild(el("small",null,x.s));
   var o=el("div","opts"),lb=labelsFor(x),fl=full(x);
   o.dataset.id=x.id;o.style.gridTemplateColumns="repeat("+x.n+",1fr)";if(x.n>5)o.style.gap="4px";
   for(var k=1;k<=x.n;k++){
-   var b=el("button",null,String(k));b.type="button";b.dataset.v=k;b.setAttribute("aria-pressed","false");
-   if(fl)b.appendChild(el("span",null,lb[k-1]));
+   var label=lb[k-1]||"";
+   if(isMood&&(oldMoodLabels[k-1]===String(label).toLowerCase()||!label))label=newMoodLabels[k-1];
+   var b=el("button",null,isMood?"":String(k));b.type="button";b.dataset.v=k;b.setAttribute("aria-pressed","false");
+   if(isMood){
+    var art=el("span","mood-art");art.setAttribute("aria-hidden","true");
+    art.appendChild(el("i"));art.appendChild(el("b"));art.appendChild(el("em"));
+    b.appendChild(art);b.appendChild(el("span","mood-label",label));
+    b.setAttribute("aria-label",label);b.title=label;
+   }else if(fl)b.appendChild(el("span",null,lb[k-1]));
    o.appendChild(b);
   }
   w.appendChild(o);
-  if(!fl){var en=el("div","ends"),e2=ends(x);en.appendChild(el("span",null,e2[0]));en.appendChild(el("span",null,e2[1]));w.appendChild(en)}
+  if(!fl&&!isMood){var en=el("div","ends"),e2=ends(x);en.appendChild(el("span",null,e2[0]));en.appendChild(el("span",null,e2[1]));w.appendChild(en)}
   box.appendChild(w);
  });
 }
