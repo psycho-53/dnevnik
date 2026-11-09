@@ -502,6 +502,48 @@ textarea::placeholder{color:#7786aa}
 @keyframes cosmic-supernova-pulse{0%,100%{transform:translate(-50%,-50%) scale(.9);opacity:.35}50%{transform:translate(-50%,-50%) scale(1.12);opacity:.95}}
 @media(prefers-reduced-motion:reduce){.cosmic-effects i{animation:none!important;transition:none!important}}
 
+
+
+/* Mood Cosmos v2: individual cinematic atmospheres, separate from permanent discoveries */
+.mood-sky-stage{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#080f22}
+.mood-sky{display:block;position:absolute;inset:0;width:100%;height:100%;opacity:0;pointer-events:none;
+ transform:scale(1.065);transform-origin:center;transition:opacity 1.3s ease;
+ animation:mood-sky-drift 34s ease-in-out infinite alternate}
+.mood-sky.is-active{opacity:1}
+@keyframes mood-sky-drift{from{transform:scale(1.065) translate(-.8%,.4%)}to{transform:scale(1.085) translate(.8%,-.5%)}}
+.solar-system-panel .cosmic-effects{z-index:2}
+.solar-system-panel .cosmic-effects .mood-meteor{opacity:0;position:absolute;width:155px;height:2px;left:-50%;top:21%;border-radius:999px;
+ background:linear-gradient(90deg,transparent,rgba(207,254,247,.85),#fff);
+ filter:drop-shadow(0 0 5px rgba(174,246,239,.85));transform:rotate(-20deg);
+ animation:none;pointer-events:none}
+.solar-system-panel[data-mood="4"] .cosmic-effects .mood-meteor{animation:mood-meteor-pass 15s linear infinite}
+.solar-system-panel[data-mood="5"] .cosmic-effects .mood-meteor{background:linear-gradient(90deg,transparent,rgba(255,218,137,.9),#fff);animation:mood-meteor-pass 11s linear infinite}
+.solar-system-panel[data-mood="5"] .cosmic-effects .mood-meteor.second{animation-delay:-6s;top:37%;opacity:0}
+@keyframes mood-meteor-pass{0%,27%{left:-50%;opacity:0}30%{opacity:.95}42%{left:125%;opacity:1}48%,100%{left:125%;opacity:0}}
+.solar-system-panel .central-glow{transition:fill 1.2s,opacity 1.2s}
+.solar-system-panel .central-halo{transition:stroke 1.2s,opacity 1.2s}
+.solar-system-panel #world>image{transition:filter 1.1s}
+.solar-system-panel[data-mood="1"] .central-glow{fill:#ff617d;opacity:.29}
+.solar-system-panel[data-mood="1"] .central-halo{stroke:#ffb2b9;opacity:.66}
+.solar-system-panel[data-mood="1"] #world>image{filter:hue-rotate(125deg) saturate(1.18) drop-shadow(0 0 23px rgba(255,89,123,.65))!important}
+.solar-system-panel[data-mood="2"] .central-glow{fill:#b17cef;opacity:.25}
+.solar-system-panel[data-mood="2"] .central-halo{stroke:#d7b4ff;opacity:.63}
+.solar-system-panel[data-mood="2"] #world>image{filter:hue-rotate(55deg) saturate(1.12) drop-shadow(0 0 23px rgba(177,114,231,.52))!important}
+.solar-system-panel[data-mood="3"] .central-glow{fill:#74a6f3;opacity:.17}
+.solar-system-panel[data-mood="3"] .central-halo{stroke:#afd6ff;opacity:.46}
+.solar-system-panel[data-mood="3"] #world>image{filter:drop-shadow(0 0 23px rgba(112,153,241,.35))!important}
+.solar-system-panel[data-mood="4"] .central-glow{fill:#53efd0;opacity:.31}
+.solar-system-panel[data-mood="4"] .central-halo{stroke:#9cf8e4;opacity:.71}
+.solar-system-panel[data-mood="4"] #world>image{filter:hue-rotate(-42deg) saturate(1.2) drop-shadow(0 0 27px rgba(92,239,218,.65))!important}
+.solar-system-panel[data-mood="5"] .central-glow{fill:#ffe0a4;opacity:.35}
+.solar-system-panel[data-mood="5"] .central-halo{stroke:#ffebc0;opacity:.8}
+.solar-system-panel[data-mood="5"] #world>image{filter:hue-rotate(168deg) saturate(1.06) drop-shadow(0 0 30px rgba(255,208,127,.73))!important}
+.solar-system-panel .solar-footer{background:linear-gradient(180deg,transparent,rgba(4,7,18,.4));padding-top:10px}
+@media(prefers-reduced-motion:reduce){
+ .mood-sky,.solar-system-panel .cosmic-effects .mood-meteor{animation:none!important;transition:none!important}
+ .solar-system-panel #world>image,.solar-system-panel .central-glow,.solar-system-panel .central-halo{transition:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -557,7 +599,7 @@ textarea::placeholder{color:#7786aa}
  <div class="page-mark" aria-hidden="true">✧</div>
 </div>
 <section class="solar-system-panel" aria-label="Интерактивная солнечная система">
- <div class="cosmic-effects" aria-hidden="true"><i class="cosmic-comet"></i><i class="cosmic-cluster"></i><i class="cosmic-satellite"></i><i class="cosmic-aurora"></i><i class="cosmic-supernova"></i></div>
+ <div class="cosmic-effects" aria-hidden="true"><i class="cosmic-comet"></i><i class="cosmic-cluster"></i><i class="cosmic-satellite"></i><i class="cosmic-aurora"></i><i class="cosmic-supernova"></i><i class="mood-meteor"></i><i class="mood-meteor second"></i></div>
  <div class="solar-top">
   <span class="eyebrow">СОЛНЕЧНАЯ СИСТЕМА</span>
   <div class="solar-controls">
@@ -1544,5 +1586,6 @@ $("closeRep").addEventListener("click",function(){var dl=$("repDlg");if(dl.close
 initAch();initCollection();initSystem();buildScales();renderEditor();renderTagEditor();loadDay();render();renderAch();
 })();
 </script>
+<script src="mood-cosmos.js" defer></script>
 </body>
 </html>
