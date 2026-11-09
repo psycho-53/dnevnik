@@ -168,8 +168,22 @@ function buildReport(){
  lines.push("Составлено локально в «Дневнике состояния». Решения о диагностике и лечении принимаются вместе со специалистом.");
  return lines.join("\n");
 }
+function reportFresh(valid){
+ $("doctorCopy").disabled=!valid;
+ $("doctorDownload").disabled=!valid;
+}
+function invalidateReport(){
+ if(!$("doctorPreview").value)return;
+ reportFresh(false);
+ message("doctorMsg","Параметры изменились. Подготовь сводку заново, чтобы включить новые настройки.");
+}
+["doctorDays","doctorMood","doctorSleep","doctorTests","doctorMeds","doctorNotes","doctorQuestions"].forEach(function(id){
+ $(id).addEventListener("change",invalidateReport);
+ if(id==="doctorQuestions")$(id).addEventListener("input",invalidateReport);
+});
 $("doctorGenerate").addEventListener("click",function(){
  $("doctorPreview").value=buildReport();
+ reportFresh(!$("doctorPreview").value.startsWith("Выбери хотя бы один"));
  message("doctorMsg","Сводка подготовлена на этом устройстве. Проверь содержание перед тем, как кому-либо отправить.");
 });
 $("doctorCopy").addEventListener("click",function(){

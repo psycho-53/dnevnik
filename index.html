@@ -1210,6 +1210,26 @@ main h1:focus{outline:0}
 .med-danger-zone>.btn{min-height:43px;color:#f5d3ca;border-color:rgba(203,156,141,.38)}
 @media(max-width:500px){#medForm .wb-action-row{display:grid;grid-template-columns:1fr 1fr}#medForm .wb-action-row .btn{width:100%;padding-inline:6px}}
 
+
+/* ITERATION 12 / 13: prevent stale medical summaries and explain backup privacy */
+.doctor-safe-note,.backup-privacy-note{font-size:12px;color:#b5cedb;line-height:1.7;
+ margin:11px 0;padding:11px 12px;background:rgba(70,124,126,.13);
+ border:1px solid rgba(129,185,185,.25);border-radius:11px}
+.backup-privacy-note{border-color:rgba(183,168,138,.3);background:rgba(137,118,77,.08)}
+.doctor-export-actions button:disabled{opacity:.45;filter:grayscale(.5);cursor:not-allowed}
+#tab-more .wb-check{min-height:34px;align-items:center;gap:11px}
+#tab-more .wb-check input{min-width:18px;min-height:18px}
+#tab-more #doctorGenerate{min-height:47px}
+#tab-more #doctorPreview{background:rgba(5,16,30,.77);border:1px solid rgba(165,190,213,.32);
+ padding:15px;line-height:1.65;border-radius:12px}
+#tab-more #doctorMsg{min-height:25px;line-height:1.6}
+#tab-more #exp,#tab-more #imp{min-height:46px}
+@media(max-width:430px){
+ #tab-more .doctor-export-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ #tab-more .doctor-export-actions button{padding-inline:6px}
+ #tab-more #exp,#tab-more #imp{flex:1;min-width:125px}
+}
+
 </style>
 </head>
 <body>
@@ -1678,8 +1698,9 @@ main h1:focus{outline:0}
    <div class="wb-field"><label for="doctorQuestions">Вопросы врачу (необязательно)</label><textarea id="doctorQuestions" rows="3" maxlength="800" placeholder="Что хочу обсудить на приёме"></textarea></div>
    <div class="wb-action-row"><button id="doctorGenerate" class="btn" type="button">Подготовить сводку</button></div>
    <label for="doctorPreview" class="wb-label">Предпросмотр — можно отредактировать</label>
+   <p class="doctor-safe-note">Сводка содержит только выбранные разделы. Если изменить настройки после формирования, потребуется создать её заново.</p>
    <textarea id="doctorPreview" spellcheck="false" placeholder="Здесь появится текст сводки. Он не отправляется автоматически."></textarea>
-   <div class="wb-action-row"><button id="doctorCopy" class="btn sec sm" type="button">Скопировать</button><button id="doctorDownload" class="btn sec sm" type="button">Сохранить .txt</button></div>
+   <div class="wb-action-row doctor-export-actions"><button id="doctorCopy" class="btn sec sm" type="button" disabled>Скопировать</button><button id="doctorDownload" class="btn sec sm" type="button" disabled>Сохранить .txt</button></div>
    <p id="doctorMsg" class="msg" role="status"></p>
    <p class="wb-privacy">Скопированный текст и сохранённый файл могут содержать конфиденциальные сведения. Поделись ими только по собственному решению.</p>
   </details>
@@ -1737,7 +1758,8 @@ main h1:focus{outline:0}
 <section>
 <details>
 <summary>Резервная копия</summary>
-<p class="note" style="margin-top:0">Записи лежат только в этом браузере. Сохраняйте копию время от времени и перед очисткой данных браузера. Копию можно загрузить на другом устройстве.</p>
+<p class="note" style="margin-top:0">Записи лежат только в этом браузере. Сохраняй копию время от времени и перед очисткой браузера. Копию можно загрузить на другом устройстве.</p>
+<p class="backup-privacy-note">Файл резервной копии содержит личные записи, результаты тестов, контакты плана поддержки и, если есть, отметки о лекарствах. Храни его в безопасном месте.</p>
 <div class="row"><button class="btn sec" id="exp" type="button">Скачать копию</button><button class="btn sec" id="imp" type="button">Загрузить копию</button><input type="file" id="file" accept=".json,application/json" hidden></div>
 <p class="msg" id="msg3" role="status"></p>
 </details>
