@@ -632,6 +632,48 @@ textarea::placeholder{color:#7786aa}
  .guide-card-brief{font-size:11px}
 }
 
+
+/* Новые самоопросники и дневник сна */
+.screening-switch{grid-template-columns:repeat(2,minmax(0,1fr))}
+.screening-switch button{min-height:71px}
+#tab-tests .screening-question:has(input[value="4"]) .screening-choices{grid-template-columns:repeat(3,minmax(0,1fr))}
+#tab-tests .screening-question:has(input[value="5"]) .screening-choices{grid-template-columns:repeat(3,minmax(0,1fr))}
+.sleep-entry-link{margin:9px 0 0}
+.sleep-entry-link a{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border-radius:10px;border:1px solid rgba(153,185,242,.3);color:#d8e9ff;font-size:13px;text-decoration:none}
+.sleep-entry-link a:hover{background:rgba(108,142,202,.19)}
+#sleepDiarySection{scroll-margin-top:18px}
+.sleep-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:12px 0}
+.sleep-field{display:grid;gap:6px;min-width:0}
+.sleep-field label,.sleep-field .sleep-label{color:#d7e6ff;font-size:12px;font-weight:650}
+.sleep-field input,.sleep-field select,.sleep-field textarea{width:100%;min-width:0;font-size:14px;border:1px solid #34436c;background:#0c1429;color:#eef3ff;padding:10px;border-radius:10px}
+.sleep-field small{color:#9daed0;font-size:11px}
+.sleep-check{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.55;color:#cbdaf1;padding:12px;border:1px solid rgba(136,164,213,.23);border-radius:12px;background:rgba(14,28,53,.57)}
+.sleep-check input{margin-top:4px;accent-color:#8294ff;width:17px;height:17px;flex:none}
+.sleep-chart-wrap{margin:15px 0 12px}
+.sleep-chart-title{display:flex;justify-content:space-between;gap:8px;align-items:baseline;font-size:12px;color:#b4c4e2}
+.sleep-chart-title small{font-size:10px;color:#94a9cf}
+.sleep-bars{display:flex;gap:9px;align-items:end;height:115px;padding:8px 4px 0}
+.sleep-bar-day{display:flex;flex:1;flex-direction:column;align-items:center;gap:5px;height:100%;min-width:0}
+.sleep-bar-track{height:90px;width:100%;border-radius:9px 9px 3px 3px;background:rgba(45,63,104,.27);display:flex;align-items:flex-end;overflow:hidden}
+.sleep-bar-fill{width:100%;border-radius:8px 8px 2px 2px;background:linear-gradient(180deg,#91baff,#597cbd);min-height:0}
+.sleep-bar-label{font-size:10px;color:#9cadd0}
+.sleep-history-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid rgba(145,169,212,.18)}
+.sleep-history-row b{font-size:13px;display:block;color:#e4ecff}
+.sleep-history-row small{font-size:11px;display:block;color:#9aafd4;line-height:1.4;max-width:370px;overflow-wrap:anywhere;margin-top:3px}
+.sleep-actions{display:flex;gap:5px;flex:none}
+.sleep-actions button{padding:6px 9px!important;font-size:11px!important}
+#sleepSummary{font-size:13px;color:#bfd0ec;line-height:1.55}
+#sleepDiarySection .screening-safety{margin-bottom:13px}
+@media(max-width:560px){
+ #tab-tests .screening-choices,#tab-tests .screening-question:has(input[value="4"]) .screening-choices,#tab-tests .screening-question:has(input[value="5"]) .screening-choices{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .screening-choice span{font-size:11px;min-height:53px;padding:7px 6px}
+ .screening-switch button{min-height:64px}
+ .sleep-form-grid{gap:9px}
+ .sleep-history-row{align-items:flex-start}
+ .sleep-actions{flex-direction:column}
+ .sleep-actions button{font-size:10px!important}
+}
+
 </style>
 </head>
 <body>
@@ -816,8 +858,11 @@ textarea::placeholder{color:#7786aa}
  <div class="screening-switch">
   <button type="button" data-screening-kind="phq9" aria-pressed="true"><b>Депрессивные симптомы</b><small>PHQ-9 · за 2 недели</small></button>
   <button type="button" data-screening-kind="asrm" aria-pressed="false"><b>Подъём настроения и активности</b><small>По мотивам ASRM · за 7 дней</small></button>
+  <button type="button" data-screening-kind="gad7" aria-pressed="false"><b>Тревожность</b><small>GAD-7 · за 2 недели</small></button>
+  <button type="button" data-screening-kind="who5" aria-pressed="false"><b>Благополучие</b><small>По мотивам WHO-5 · за 2 недели</small></button>
  </div>
  <p class="note">Опросники не заменяют консультацию и не ставят диагноз. Ответы и результаты остаются только в браузере этого устройства.</p>
+ <p class="sleep-entry-link"><a href="#sleepDiarySection">☾ Дневник сна — записать часы и энергию</a></p>
 </section>
 <section>
  <div class="eyebrow" id="screeningPeriod">За последние две недели</div>
@@ -843,8 +888,64 @@ textarea::placeholder{color:#7786aa}
  <p class="note">PHQ-9 — известный инструмент оценки депрессивных симптомов (Kroenke, Spitzer, Williams, 2001). Чек-лист активности основан на пяти областях ASRM (Altman и соавт., 1997); формулировки здесь адаптированы, поэтому баллы следует понимать осторожно.</p>
  <p class="note">При необычно высокой активности, уменьшении потребности во сне и рискованных решениях лучше обратиться к специалисту. При мыслях о самоповреждении необходима отдельная оценка безопасности независимо от общей суммы.</p>
  <p class="note"><a href="https://www.phqscreeners.com/" target="_blank" rel="noopener noreferrer">Информация о PHQ</a> · <a href="https://www.psychiatry.org/File%20Library/Psychiatrists/Practice/DSM/DSM-5-TR/APA-DSM5TR-Level2ManiaAdult.pdf" target="_blank" rel="noopener noreferrer">Справка по ASRM (APA)</a></p>
+ <p class="note">Источники шкал: <a href="https://www.phqscreeners.com/" target="_blank" rel="noopener noreferrer">PHQ/GAD</a> · <a href="https://www.who.int/publications/m/item/who-ucn-msd-mhe-2024.01" target="_blank" rel="noopener noreferrer">WHO-5, ВОЗ</a>. Формулировки GAD-7 и WHO-5 в приложении адаптированы, не являются официальным русским переводом.</p>
+ <p class="note">WHO-5: © World Health Organization 2024. <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/igo/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 3.0 IGO</a>. Русский текст адаптирован авторами приложения, ВОЗ не несёт ответственности за его точность и не поддерживает приложение.</p>
+
 </section>
 </div>
+
+
+<section id="sleepDiarySection">
+ <div class="eyebrow">СОН И ЭНЕРГИЯ</div>
+ <h2>Дневник сна</h2>
+ <p class="note">Отмечай, сколько спал(а), насколько отдохнул(а) и сколько было энергии. Резкое снижение потребности во сне иногда бывает ранним сигналом подъёма настроения, но само по себе ничего не диагностирует.</p>
+ <form id="sleepForm">
+  <div class="sleep-form-grid">
+   <div class="sleep-field">
+    <label for="sleepDate">Дата</label>
+    <input id="sleepDate" type="date" required>
+   </div>
+   <div class="sleep-field">
+    <label for="sleepHours">Сколько часов спал(а)?</label>
+    <input id="sleepHours" type="number" min="0" max="24" step="0.5" placeholder="Например, 7.5" inputmode="decimal" required>
+   </div>
+   <div class="sleep-field">
+    <label for="sleepQuality">Качество сна</label>
+    <select id="sleepQuality" required>
+     <option value="">Выбрать</option><option value="1">1 — Очень плохое</option><option value="2">2 — Плохое</option><option value="3">3 — Обычное</option><option value="4">4 — Хорошее</option><option value="5">5 — Отличное</option>
+    </select>
+   </div>
+   <div class="sleep-field">
+    <label for="sleepEnergy">Энергия после сна</label>
+    <select id="sleepEnergy" required>
+     <option value="">Выбрать</option><option value="1">1 — Очень мало</option><option value="2">2 — Мало</option><option value="3">3 — Обычно</option><option value="4">4 — Много</option><option value="5">5 — Очень много</option>
+    </select>
+   </div>
+  </div>
+  <label class="sleep-check"><input type="checkbox" id="sleepLessNeed"><span>Мне требовалось меньше сна, чем обычно, но я почти не чувствовал(а) усталости.</span></label>
+  <div class="sleep-field" style="margin-top:11px">
+   <label for="sleepNote">Заметка (необязательно)</label>
+   <textarea id="sleepNote" maxlength="240" rows="2" placeholder="Что могло повлиять на сон?"></textarea>
+  </div>
+  <div class="row" style="margin-top:13px">
+   <button class="btn" type="submit">Сохранить сон</button>
+   <button class="btn sec" type="button" id="sleepReset">Сегодня</button>
+  </div>
+  <p class="msg" id="sleepMessage" role="status"></p>
+ </form>
+ <div id="sleepNotice" class="screening-safety" role="status" hidden></div>
+ <div class="sleep-chart-wrap">
+  <div class="sleep-chart-title"><b>Сон за последние 7 дней</b><small>Высота столбца · до 12 ч.</small></div>
+  <div id="sleepBars" class="sleep-bars" aria-label="Сводка часов сна по дням"></div>
+ </div>
+ <p id="sleepSummary" role="status"></p>
+ <div class="row" style="justify-content:space-between;margin:18px 0 8px">
+  <b>История сна</b>
+  <button class="btn sec sm" type="button" id="sleepClearHistory">Удалить все записи</button>
+ </div>
+ <div id="sleepHistory"></div>
+ <p class="note">Это дневник самонаблюдения, а не медицинский тест. При необычном сокращении сна в сочетании с высокой энергией, импульсивностью или возбуждением обратись к лечащему врачу. При сильном ухудшении или опасности нужна срочная помощь.</p>
+</section>
 
 <div id="tab-guide" hidden>
  <button class="btn sec sm guide-back" id="guideBack" type="button">← Назад в «Ещё»</button>
@@ -942,7 +1043,7 @@ textarea::placeholder{color:#7786aa}
 <section class="priv">
 <details>
 <summary>Приватность</summary>
-<p>Все записи и ответы на самоопросники хранятся только в браузере этого устройства. Страница ничего не отправляет на сервер, не использует аккаунты, аналитику и сторонние сервисы. Результаты опросников могут содержать очень личную информацию.</p>
+<p>Все записи, ответы на самоопросники и дневник сна хранятся только в браузере этого устройства. Страница ничего не отправляет на сервер, не использует аккаунты, аналитику и сторонние сервисы. Результаты опросников могут содержать очень личную информацию.</p>
 <p>Автор приложения ваших записей не видит и восстановить их не может. Поэтому делайте резервную копию.</p>
 <p>Это дневник самонаблюдения, а не медицинский инструмент и не диагностика. Если вам плохо, обратитесь к врачу или близким.</p>
 </details>
@@ -1551,9 +1652,10 @@ $("ics").addEventListener("click",function(){
 $("exp").addEventListener("click",function(){
  var d=load(),n=Object.keys(d).length;
  var screeningData=window.DnevnikScreenings?window.DnevnikScreenings.exportEntries():[];
- if(!n&&!screeningData.length){$("msg3").textContent="Пока нет записей или результатов для копирования.";return}
+ var sleepData=window.DnevnikSleep?window.DnevnikSleep.exportEntries():{};
+ if(!n&&!screeningData.length&&!Object.keys(sleepData).length){$("msg3").textContent="Пока нет записей или результатов для копирования.";return}
  try{
-  var b=new Blob([JSON.stringify({version:5,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d,screenings:screeningData},null,1)],{type:"application/json"});
+  var b=new Blob([JSON.stringify({version:6,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d,screenings:screeningData,sleep:sleepData},null,1)],{type:"application/json"});
   var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dnevnik-"+iso(new Date())+".json";
   document.body.appendChild(a);a.click();a.remove();
   $("msg3").textContent="Копия сохранена. Записей: "+n+".";unlock(["backup"]);
@@ -1575,10 +1677,12 @@ $("file").addEventListener("change",function(){
     if(/^\d{4}-\d{2}-\d{2}$/.test(k)){var e=normE(src[k]);if(e){add[k]=e;c++}}
    });
    var importedScreens=Array.isArray(j.screenings)?j.screenings:[];
-   if(!c&&!importedScreens.length){$("msg3").textContent="В файле нет подходящих записей или результатов опросников.";return}
-   if(!confirm("Добавить записей: "+c+(importedScreens.length?", результатов опросников: "+importedScreens.length:"")+(ns.length?", шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
+   var importedSleep=j&&j.sleep&&typeof j.sleep==="object"&&!Array.isArray(j.sleep)?j.sleep:{};
+   if(!c&&!importedScreens.length&&!Object.keys(importedSleep).length){$("msg3").textContent="В файле нет подходящих записей или результатов опросников.";return}
+   if(!confirm("Добавить записей: "+c+(importedScreens.length?", результатов опросников: "+importedScreens.length:"")+(Object.keys(importedSleep).length?", записей сна: "+Object.keys(importedSleep).length:"")+(ns.length?", шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
    var d=load();Object.keys(add).forEach(function(k){d[k]=add[k]});if(c)store(d);
    var screeningCount=window.DnevnikScreenings?window.DnevnikScreenings.importEntries(importedScreens):0;
+   var sleepCount=window.DnevnikSleep?window.DnevnikSleep.importEntries(importedSleep):0;
    if(j.progress&&typeof j.progress==="object"){
     if(j.progress.ach&&typeof j.progress.ach==="object"){
      if(!cfg.ach)cfg.ach={};
@@ -1592,7 +1696,7 @@ $("file").addEventListener("change",function(){
    }
    if(ns.length){cfg.scales=cfg.scales.concat(ns);saveCfg();renderEditor();buildScales()}
    if(nt.length){cfg.tags=cfg.tags.concat(nt);saveCfg();renderTagEditor();buildChips()}
-   $("msg3").textContent="Загружено записей: "+c+", результатов опросников: "+screeningCount+".";render();loadDay();
+   $("msg3").textContent="Загружено записей: "+c+", результатов опросников: "+screeningCount+", записей сна: "+sleepCount+".";render();loadDay();
   }catch(e){$("msg3").textContent="Не удалось прочитать файл. Нужна копия, скачанная из этого приложения."}
   inp2.value="";
  };
@@ -1758,6 +1862,7 @@ initAch();initCollection();initSystem();buildScales();renderEditor();renderTagEd
 </script>
 <script src="mood-cosmos.js" defer></script>
 <script src="screenings.js" defer></script>
+<script src="sleep.js" defer></script>
 <script src="guide.js" defer></script>
 </body>
 </html>
