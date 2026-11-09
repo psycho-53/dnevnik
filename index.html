@@ -951,6 +951,64 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
 }
 @media(prefers-reduced-motion:reduce){.checkin-primary .opts button{transition:none!important}}
 
+
+/* UI/UX iteration 3: more legible tests and tool grouping */
+#tab-tests .screening-switch{gap:10px;margin:15px 0}
+#tab-tests .screening-switch button{min-height:82px;padding:13px;background:rgba(29,46,67,.74);border:1px solid rgba(160,190,220,.28);border-radius:15px;transition:background-color .16s}
+#tab-tests .screening-switch button[aria-pressed="true"]{background:rgba(74,132,132,.28);border-color:#9bded3;box-shadow:inset 0 0 0 1px rgba(174,234,219,.12)}
+#tab-tests .screening-switch button b{font-size:14px;line-height:1.4;color:#eef7f9;margin-bottom:5px}
+#tab-tests .screening-switch button small{font-size:12px;line-height:1.45;color:#b8cede}
+#tab-tests .screening-question{padding:15px;border:1px solid rgba(162,186,217,.22);background:rgba(9,22,39,.24);border-radius:16px;margin-bottom:14px}
+#tab-tests .screening-legend{font-size:14px;line-height:1.6;color:#edf6fa;font-weight:700}
+#tab-tests .screening-choices{gap:8px;margin-top:11px}
+#tab-tests .screening-choice span{font-size:12px;line-height:1.45;min-height:62px;padding:10px 8px;border:1px solid rgba(155,183,212,.3);background:rgba(19,36,54,.88);border-radius:11px;color:#d7e5ef}
+#tab-tests .screening-choice input:checked+span{background:rgba(64,119,119,.45);border-color:#a4eadc;color:#fff}
+#tab-tests .screening-choice input:focus-visible+span{outline:3px solid #a9f2e4;outline-offset:3px}
+#tab-tests .screening-question:has(input[value="4"]) .screening-choices,#tab-tests .screening-question:has(input[value="5"]) .screening-choices{grid-template-columns:repeat(3,minmax(0,1fr))}
+.test-sleep-shortcut{display:flex;align-items:center;gap:12px;padding:13px;margin:16px 0 0;border:1px solid rgba(144,199,198,.3);border-radius:14px;background:rgba(49,97,107,.13)}
+.test-sleep-icon{flex:none;display:grid;place-items:center;width:39px;height:39px;border-radius:12px;background:rgba(111,177,187,.15);color:#bce7e2;font-size:22px}
+.test-sleep-shortcut>span:nth-child(2){display:grid;gap:3px;min-width:0;flex:1}
+.test-sleep-shortcut strong{font-size:13px;color:#e3f6f3}
+.test-sleep-shortcut small{font-size:11px;color:#b0cbd6;line-height:1.4}
+.test-sleep-shortcut a{font-size:12px;font-weight:700;white-space:nowrap;color:#c5f3e7;text-decoration:none;padding:9px 10px;border-radius:10px;border:1px solid rgba(169,217,210,.34)}
+.test-sleep-shortcut a:hover{background:rgba(102,177,168,.2)}
+.test-sources{padding:12px 18px;background:rgba(19,32,49,.67);box-shadow:none}
+.test-sources>details>summary{font-size:13px;font-weight:650;min-height:44px;display:flex;align-items:center;color:#b6c9da}
+.test-sources-content{padding:0 2px 8px}
+.test-sources-content p{line-height:1.7;color:#b1c4d5}
+.more-main-head{margin-top:10px}
+.more-group-title{margin:21px 0 11px;padding:0 2px}
+.more-group-title h2{margin:0 0 3px;font-size:18px}
+.more-group-title p{font-size:12px;color:#a9bdcf;margin:0;line-height:1.55}
+.more-settings-title{margin-top:28px}
+#tab-more .guide-entry{margin-top:8px;margin-bottom:23px}
+#tab-more .wb-section{padding:12px 18px}
+#tab-more .wb-section>details>summary{min-height:50px;display:flex;align-items:center;gap:12px;font-size:15px;line-height:1.45;color:#e2edf7}
+#tab-more .wb-section>details>summary::before{content:"✧";flex:none;display:grid;place-items:center;width:33px;height:33px;border-radius:10px;color:#b4e6de;background:rgba(129,184,189,.11);border:1px solid rgba(137,193,195,.2);font-size:18px;font-weight:400}
+#medSection>summary::before{content:"+"!important}
+#doctorSection>summary::before{content:"▤"!important}
+#tab-more .wb-section>details[open]>summary{padding-bottom:12px;border-bottom:1px solid rgba(162,183,213,.17);margin-bottom:12px}
+#tab-more>section details>summary{min-height:44px;display:flex;align-items:center;font-size:15px}
+#tab-more input,#tab-more select,#tab-more textarea,#tab-tests input,#tab-tests select,#tab-tests textarea{border-color:rgba(167,189,217,.3);background:rgba(8,20,35,.72)}
+#tab-more .wb-privacy{color:#adc1d2;line-height:1.75}
+@media(max-width:600px){
+ #tab-tests .screening-switch button{min-height:88px;padding:11px}
+ #tab-tests .screening-switch button b{font-size:13px}
+ #tab-tests .screening-switch button small{font-size:11px}
+ #tab-tests .screening-choices,#tab-tests .screening-question:has(input[value="4"]) .screening-choices,#tab-tests .screening-question:has(input[value="5"]) .screening-choices{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #tab-tests .screening-choice span{font-size:12px;min-height:55px;padding:9px 8px}
+ #tab-tests .screening-question{padding:12px}
+ .test-sleep-shortcut{gap:9px;padding:12px}
+ .test-sleep-shortcut a{font-size:11px;padding:8px}
+ #tab-more .wb-section{padding:11px 14px}
+}
+@media(max-width:340px){
+ #tab-tests .screening-switch{grid-template-columns:1fr}
+ #tab-tests .screening-switch button{min-height:58px}
+ .test-sleep-shortcut{flex-wrap:wrap}
+ .test-sleep-shortcut a{width:100%;text-align:center}
+}
+
 </style>
 </head>
 <body>
@@ -1247,7 +1305,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
   <button type="button" data-screening-kind="who5" aria-pressed="false"><b>Благополучие</b><small>По мотивам WHO-5 · за 2 недели</small></button>
  </div>
  <p class="note">Опросники не заменяют консультацию и не ставят диагноз. Ответы и результаты остаются только в браузере этого устройства.</p>
- <p class="sleep-entry-link"><a href="#sleepDiarySection">☾ Дневник сна — записать часы и энергию</a></p>
+ <div class="test-sleep-shortcut"><span class="test-sleep-icon" aria-hidden="true">☾</span><span><strong>Дневник сна</strong><small>Часы сна, энергия и история наблюдений</small></span><a href="#sleepDiarySection">Перейти <span aria-hidden="true">↗</span></a></div>
 </section>
 <section>
  <div class="eyebrow" id="screeningPeriod">За последние две недели</div>
@@ -1268,15 +1326,13 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
  <p class="note">Можно удалить отдельный результат или всю историю. Для динамики сравнивай результаты одного опросника в разные даты, а не между собой.</p>
  <div id="screeningHistory"></div>
 </section>
-<section>
- <h2>Об источниках</h2>
+<section class="test-sources"><details><summary>Источники и ограничения опросников</summary><div class="test-sources-content">
  <p class="note">PHQ-9 — известный инструмент оценки депрессивных симптомов (Kroenke, Spitzer, Williams, 2001). Чек-лист активности основан на пяти областях ASRM (Altman и соавт., 1997); формулировки здесь адаптированы, поэтому баллы следует понимать осторожно.</p>
  <p class="note">При необычно высокой активности, уменьшении потребности во сне и рискованных решениях лучше обратиться к специалисту. При мыслях о самоповреждении необходима отдельная оценка безопасности независимо от общей суммы.</p>
  <p class="note"><a href="https://www.phqscreeners.com/" target="_blank" rel="noopener noreferrer">Информация о PHQ</a> · <a href="https://www.psychiatry.org/File%20Library/Psychiatrists/Practice/DSM/DSM-5-TR/APA-DSM5TR-Level2ManiaAdult.pdf" target="_blank" rel="noopener noreferrer">Справка по ASRM (APA)</a></p>
  <p class="note">Источники шкал: <a href="https://www.phqscreeners.com/" target="_blank" rel="noopener noreferrer">PHQ/GAD</a> · <a href="https://www.who.int/publications/m/item/who-ucn-msd-mhe-2024.01" target="_blank" rel="noopener noreferrer">WHO-5, ВОЗ</a>. Формулировки GAD-7 и WHO-5 в приложении адаптированы, не являются официальным русским переводом.</p>
  <p class="note">WHO-5: © World Health Organization 2024. <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/igo/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 3.0 IGO</a>. Русский текст адаптирован авторами приложения, ВОЗ не несёт ответственности за его точность и не поддерживает приложение.</p>
-
-</section>
+</div></details></section>
 <section id="sleepDiarySection">
  <div class="eyebrow">СОН И ЭНЕРГИЯ</div>
  <h2>Дневник сна</h2>
@@ -1360,9 +1416,10 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
 </div>
 
 <div id="tab-more" hidden>
-<h1>Ещё</h1>
+<div class="page-head more-main-head"><div><div class="eyebrow">ИНСТРУМЕНТЫ И НАСТРОЙКИ</div><h1>Ещё</h1><p class="sub">Справочник, наблюдения и управление своими данными.</p></div><div class="page-mark" aria-hidden="true">⋯</div></div>
 
 <div id="wellbeingTools">
+ <div class="more-group-title"><h2>Мои инструменты</h2><p>Выбирай только то, что сейчас полезно.</p></div>
  <section class="wb-section">
   <details id="warningSection">
    <summary>Ранние изменения состояния</summary>
@@ -1425,6 +1482,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
  <div><div class="eyebrow">ПОНЯТНЫМИ СЛОВАМИ</div><h2>Справочник психического здоровья</h2><p>Что такое БАР, шизоаффективное расстройство, психоз и другие состояния? Короткие ответы, источники и подсказки, когда трудно.</p></div>
  <button type="button" class="btn sec" id="openGuide">Открыть справочник</button>
 </section>
+<div class="more-group-title more-settings-title"><h2>Настройки и данные</h2><p>Шкалы, напоминания, резервные копии и конфиденциальность.</p></div>
 <section>
 <details>
 <summary>Настройка шкал</summary>
