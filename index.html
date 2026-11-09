@@ -309,7 +309,10 @@ textarea::placeholder{color:#7786aa}
 }
 .solar-system-panel:before{
  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
- background:radial-gradient(ellipse at 50% 48%,transparent 24%,rgba(3,6,15,.24) 100%);
+ background:
+  radial-gradient(ellipse at 25% 72%,var(--cosmic-a),transparent 60%),
+  radial-gradient(ellipse at 78% 26%,var(--cosmic-b),transparent 58%),
+  radial-gradient(ellipse at 50% 48%,transparent 24%,rgba(3,6,15,.24) 100%);
 }
 .solar-top{position:absolute;z-index:4;top:15px;left:18px;right:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;pointer-events:none}
 .solar-top .eyebrow{color:#d3dcff;text-shadow:0 1px 8px #050916}
@@ -462,6 +465,43 @@ textarea::placeholder{color:#7786aa}
 }
 @media(prefers-reduced-motion:reduce){.scale.mood-scale .opts button[aria-pressed=true] .mood-art{animation:none}}
 
+
+/* ---------- Атмосфера по настроению и открытия за достижения ---------- */
+.space-hero-secondary,.solar-system-panel{--cosmic-a:rgba(104,126,226,.28);--cosmic-b:rgba(91,104,190,.2)}
+.space-hero-secondary:after{
+ content:"";position:absolute;inset:-12%;z-index:0;pointer-events:none;opacity:.82;
+ background:radial-gradient(ellipse at 76% 50%,var(--cosmic-a),transparent 60%),radial-gradient(ellipse at 28% 28%,var(--cosmic-b),transparent 58%);
+}
+.solar-system-panel[data-mood="1"],.space-hero-secondary[data-mood="1"]{--cosmic-a:rgba(229,55,78,.42);--cosmic-b:rgba(150,38,91,.3)}
+.solar-system-panel[data-mood="2"],.space-hero-secondary[data-mood="2"]{--cosmic-a:rgba(153,83,198,.4);--cosmic-b:rgba(91,57,154,.3)}
+.solar-system-panel[data-mood="3"],.space-hero-secondary[data-mood="3"]{--cosmic-a:rgba(82,145,204,.34);--cosmic-b:rgba(71,102,173,.25)}
+.solar-system-panel[data-mood="4"],.space-hero-secondary[data-mood="4"]{--cosmic-a:rgba(54,198,174,.4);--cosmic-b:rgba(65,145,194,.28)}
+.solar-system-panel[data-mood="5"],.space-hero-secondary[data-mood="5"]{--cosmic-a:rgba(239,190,111,.42);--cosmic-b:rgba(142,159,219,.28)}
+.space-hero-secondary[data-mood="1"] .planet{box-shadow:inset -13px -12px 22px rgba(3,8,34,.55),0 0 28px rgba(225,75,91,.38),0 0 64px rgba(190,48,88,.22)}
+.space-hero-secondary[data-mood="2"] .planet{box-shadow:inset -13px -12px 22px rgba(3,8,34,.55),0 0 28px rgba(171,111,222,.4),0 0 64px rgba(123,72,187,.22)}
+.space-hero-secondary[data-mood="3"] .planet{box-shadow:inset -13px -12px 22px rgba(3,8,34,.55),0 0 28px rgba(105,166,220,.4),0 0 64px rgba(75,123,190,.22)}
+.space-hero-secondary[data-mood="4"] .planet{box-shadow:inset -13px -12px 22px rgba(3,8,34,.55),0 0 28px rgba(91,222,194,.4),0 0 64px rgba(53,168,158,.22)}
+.space-hero-secondary[data-mood="5"] .planet{box-shadow:inset -13px -12px 22px rgba(3,8,34,.55),0 0 28px rgba(255,211,139,.48),0 0 64px rgba(220,165,93,.26)}
+.cosmic-effects{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.cosmic-effects i{position:absolute;display:block;opacity:0;pointer-events:none;transition:opacity .8s ease}
+.cosmic-comet{left:-28%;top:22%;width:230px;height:2px;transform:rotate(19deg);background:linear-gradient(90deg,transparent,rgba(221,237,255,.95),transparent);filter:drop-shadow(0 0 5px rgba(176,210,255,.9))}
+.solar-system-panel[data-achievements~="insight"] .cosmic-comet{opacity:.85;animation:cosmic-comet-pass 18s ease-in-out infinite}
+@keyframes cosmic-comet-pass{0%{transform:translate(-8vw,0) rotate(19deg);opacity:0}12%{opacity:.85}62%{transform:translate(85vw,100px) rotate(19deg);opacity:.7}82%,100%{opacity:0}}
+.cosmic-cluster{right:7%;top:13%;width:150px;height:110px;background:radial-gradient(2px 2px at 16% 35%,#fff 60%,transparent 75%),radial-gradient(2px 2px at 38% 18%,#dce9ff 60%,transparent 75%),radial-gradient(3px 3px at 57% 54%,#fff 60%,transparent 75%),radial-gradient(2px 2px at 82% 28%,#cbdcff 60%,transparent 75%),radial-gradient(2px 2px at 72% 82%,#fff 60%,transparent 75%);filter:drop-shadow(0 0 9px rgba(181,204,255,.55))}
+.solar-system-panel[data-achievements~="report"] .cosmic-cluster{opacity:.9;animation:cosmic-twinkle 5s ease-in-out infinite}
+@keyframes cosmic-twinkle{0%,100%{opacity:.45}50%{opacity:1}}
+.cosmic-satellite{left:13%;bottom:18%;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff,#9db9e8 38%,#344b7e 78%);box-shadow:0 0 16px rgba(166,201,255,.75)}
+.cosmic-satellite:after{content:"";position:absolute;inset:-6px -11px;border:1px solid rgba(190,213,255,.72);border-radius:50%;transform:rotate(-24deg)}
+.solar-system-panel[data-achievements~="backup"] .cosmic-satellite{opacity:.95;animation:cosmic-satellite-drift 10s ease-in-out infinite}
+@keyframes cosmic-satellite-drift{0%,100%{transform:translate(0,0)}50%{transform:translate(12px,-8px)}}
+.cosmic-aurora{left:-10%;right:-10%;bottom:4%;height:34%;background:linear-gradient(110deg,transparent 8%,rgba(73,211,194,.12) 35%,rgba(126,130,255,.17) 63%,transparent 92%);filter:blur(22px);transform:rotate(-8deg)}
+.solar-system-panel[data-achievements~="month"] .cosmic-aurora{opacity:.9;animation:cosmic-aurora-wave 12s ease-in-out infinite}
+@keyframes cosmic-aurora-wave{0%,100%{transform:translateX(-3%) rotate(-8deg);opacity:.45}50%{transform:translateX(3%) rotate(-4deg);opacity:.95}}
+.cosmic-supernova{left:50%;top:48%;width:260px;height:260px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,237,190,.22),rgba(150,164,255,.09) 34%,transparent 72%);filter:blur(2px)}
+.solar-system-panel[data-stage="6"] .cosmic-supernova{opacity:.95;animation:cosmic-supernova-pulse 8s ease-in-out infinite}
+@keyframes cosmic-supernova-pulse{0%,100%{transform:translate(-50%,-50%) scale(.9);opacity:.35}50%{transform:translate(-50%,-50%) scale(1.12);opacity:.95}}
+@media(prefers-reduced-motion:reduce){.cosmic-effects i{animation:none!important;transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -497,7 +537,7 @@ textarea::placeholder{color:#7786aa}
  <div class="legend" id="legend7"></div><p class="note" id="wk" style="margin-bottom:0"></p>
 </section>
 <div class="space-hero space-hero-secondary">
- <div class="hero-copy"><div class="hero-label">Тихий визуальный отклик</div><h2>Твоя вселенная</h2><p>Небольшое отражение твоего пути. Здесь не нужно ничего достигать — можно просто наблюдать.</p></div>
+ <div class="hero-copy"><div class="hero-label">Тихий визуальный отклик</div><h2>Твоя вселенная</h2><p>Её атмосфера откликается на настроение, а новые открытия появляются постепенно — за твои достижения.</p></div>
  <div class="planet-scene" aria-hidden="true"><div class="planet-orbit"></div><div class="planet-orbit second"></div><div class="planet"></div><div class="planet-moon"></div></div>
 </div>
 <div class="stats-grid" aria-label="Твой прогресс">
@@ -513,10 +553,11 @@ textarea::placeholder{color:#7786aa}
 
 <div id="tab-universe" hidden>
 <div class="page-head">
- <div><div class="eyebrow">ТВОЙ ПУТЬ</div><h1>Моя вселенная</h1><p class="sub">Здесь собирается карта твоих наблюдений. Она отражает регулярность записей, а не оценку твоего настроения.</p></div>
+ <div><div class="eyebrow">ТВОЙ ПУТЬ</div><h1>Моя вселенная</h1><p class="sub">Карта твоих наблюдений: атмосфера меняется вместе с настроением, а достижения постепенно добавляют новые космические явления.</p></div>
  <div class="page-mark" aria-hidden="true">✧</div>
 </div>
 <section class="solar-system-panel" aria-label="Интерактивная солнечная система">
+ <div class="cosmic-effects" aria-hidden="true"><i class="cosmic-comet"></i><i class="cosmic-cluster"></i><i class="cosmic-satellite"></i><i class="cosmic-aurora"></i><i class="cosmic-supernova"></i></div>
  <div class="solar-top">
   <span class="eyebrow">СОЛНЕЧНАЯ СИСТЕМА</span>
   <div class="solar-controls">
@@ -576,7 +617,7 @@ textarea::placeholder{color:#7786aa}
   <div class="drag-hint">Потяни фон, чтобы менять ракурс · перетащи открытый объект вдоль орбиты</div>
  </div>
  <div class="solar-footer">
-  <span><i class="solar-dot"></i>Личная система · объекты открываются постепенно</span>
+  <span><i class="solar-dot"></i><span id="cosmicMoodLabel">Атмосфера ждёт твоей отметки</span></span>
   <span id="zoomLabel">Масштаб 100%</span>
  </div>
 </section>
@@ -829,12 +870,12 @@ function paint(){
 $("scales").addEventListener("click",function(e){
  var b=e.target.closest("button");if(!b)return;
  var id=b.parentNode.dataset.id,v=+b.dataset.v;
- cur[id]=cur[id]===v?0:v;paint();
+ cur[id]=cur[id]===v?0:v;paint();if(id==="m")updateCosmicMood();
 });
 function loadDay(){
  var e=load()[dateEl.value];cur={};curT=e?e.g.slice():[];
  if(e)cfg.scales.forEach(function(x){if(e.v[x.id])cur[x.id]=conv(e.v[x.id],e.d[x.id],x.n)});
- $("note").value=e?e.note:"";paint();buildChips();setNoteView(false);
+ $("note").value=e?e.note:"";paint();buildChips();setNoteView(false);updateCosmicMood();
 }
 dateEl.addEventListener("change",function(){if(dateEl.value)loadDay();$("msg").textContent=""});
 function setNoteView(editing){
@@ -1160,7 +1201,8 @@ function renderJourney(d){
  var unlocked=Object.keys(cfg.ach||{}).length,collected=COLLECTION.filter(function(item){return !!(cfg.collection&&cfg.collection[item.id])}).length;
  var stage=count>=100?6:count>=60?5:count>=30?4:count>=14?3:count>=7?2:count>=1?1:0;
  var planets=document.querySelectorAll(".planet-scene,.universe-art,.solar-system-panel");
- for(var pi=0;pi<planets.length;pi++)planets[pi].setAttribute("data-stage",String(stage));
+ var cosmicAchievements=ACH.filter(function(a){return !!(cfg.ach&&cfg.ach[a.id])}).map(function(a){return a.id}).join(" ");
+ for(var pi=0;pi<planets.length;pi++){planets[pi].setAttribute("data-stage",String(stage));planets[pi].setAttribute("data-achievements",cosmicAchievements)}
  ["totalEntries","uTotalEntries"].forEach(function(id){$(id).textContent=count});
  $("weekEntries").textContent=week+"/7";$("uWeekEntries").textContent=week+"/7";
  $("discoveryCount").textContent=unlocked;$("uDiscoveries").textContent=collected;
@@ -1191,6 +1233,28 @@ function renderJourney(d){
  });
 }
 
+
+function cosmicMoodLevel(value,divisions){
+ value=Number(value);divisions=Number(divisions)||5;
+ if(!Number.isFinite(value)||value<1||value>divisions)return 0;
+ return Math.max(1,Math.min(5,Math.round((value-1)/Math.max(1,divisions-1)*4)+1));
+}
+function updateCosmicMood(data){
+ data=data||load();
+ var today=iso(new Date()),mood=0,moodScale=cfg.scales.filter(function(x){return x.id==="m"})[0],divisions=moodScale?moodScale.n:5;
+ if(dateEl.value===today&&cur.m)mood=cosmicMoodLevel(cur.m,divisions);
+ if(!mood){
+  var dates=Object.keys(data).sort().reverse();
+  for(var i=0;i<dates.length;i++){
+   var entry=data[dates[i]];
+   if(entry&&entry.v&&entry.v.m){mood=cosmicMoodLevel(entry.v.m,entry.d&&entry.d.m||5);if(mood)break}
+  }
+ }
+ var labels={0:"Атмосфера ждёт твоей отметки",1:"Багровая туманность · очень тяжело",2:"Фиолетовая туманность · тяжело",3:"Спокойное синее пространство · нейтрально",4:"Бирюзовое сияние · хорошо",5:"Золотистое сияние · отлично"};
+ document.querySelectorAll(".solar-system-panel,.space-hero-secondary").forEach(function(node){node.setAttribute("data-mood",String(mood))});
+ var label=$("cosmicMoodLabel");if(label)label.textContent=labels[mood]||labels[0];
+}
+
 function render(){
  var d=load(),r=range(days),r7=range(7),bs=$("tabs").querySelectorAll("button");
  for(var i=0;i<bs.length;i++)bs[i].setAttribute("aria-pressed",String(+bs[i].dataset.n===days));
@@ -1198,7 +1262,7 @@ function render(){
  var n7=r7.filter(function(s){return d[s]}).length;
  $("after").hidden=!n7;
  if(n7){chart(r7,d,{svg:$("chart7"),legend:$("legend7"),pulse:true});$("wk").textContent="Записей за 7 дней: "+n7+" из 7. Пропуски в порядке вещей."}
- report(r,d);hist(d);renderIns(d);hintUpdate(d);checkAch();checkCollection(d,false);renderCollection();renderJourney(d);checkBanner();
+ report(r,d);hist(d);renderIns(d);hintUpdate(d);checkAch();checkCollection(d,false);renderCollection();renderJourney(d);updateCosmicMood(d);checkBanner();
  $("sub").textContent=Object.keys(d).length?"Можно отмечать не все шкалы. Пропущенные дни ничего не ломают.":"Отметь состояние в удобном темпе. Пропущенные дни ничего не ломают. Записи хранятся только на твоём устройстве.";
 }
 

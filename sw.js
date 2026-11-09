@@ -1,7 +1,7 @@
-/* Дневник состояния · кэш v12
+/* Дневник состояния · кэш v13
    Для HTML сначала сеть: обновления интерфейса не застревают в старом кэше.
    При отсутствии сети — сохранённая страница. */
-const CACHE = 'dnevnik-v12';
+const CACHE = 'dnevnik-v13';
 const PRECACHE = [
   './', './index.html', './universe-prototype.html',
   './manifest.webmanifest', './favicon-32.png', './icon-192.png', './icon-512.png',
