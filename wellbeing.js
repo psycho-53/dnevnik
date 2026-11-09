@@ -25,10 +25,10 @@ function medClean(x){return {id:x.id.slice(0,80),date:x.date,name:x.name.trim().
 function meds(){return readArr(MED_KEY).filter(validMed).slice(-400).map(medClean)}
 function saveMeds(rows){return write(MED_KEY,rows.slice(-400))}
 function message(id,value){$(id).textContent=value}
-function resetMed(){ $("medDate").value=today();$("medName").value="";$("medStatus").value="taken";$("medEffects").value="";$("medNote").value="";$("medEditId").value="";$("medSave").textContent="Сохранить отметку"}
+function resetMed(){ $("medDate").value=today();$("medName").value="";$("medStatus").value="taken";$("medEffects").value="";$("medNote").value="";$("medEditId").value="";$("medSave").textContent="Сохранить отметку";$("medFormState").textContent="Новая отметка"}
 function fillMed(x){$("medDate").value=x.date;$("medName").value=x.name;$("medStatus").value=x.status;
  $("medEffects").value=x.effects;$("medNote").value=x.note;$("medEditId").value=x.id;
- $("medSave").textContent="Сохранить изменения";
+ $("medSave").textContent="Сохранить изменения";$("medFormState").textContent="Редактирование отметки за "+x.date;
  $("medSection").open=true;$("medSection").scrollIntoView({block:"start",behavior:"smooth"})}
 function renderMeds(){
  var list=$("medList");list.textContent="";var arr=meds().slice().sort(function(a,b){return b.date.localeCompare(a.date)}).slice(0,45);
@@ -36,7 +36,7 @@ function renderMeds(){
  arr.forEach(function(x){
   var row=E("div","wb-med-row"),body=E("div","wb-med-info");
   body.appendChild(E("b",null,x.date+" · "+x.name));
-  body.appendChild(E("small",null,statuses[x.status]));
+  body.appendChild(E("small","wb-med-status wb-med-status-"+x.status,statuses[x.status]));
   if(x.effects)body.appendChild(E("small",null,"Наблюдения: "+x.effects));
   if(x.note)body.appendChild(E("small",null,"Заметка: "+x.note));
   var actions=E("div","wb-med-actions"),edit=E("button","btn sec sm","Изменить"),del=E("button","btn sec sm","Удалить");

@@ -1191,6 +1191,25 @@ main h1:focus{outline:0}
  .guide-switch button{font-size:11px}
 }
 
+
+/* ITERATION 11 / 13: medication editing feedback, status chips and safe deletion */
+.med-form-state{margin:0 0 14px;font-size:12px;line-height:1.5;font-weight:700;
+ color:#c9ede5;display:inline-block;background:rgba(90,146,141,.15);
+ border:1px solid rgba(145,209,199,.27);padding:7px 11px;border-radius:999px}
+#medForm .wb-field input,#medForm .wb-field select,#medForm .wb-field textarea{min-height:46px}
+#medForm #medEffects,#medForm #medNote{min-height:72px}
+#medForm #medMsg{min-height:24px;line-height:1.6}
+.wb-med-info .wb-med-status{display:inline-block;margin:7px 0 4px;padding:3px 9px;
+ border-radius:999px;border:1px solid rgba(151,193,198,.3);
+ background:rgba(62,100,107,.2);color:#c4e7e3;font-weight:680}
+.wb-med-status-missed{background:rgba(147,109,80,.17)!important;color:#ffe0be!important;border-color:rgba(197,163,127,.33)!important}
+.wb-med-status-unsure{background:rgba(120,119,159,.15)!important;color:#dedff3!important;border-color:rgba(169,159,196,.28)!important}
+.wb-med-row{align-items:flex-start;gap:15px}
+.med-danger-zone{border-top:1px solid rgba(152,177,203,.18);margin-top:17px;padding-top:10px}
+.med-danger-zone>summary{font-size:13px!important;font-weight:650;color:#a8c0d4;min-height:44px;display:flex;align-items:center}
+.med-danger-zone>.btn{min-height:43px;color:#f5d3ca;border-color:rgba(203,156,141,.38)}
+@media(max-width:500px){#medForm .wb-action-row{display:grid;grid-template-columns:1fr 1fr}#medForm .wb-action-row .btn{width:100%;padding-inline:6px}}
+
 </style>
 </head>
 <body>
@@ -1625,6 +1644,7 @@ main h1:focus{outline:0}
    <summary>Лекарства и побочные эффекты</summary>
    <p class="wb-intro">Личные отметки о назначенном лечении: было ли принято лекарство и появились ли нежелательные ощущения. Приложение не напоминает о дозировках и не советует менять лечение.</p>
    <form id="medForm">
+    <p id="medFormState" class="med-form-state" role="status">Новая отметка</p>
     <input type="hidden" id="medEditId">
     <div class="wb-grid">
      <div class="wb-field"><label for="medDate">Дата</label><input type="date" id="medDate" required></div>
@@ -1638,8 +1658,9 @@ main h1:focus{outline:0}
     <div class="wb-action-row"><button class="btn" id="medSave" type="submit">Сохранить отметку</button><button class="btn sec sm" id="medReset" type="button">Очистить форму</button></div>
     <p class="msg" role="status" id="medMsg"></p>
    </form>
-   <div class="row" style="justify-content:space-between;align-items:center;margin:15px 0 10px"><b>Последние отметки</b><button class="btn sec sm" id="medClear" type="button">Удалить историю</button></div>
+   <div class="row" style="justify-content:space-between;align-items:center;margin:15px 0 10px"><b>Последние отметки</b></div>
    <div id="medList"></div>
+   <details class="med-danger-zone"><summary>Управление историей</summary><p class="note">Удаление всей истории необратимо. Резервная копия сохранит только те записи, которые были в ней при создании.</p><button class="btn sec sm" id="medClear" type="button">Удалить всю историю</button></details>
    <p class="wb-privacy">При неприятных эффектах обратись к назначившему врачу; не отменяй препараты и не меняй дозы самостоятельно. При тяжёлой реакции нужна срочная медицинская помощь.</p>
   </details>
  </section>
