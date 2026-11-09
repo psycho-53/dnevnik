@@ -1054,9 +1054,39 @@ html{min-width:280px}
  #tab-tests .sleep-form-grid{grid-template-columns:1fr}
 }
 
+
+/* ITERATION 5 / 13: keyboard access, focus and legibility */
+.skip-to-content{position:fixed;top:6px;left:50%;transform:translate(-50%,-160%);
+ z-index:99;background:#d8f8ef;color:#0b2530;padding:11px 16px;border-radius:12px;
+ border:2px solid #153f40;font-size:14px;font-weight:750;text-decoration:none}
+.skip-to-content:focus-visible{transform:translate(-50%,0);outline:3px solid #fff}
+main:focus{outline:none}
+main h1:focus{outline:0}
+:where(button,a,input,select,textarea,summary):focus-visible{outline:3px solid #b6f6e8;outline-offset:3px}
+#nav button:focus-visible{outline:3px solid #b7eddb;outline-offset:-3px}
+[aria-pressed=true],[aria-current=page]{font-weight:700}
+#tab-tests .screening-choice input{width:15px;height:15px;opacity:0;clip-path:inset(50%);overflow:hidden}
+#tab-tests .screening-choice input:focus-visible+span{outline:3px solid #b4f4e6;outline-offset:3px}
+#tab-more details>summary:focus-visible,#tab-guide details>summary:focus-visible{outline:3px solid #adeadc;outline-offset:4px}
+#tab-help .help-step-body h3{max-width:55ch}
+#tab-help .help-step-body p,#tab-help .help-step-hint{max-width:66ch}
+#tab-help .help-actions .btn{min-width:110px}
+#tab-tests p.note,#tab-more p.note,.wb-intro{line-height:1.7}
+#tab-tests input,#tab-more input,#tab-help input{font-size:16px}
+@media(max-width:600px){
+ :where(#tab-help,#tab-tests,#tab-more) .btn.sec.sm{min-height:40px}
+ #tab-guide .guide-card-head{min-height:58px}
+ #tab-help .help-actions{gap:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+ transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
 </style>
 </head>
 <body>
+<a class="skip-to-content" href="#app-main">Перейти к содержимому</a>
 <div id="banner" hidden role="status">
  <p>Сегодня ещё нет записи. Если будет минутка, отметьте состояние. Пропустить тоже нормально.</p>
  <button class="btn sec sm" id="snooze" type="button">Не сейчас</button>
@@ -1066,7 +1096,7 @@ html{min-width:280px}
   <div class="app-brand"><span class="app-brand-mark" aria-hidden="true">✳</span><span class="app-brand-copy"><strong>Дневник состояния</strong><small>Твоё пространство</small></span></div>
   <span class="app-private"><span class="app-private-dot" aria-hidden="true"></span>Лично и локально</span>
 </header>
-<main>
+<main id="app-main" tabindex="-1">
 <div id="tab-today">
 <div class="page-head">
  <div><div class="eyebrow">ПРОСТРАНСТВО ДЛЯ СЕБЯ</div><h1>Как ты сегодня?</h1><p class="sub" id="sub">Не нужно подбирать правильный ответ. Просто отметь, как ты себя чувствуешь.</p></div>
@@ -2403,12 +2433,15 @@ $("achOn").addEventListener("change",function(){cfg.achOn=this.checked;saveCfg()
 
 /* ---------- разделы и отчёт ---------- */
 function showTab(n){
+ if(!document.getElementById("tab-"+n))return;
  ["today","help","universe","trend","tests","more","guide"].forEach(function(t){
   $("tab-"+t).hidden=t!==n;
   var navButton=document.querySelector('#nav button[data-t="'+t+'"]');
   if(navButton)navButton.setAttribute("aria-current",t===n||(t==="more"&&n==="guide")?"page":"false");
  });
  window.scrollTo(0,0);
+ var target=$("tab-"+n).querySelector("h1");
+ if(target){target.setAttribute("tabindex","-1");target.focus({preventScroll:true})}
 }
 $("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b)showTab(b.dataset.t)});
 $("openGuide").addEventListener("click",function(){showTab("guide")});
