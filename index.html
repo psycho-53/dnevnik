@@ -1161,6 +1161,36 @@ main h1:focus{outline:0}
 #tab-tests .sleep-history-row small{color:#afc7db}
 @media(max-width:400px){#tab-tests .sleep-bars{gap:4px}#tab-tests .sleep-bar-value,#tab-tests .sleep-bar-label{font-size:9px}}
 
+
+/* ITERATION 10 / 13: guide clarity, search feedback and readable content */
+.guide-view-hint{font-size:13px;line-height:1.6;color:#b4cbd7;margin:4px 0 12px}
+.guide-search-row{gap:9px}
+.guide-clear-search{font:inherit;font-size:12px;min-height:42px;border:1px solid rgba(146,196,194,.3);
+ border-radius:10px;background:rgba(62,111,119,.16);padding:8px 10px;color:#d4f1ea;cursor:pointer}
+.guide-clear-search:hover{background:rgba(91,149,151,.27)}
+#guideCount{font-size:12px;font-variant-numeric:tabular-nums}
+.guide-switch button{min-height:48px;font-size:12px;line-height:1.4}
+.guide-switch button[aria-pressed="true"]{background:rgba(71,127,128,.3);border-color:#9fe0d7;color:#fff}
+.guide-card-head{min-height:70px}
+.guide-card-heading{max-width:68ch}
+.guide-card-title{font-size:15px;line-height:1.55}
+.guide-card-brief{color:#bbcee0;font-size:13px;line-height:1.6}
+.guide-card-body{padding:12px 18px 18px}
+.guide-card-body p,.guide-card-body li{font-size:13px;line-height:1.8}
+.guide-card-body h3{font-size:14px;margin-top:17px}
+.guide-sources a{line-height:1.5}
+#guideSearch{min-height:46px}
+@media(max-width:460px){
+ .guide-search-row{flex-wrap:wrap}
+ #guideSearch{width:100%;flex:1 1 100%}
+ #guideCount{order:3}
+ .guide-clear-search{margin-left:auto}
+ .guide-card-title{font-size:14px}
+ .guide-card-body{padding:10px 13px 16px}
+ .guide-switch{gap:6px}
+ .guide-switch button{font-size:11px}
+}
+
 </style>
 </head>
 <body>
@@ -1559,9 +1589,10 @@ main h1:focus{outline:0}
   <button type="button" data-guide-view="faq" aria-pressed="false">Вопросы и ответы</button>
   <button type="button" data-guide-view="family" aria-pressed="false">Для близких</button>
  </div>
+ <p class="guide-view-hint" id="guideViewHint" aria-live="polite"></p>
  <div class="guide-search-row">
   <input type="search" id="guideSearch" placeholder="Поиск: БАР, психоз, тревога..." aria-label="Поиск по справочнику" autocomplete="off">
-  <span id="guideCount" role="status">Тем: 10</span>
+  <button type="button" id="guideSearchClear" class="guide-clear-search" hidden>Сбросить</button><span id="guideCount" role="status">Тем: 10</span>
  </div>
  <div id="guideItems"></div>
  <section>

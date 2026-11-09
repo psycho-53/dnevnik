@@ -441,8 +441,9 @@ function externalLink(parent,key){
  a.href=src.url;a.target="_blank";a.rel="noopener noreferrer";
  parent.appendChild(a);
 }
-function renderCard(data,kind){
+function renderCard(data,kind,openMatch){
  var d=E("details","guide-card");d.dataset.id=data.id;
+ if(openMatch)d.open=true;
  // Карточки равнозначны; ни один диагноз не раскрывается автоматически.
  var sum=E("summary","guide-card-head");
  var head=E("span","guide-card-heading");
@@ -479,9 +480,17 @@ function render(){
   button.setAttribute("aria-pressed",String(current));
  });
  var arr=collection().filter(function(d){return !query||searchable(d).includes(query)});
+ var descriptions={
+  conditions:"Описание состояний, признаки, помощь и ситуации, когда стоит обратиться к врачу.",
+  support:"Практические шаги для сложных моментов. Не обязательно следовать всем сразу.",
+  faq:"Короткие ответы на частые вопросы о диагнозах, лечении и изменениях самочувствия.",
+  family:"Как бережно поддерживать близкого человека и не забывать о собственных границах."
+ };
+ document.getElementById("guideViewHint").textContent=descriptions[active]||"";
+ document.getElementById("guideSearchClear").hidden=!query;
  root.textContent="";
  if(!arr.length)addText(root,"p","guide-empty","Ничего не найдено. Попробуй другое слово.");
- else arr.forEach(function(d){root.appendChild(renderCard(d,active))});
+ else arr.forEach(function(d){root.appendChild(renderCard(d,active,!!query&&arr.length===1))});
  var n=document.getElementById("guideCount");
  if(n)n.textContent="Тем: "+arr.length;
 }
@@ -494,5 +503,6 @@ document.querySelectorAll("[data-guide-view]").forEach(function(button){
 });
 var search=document.getElementById("guideSearch");
 search.addEventListener("input",function(){query=this.value.trim().toLocaleLowerCase("ru");render()});
+document.getElementById("guideSearchClear").addEventListener("click",function(){search.value="";query="";render();search.focus()});
 render();
 })();
