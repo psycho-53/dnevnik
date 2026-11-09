@@ -674,6 +674,90 @@ textarea::placeholder{color:#7786aa}
  .sleep-actions button{font-size:10px!important}
 }
 
+
+/* Помощь · спокойный интерфейс для сложных моментов */
+#tab-help .help-head{margin-bottom:16px}
+#tab-help .help-head h1{font-size:30px}
+#tab-help .help-head .sub{margin-bottom:6px}
+#tab-help .help-lead{padding:20px;background:radial-gradient(ellipse at 100% 0,rgba(88,171,175,.20),transparent 68%),linear-gradient(135deg,#172941,#121e33);border:1px solid rgba(143,205,210,.27)}
+#tab-help .help-lead h2{font-size:20px;line-height:1.35;margin:5px 0 10px}
+#tab-help .help-lead p{margin:0 0 12px;max-width:550px;color:#c3d3e9;font-size:14px;line-height:1.7}
+#tab-help .help-lead small{font-size:12px;color:#93b4c7}
+.help-modes{display:grid;gap:11px}
+.help-mode{display:flex;gap:15px;text-align:left;align-items:center;width:100%;padding:17px;border-radius:17px;border:1px solid rgba(133,166,201,.24);background:linear-gradient(122deg,rgba(33,52,72,.97),rgba(17,30,49,.98));color:#eef6ff;cursor:pointer;font:inherit}
+.help-mode:hover{background:linear-gradient(122deg,rgba(46,69,92,.95),rgba(23,39,59,.98));border-color:rgba(153,202,218,.55)}
+.help-mode:focus-visible,#tab-help button:focus-visible,#tab-help a:focus-visible{outline:3px solid #b7e6f0;outline-offset:3px}
+.help-mode .help-mode-icon{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border-radius:15px;background:rgba(97,162,177,.14);border:1px solid rgba(125,196,209,.22);font-size:23px}
+.help-mode:nth-child(2) .help-mode-icon{background:rgba(125,143,201,.15)}
+.help-mode:nth-child(3) .help-mode-icon{background:rgba(193,137,121,.15)}
+.help-mode-content{display:block;flex:1;min-width:0}
+.help-mode-content b{display:block;font-size:16px}
+.help-mode-content small{display:block;font-size:12px;color:#adc7dd;line-height:1.55;margin-top:3px}
+.help-mode-arrow{color:#9bd9d3;font-size:23px;font-weight:300}
+.help-note{color:#a9bbd7;font-size:12px;line-height:1.7;margin-top:12px}
+.help-session{scroll-margin-top:12px;padding:19px;background:linear-gradient(160deg,rgba(25,49,66,.97),rgba(12,25,42,.98));border-color:rgba(137,204,209,.3)}
+.help-session-top{display:flex;align-items:start;justify-content:space-between;gap:10px}
+.help-session-top h2{font-size:21px;line-height:1.3;margin:5px 0 6px}
+.help-session-top p{color:#b5cadb;font-size:13px;line-height:1.5;margin:0 0 9px}
+.help-session-top .btn{flex:0 0 auto}
+.help-step-meta{display:flex;justify-content:space-between;gap:9px;align-items:center;color:#afc9d4;font-size:12px;margin:16px 0 9px}
+.help-track{height:5px;border-radius:99px;overflow:hidden;background:rgba(116,169,186,.2);margin-bottom:18px}
+.help-fill{height:100%;width:0;background:linear-gradient(90deg,#75c7c1,#b6e6d3);border-radius:99px;transition:width .24s ease}
+.help-step-body{padding:15px 0 12px;min-height:120px}
+.help-step-body h3{margin:0 0 11px;font-size:19px;line-height:1.4;color:#f0f8ff}
+.help-step-body p{margin:0;color:#c7daeb;font-size:15px;line-height:1.8}
+.help-step-hint{background:rgba(109,176,181,.11);border-left:3px solid #91d5ce;padding:10px 12px;margin:10px 0 16px;border-radius:0 10px 10px 0;font-size:13px;line-height:1.6;color:#c8e2df}
+.help-actions{display:flex;justify-content:space-between;gap:9px;align-items:center;flex-wrap:wrap}
+.help-actions .btn:disabled{opacity:.35;cursor:default}
+.help-actions .btn{min-height:44px}
+.help-breathing{border:1px solid rgba(133,193,193,.22);background:rgba(6,24,39,.47);border-radius:15px;padding:14px;margin:9px 0 16px;text-align:center}
+.help-breath-orb{width:74px;height:74px;border-radius:50%;margin:10px auto 13px;background:radial-gradient(circle at 35% 35%,#bfe8e3,#63a6b3 65%,#3d7a8e);box-shadow:0 0 0 12px rgba(95,156,165,.1),0 0 35px rgba(114,184,188,.16);transition:transform 3.8s ease-in-out}
+.help-breath-orb[data-breath="in"]{transform:scale(1.26)}
+.help-breath-orb[data-breath="out"],.help-breath-orb[data-breath="idle"]{transform:scale(1)}
+.help-breath-word{display:block;font-size:16px;color:#e7fffd;font-weight:700}
+.help-breath-time{display:block;color:#b7d3df;font-size:12px;margin:4px 0 11px}
+.help-breathing p{font-size:11px;color:#95b0c5;line-height:1.6;margin:10px 0 0}
+.help-safety{border-color:rgba(172,192,208,.23);background:linear-gradient(135deg,rgba(27,38,58,.97),rgba(17,29,49,.97))}
+.help-safety h2{font-size:17px;margin-bottom:8px}
+.help-safety p{font-size:13px;line-height:1.7;color:#bfd0e5;margin:0 0 9px}
+.help-safety .help-safety-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:13px}
+.help-safety .help-emergency-link{display:inline-flex;align-items:center;justify-content:center;min-height:43px;border-radius:11px;border:1px solid rgba(241,178,168,.46);padding:8px 14px;color:#ffe0d8;background:rgba(131,59,62,.22);font-size:13px;font-weight:650;text-decoration:none}
+.help-safety .help-emergency-link:hover{background:rgba(154,72,74,.3)}
+.help-plan-box summary{cursor:pointer;font-weight:700;line-height:1.5;font-size:18px}
+.help-plan-box[open] summary{margin-bottom:13px}
+.help-plan-box .note{line-height:1.6}
+.help-plan-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.help-plan-field{display:grid;gap:6px;min-width:0;margin:9px 0}
+.help-plan-field label{font-size:12px;font-weight:700;color:#d5e8f5}
+.help-plan-field input,.help-plan-field textarea{background:#0c1a2d;color:#eef6ff;border:1px solid #3b5168;border-radius:10px;padding:10px;font:inherit;font-size:14px;min-width:0;width:100%}
+.help-plan-field textarea{min-height:72px;resize:vertical}
+.help-saved-plan:empty{display:none}
+.help-plan-summary{margin:9px 0!important;white-space:pre-line;overflow-wrap:anywhere;color:#c2d8e8;font-size:13px;line-height:1.65}
+.help-saved-contact{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.help-saved-contact strong{font-size:13px}
+.help-phone{font-size:13px;color:#b6d2e3;overflow-wrap:anywhere}
+.help-quick-plan{padding:12px 14px;margin:0 0 16px;border:1px solid rgba(137,190,203,.24);border-radius:12px;background:rgba(66,115,129,.12)}
+.help-quick-plan h3{font-size:14px;margin:0 0 8px}
+.help-plan-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.help-from-today{display:flex;align-items:center;gap:9px;margin:0 0 16px}
+.help-from-today button{background:rgba(72,125,137,.12);border:1px solid rgba(111,177,192,.3);border-radius:11px;padding:10px 13px;font:inherit;font-size:13px;color:#bfe6e7;cursor:pointer}
+.help-from-today button:hover{background:rgba(86,153,166,.23)}
+#tab-help a:not(.btn){text-underline-offset:3px}
+@media(max-width:540px){
+ .help-mode{padding:14px;gap:11px}
+ .help-mode .help-mode-icon{width:42px;height:42px;flex-basis:42px;font-size:21px}
+ .help-mode-content b{font-size:15px}
+ .help-mode-content small{font-size:11px}
+ .help-session{padding:15px}
+ .help-session-top h2{font-size:18px}
+ .help-session-top .btn{font-size:12px;padding:7px 10px}
+ .help-step-body h3{font-size:18px}
+ .help-step-body p{font-size:14px}
+ .help-actions .btn{padding:10px 12px}
+ .help-plan-grid{grid-template-columns:1fr;gap:0}
+}
+@media(prefers-reduced-motion:reduce){.help-breath-orb,.help-fill{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -722,6 +806,80 @@ textarea::placeholder{color:#7786aa}
  <div><div class="eyebrow">МИНУТА ДЛЯ СЕБЯ</div><p id="promptText">Что сегодня помогло тебе почувствовать себя лучше?</p></div>
  <div class="prompt-actions"><button type="button" id="nextPrompt">Другой вопрос</button><button type="button" id="usePrompt">В заметку</button></div>
 </div>
+</div>
+
+<div id="tab-help" hidden>
+ <div class="page-head help-head">
+  <div><div class="eyebrow">РЯДОМ, КОГДА ТРУДНО</div><h1>Помощь</h1><p class="sub">Несколько спокойных шагов, если сейчас сложно. Без оценок и обязательных упражнений.</p></div>
+  <div class="page-mark" aria-hidden="true">♡</div>
+ </div>
+ <section class="help-lead" id="helpWelcome">
+  <div class="eyebrow">МОЖНО НАЧАТЬ С ОДНОГО ШАГА</div>
+  <h2>Что ты чувствуешь прямо сейчас?</h2>
+  <p>Выбери то, что ближе. Дальше будет только одно действие на экране — без спешки. Можно остановиться или выбрать другой режим.</p>
+  <div class="help-modes">
+   <button type="button" class="help-mode" data-help-mode="panic"><span class="help-mode-icon" aria-hidden="true">◉</span><span class="help-mode-content"><b>Паника</b><small>Найти опору, мягко дышать, вернуться к окружению</small></span><span class="help-mode-arrow" aria-hidden="true">›</span></button>
+   <button type="button" class="help-mode" data-help-mode="anxiety"><span class="help-mode-icon" aria-hidden="true">☁</span><span class="help-mode-content"><b>Тревога</b><small>Снизить перегрузку и выбрать один небольшой шаг</small></span><span class="help-mode-arrow" aria-hidden="true">›</span></button>
+   <button type="button" class="help-mode" data-help-mode="anger"><span class="help-mode-icon" aria-hidden="true">〰</span><span class="help-mode-content"><b>Злость</b><small>Сделать паузу, уменьшить напряжение, не действовать сгоряча</small></span><span class="help-mode-arrow" aria-hidden="true">›</span></button>
+  </div>
+  <p class="help-note">Эти упражнения могут поддержать, но не заменяют лечение. Если что-то усиливает дискомфорт, просто пропусти это.</p>
+ </section>
+ <section id="helpSession" class="help-session" hidden aria-live="polite" aria-atomic="false">
+  <div class="help-session-top">
+   <div><div class="eyebrow">НЕ СПЕШИ</div><h2 id="helpModeTitle"></h2><p id="helpModeCaption"></p></div>
+   <button class="btn sec sm" id="helpSessionClose" type="button">Выйти</button>
+  </div>
+  <div class="help-step-meta"><span id="helpStepCount"></span><span>Можно пропустить</span></div>
+  <div class="help-track" id="helpProgress" role="progressbar" aria-label="Шаги поддержки" aria-valuemin="0" aria-valuemax="5" aria-valuenow="1"><div class="help-fill" id="helpProgressFill"></div></div>
+  <div class="help-step-body"><h3 id="helpStepTitle"></h3><p id="helpStepText"></p></div>
+  <div id="helpBreathing" class="help-breathing" hidden>
+   <div id="helpBreathOrb" class="help-breath-orb" data-breath="idle" aria-hidden="true"></div>
+   <span id="helpBreathWord" class="help-breath-word">Можно дышать в своём ритме</span>
+   <span id="helpBreathTime" class="help-breath-time">Без задержек дыхания</span>
+   <button id="helpBreathStart" class="btn sec sm" type="button">Начать ритм</button>
+   <p>Не нужно заставлять себя дышать глубоко. Ритм необязателен, упражнение можно остановить.</p>
+  </div>
+  <div id="helpStepHint" class="help-step-hint"></div>
+  <div class="help-actions">
+   <button id="helpStepPrevious" class="btn sec" type="button">← Назад</button>
+   <button id="helpStepNext" class="btn" type="button">Дальше →</button>
+  </div>
+ </section>
+ <section class="help-safety" aria-label="Если сейчас небезопасно">
+  <h2>Если сейчас небезопасно</h2>
+  <p>Если есть непосредственная опасность причинить вред себе или другому человеку, сильная спутанность сознания или голоса приказывают сделать что-то опасное — нужна срочная помощь, а не упражнения в приложении.</p>
+  <p>Вызови местную экстренную службу. В странах ЕС можно звонить по номеру 112. Попроси доверенного человека побыть рядом.</p>
+  <div class="help-safety-actions">
+   <a class="help-emergency-link" href="tel:112" aria-label="Позвонить 112, экстренная служба в ЕС">Позвонить 112 (ЕС)</a>
+   <button class="btn sec sm" id="helpOpenPlan" type="button">Мой план поддержки</button>
+  </div>
+  <p class="help-note">Новые или необычные сильные боли в груди, обморок и проблемы с дыханием тоже требуют медицинской оценки.</p>
+ </section>
+ <section>
+  <details class="help-plan-box" id="helpPlanDetails">
+   <summary>Мой личный план поддержки</summary>
+   <p class="note">Его удобнее составить заранее в спокойном состоянии, при желании вместе с врачом или близким. В кризис он поможет вспомнить, что обычно работает и к кому обращаться.</p>
+   <div id="helpPlanEmpty" class="note">План пока не заполнен. Это необязательно.</div>
+   <div id="helpSavedPlan" class="help-saved-plan"></div>
+   <div id="helpTrustedLink"></div>
+   <div id="helpDoctorLink"></div>
+   <div class="help-plan-field"><label for="helpSigns">Мои ранние признаки ухудшения</label><textarea id="helpSigns" maxlength="600" placeholder="Например: хуже сон, сильнее тревога, перестаю отвечать людям"></textarea></div>
+   <div class="help-plan-field"><label for="helpHelps">Что лично мне помогает</label><textarea id="helpHelps" maxlength="600" placeholder="Место, действие или человек, с которыми становится немного спокойнее"></textarea></div>
+   <div class="help-plan-grid">
+    <div class="help-plan-field"><label for="helpTrustedName">Доверенный человек</label><input id="helpTrustedName" type="text" maxlength="600" autocomplete="off" placeholder="Имя"></div>
+    <div class="help-plan-field"><label for="helpTrustedPhone">Телефон близкого</label><input id="helpTrustedPhone" type="tel" maxlength="40" autocomplete="off" placeholder="+..."></div>
+    <div class="help-plan-field"><label for="helpDoctorName">Специалист / служба поддержки</label><input id="helpDoctorName" type="text" maxlength="600" autocomplete="off" placeholder="Имя или организация"></div>
+    <div class="help-plan-field"><label for="helpDoctorPhone">Номер специалиста</label><input id="helpDoctorPhone" type="tel" maxlength="40" autocomplete="off" placeholder="+..."></div>
+   </div>
+   <div class="help-plan-actions">
+    <button type="button" class="btn" id="helpPlanSave">Сохранить план</button>
+    <button type="button" class="btn sec" id="helpPlanDelete">Удалить план</button>
+   </div>
+   <p class="msg" id="helpPlanMessage" role="status"></p>
+   <p class="note">План и номера телефонов сохраняются только в этом браузере; они попадут в резервную копию, если ты её создашь. Доступ к устройству или файлу копии даёт доступ к этим данным.</p>
+  </details>
+ </section>
+ <p class="help-note">Основано на материалах <a href="https://www.nhs.uk/mental-health/conditions/panic-disorder/" target="_blank" rel="noopener noreferrer">NHS о панике</a>, <a href="https://oxfordhealth.nhs.uk/camhs/self-care/sleep/relaxation/ground-yourself/" target="_blank" rel="noopener noreferrer">заземлении</a> и <a href="https://www.nhs.uk/mental-health/feelings-symptoms-behaviours/feelings-and-symptoms/anger/" target="_blank" rel="noopener noreferrer">гневе</a>. Помощь работает без сети, ссылки на источники — при подключении.</p>
 </div>
 
 <div id="tab-universe" hidden>
@@ -1041,7 +1199,7 @@ textarea::placeholder{color:#7786aa}
 <section class="priv">
 <details>
 <summary>Приватность</summary>
-<p>Все записи, ответы на самоопросники и дневник сна хранятся только в браузере этого устройства. Страница ничего не отправляет на сервер, не использует аккаунты, аналитику и сторонние сервисы. Результаты опросников могут содержать очень личную информацию.</p>
+<p>Все записи, ответы на самоопросники, дневник сна и личный план поддержки хранятся только в браузере этого устройства. Страница ничего не отправляет на сервер, не использует аккаунты, аналитику и сторонние сервисы. Результаты опросников могут содержать очень личную информацию.</p>
 <p>Автор приложения ваших записей не видит и восстановить их не может. Поэтому делайте резервную копию.</p>
 <p>Это дневник самонаблюдения, а не медицинский инструмент и не диагностика. Если вам плохо, обратитесь к врачу или близким.</p>
 </details>
@@ -1052,6 +1210,7 @@ textarea::placeholder{color:#7786aa}
 <div id="toast" role="status" hidden></div>
 <nav id="nav" aria-label="Разделы">
 <button type="button" data-t="today" aria-current="page">Сегодня</button>
+<button type="button" data-t="help" aria-current="false">Помощь</button>
 <!-- Скрыто временно: вкладка и её данные сохранены для будущего редизайна. -->
 <button type="button" data-t="universe" aria-current="false" hidden>Вселенная</button>
 <!-- Скрыто временно: графики и отчёты остаются в коде. -->
@@ -1651,9 +1810,11 @@ $("exp").addEventListener("click",function(){
  var d=load(),n=Object.keys(d).length;
  var screeningData=window.DnevnikScreenings?window.DnevnikScreenings.exportEntries():[];
  var sleepData=window.DnevnikSleep?window.DnevnikSleep.exportEntries():{};
- if(!n&&!screeningData.length&&!Object.keys(sleepData).length){$("msg3").textContent="Пока нет записей или результатов для копирования.";return}
+ var supportPlan=window.DnevnikSupport?window.DnevnikSupport.exportPlan():{};
+ var hasSupportPlan=Object.keys(supportPlan).some(function(k){return !!supportPlan[k]});
+ if(!n&&!screeningData.length&&!Object.keys(sleepData).length&&!hasSupportPlan){$("msg3").textContent="Пока нет записей или результатов для копирования.";return}
  try{
-  var b=new Blob([JSON.stringify({version:6,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d,screenings:screeningData,sleep:sleepData},null,1)],{type:"application/json"});
+  var b=new Blob([JSON.stringify({version:7,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d,screenings:screeningData,sleep:sleepData,supportPlan:supportPlan},null,1)],{type:"application/json"});
   var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dnevnik-"+iso(new Date())+".json";
   document.body.appendChild(a);a.click();a.remove();
   $("msg3").textContent="Копия сохранена. Записей: "+n+".";unlock(["backup"]);
@@ -1676,11 +1837,14 @@ $("file").addEventListener("change",function(){
    });
    var importedScreens=Array.isArray(j.screenings)?j.screenings:[];
    var importedSleep=j&&j.sleep&&typeof j.sleep==="object"&&!Array.isArray(j.sleep)?j.sleep:{};
-   if(!c&&!importedScreens.length&&!Object.keys(importedSleep).length){$("msg3").textContent="В файле нет подходящих записей или результатов опросников.";return}
-   if(!confirm("Добавить записей: "+c+(importedScreens.length?", результатов опросников: "+importedScreens.length:"")+(Object.keys(importedSleep).length?", записей сна: "+Object.keys(importedSleep).length:"")+(ns.length?", шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
+   var importedPlan=j&&j.supportPlan&&typeof j.supportPlan==="object"&&!Array.isArray(j.supportPlan)?j.supportPlan:{};
+   var hasImportedPlan=Object.keys(importedPlan).some(function(k){return !!importedPlan[k]});
+   if(!c&&!importedScreens.length&&!Object.keys(importedSleep).length&&!hasImportedPlan){$("msg3").textContent="В файле нет подходящих записей или результатов опросников.";return}
+   if(!confirm("Добавить записей: "+c+(importedScreens.length?", результатов опросников: "+importedScreens.length:"")+(Object.keys(importedSleep).length?", записей сна: "+Object.keys(importedSleep).length:"")+(hasImportedPlan?", личный план поддержки (заменит текущий)": "")+(ns.length?", шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
    var d=load();Object.keys(add).forEach(function(k){d[k]=add[k]});if(c)store(d);
    var screeningCount=window.DnevnikScreenings?window.DnevnikScreenings.importEntries(importedScreens):0;
    var sleepCount=window.DnevnikSleep?window.DnevnikSleep.importEntries(importedSleep):0;
+   var planImported=hasImportedPlan&&window.DnevnikSupport?window.DnevnikSupport.importPlan(importedPlan):false;
    if(j.progress&&typeof j.progress==="object"){
     if(j.progress.ach&&typeof j.progress.ach==="object"){
      if(!cfg.ach)cfg.ach={};
@@ -1694,7 +1858,7 @@ $("file").addEventListener("change",function(){
    }
    if(ns.length){cfg.scales=cfg.scales.concat(ns);saveCfg();renderEditor();buildScales()}
    if(nt.length){cfg.tags=cfg.tags.concat(nt);saveCfg();renderTagEditor();buildChips()}
-   $("msg3").textContent="Загружено записей: "+c+", результатов опросников: "+screeningCount+", записей сна: "+sleepCount+".";render();loadDay();
+   $("msg3").textContent="Загружено записей: "+c+", результатов опросников: "+screeningCount+", записей сна: "+sleepCount+(planImported?", план поддержки сохранён":"")+".";render();loadDay();
   }catch(e){$("msg3").textContent="Не удалось прочитать файл. Нужна копия, скачанная из этого приложения."}
   inp2.value="";
  };
@@ -1842,7 +2006,7 @@ $("achOn").addEventListener("change",function(){cfg.achOn=this.checked;saveCfg()
 
 /* ---------- разделы и отчёт ---------- */
 function showTab(n){
- ["today","universe","trend","tests","more","guide"].forEach(function(t){
+ ["today","help","universe","trend","tests","more","guide"].forEach(function(t){
   $("tab-"+t).hidden=t!==n;
   var navButton=document.querySelector('#nav button[data-t="'+t+'"]');
   if(navButton)navButton.setAttribute("aria-current",t===n||(t==="more"&&n==="guide")?"page":"false");
@@ -1861,6 +2025,7 @@ initAch();initCollection();initSystem();buildScales();renderEditor();renderTagEd
 <script src="mood-cosmos.js" defer></script>
 <script src="screenings.js" defer></script>
 <script src="sleep.js" defer></script>
+<script src="support.js" defer></script>
 <script src="guide.js" defer></script>
 </body>
 </html>
