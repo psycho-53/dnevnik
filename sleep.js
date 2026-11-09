@@ -49,11 +49,14 @@ function render(){
   var x=d[day],item=E("div","sleep-bar-day");
   var track=E("div","sleep-bar-track"),bar=E("div","sleep-bar-fill");
   var h=x?x.hours:0;
+  var dayName=new Date(day+"T12:00:00").toLocaleDateString("ru-RU",{weekday:"short"});
   bar.style.height=(x?Math.max(3,Math.min(100,h/12*100)):0)+"%";
   bar.title=x?h+" ч. · качество "+x.quality+"/5":"Нет записи";
-  bar.setAttribute("aria-label",fmtDay(day)+": "+(x?h+" часов сна":"нет данных"));
+  item.setAttribute("role","img");item.setAttribute("aria-label",day+": "+(x?h+" часов сна":"нет записи"));
+  bar.setAttribute("aria-hidden","true");
   track.appendChild(bar);item.appendChild(track);
-  item.appendChild(E("span","sleep-bar-label",fmtDay(day).slice(0,2)));
+  item.appendChild(E("span","sleep-bar-label",dayName));
+  item.appendChild(E("span","sleep-bar-value",x?h+" ч":"—"));
   chart.appendChild(item);
  });
  var list=$("sleepHistory");list.textContent="";

@@ -1143,6 +1143,24 @@ main h1:focus{outline:0}
 #tab-tests .screening-result .screening-total{font-size:30px;margin:4px 0 14px;color:#dbf8f1}
 @media(prefers-reduced-motion:reduce){#screeningProgressFill{transition:none}}
 
+
+/* ITERATION 9 / 13: sleep chart labels, form guidance and compact history */
+#tab-tests #sleepDiarySection{scroll-margin-top:18px}
+#tab-tests .sleep-form-grid .sleep-field input,#tab-tests .sleep-form-grid .sleep-field select{min-height:45px}
+#tab-tests .sleep-field small{line-height:1.5;color:#b8cddd}
+#tab-tests .sleep-bars{height:145px;gap:6px;padding:10px 2px 0}
+#tab-tests .sleep-bar-day{height:100%;gap:3px}
+#tab-tests .sleep-bar-track{height:96px;border:1px solid rgba(125,172,186,.13);border-radius:10px 10px 4px 4px}
+#tab-tests .sleep-bar-fill{background:linear-gradient(180deg,#b7e7df,#5d9ea5)}
+#tab-tests .sleep-bar-label{font-size:10px;color:#c2d9e2;text-transform:capitalize}
+#tab-tests .sleep-bar-value{font-size:10px;color:#a6c2d0;font-variant-numeric:tabular-nums}
+#tab-tests .sleep-chart-title{align-items:center;flex-wrap:wrap}
+#tab-tests .sleep-history-details{border-top:1px solid rgba(155,188,207,.2);margin-top:13px;padding-top:12px}
+#tab-tests .sleep-history-details summary{font-size:14px;min-height:44px;display:flex;align-items:center;color:#d4e9f0}
+#tab-tests .sleep-history-row{gap:10px}
+#tab-tests .sleep-history-row small{color:#afc7db}
+@media(max-width:400px){#tab-tests .sleep-bars{gap:4px}#tab-tests .sleep-bar-value,#tab-tests .sleep-bar-label{font-size:9px}}
+
 </style>
 </head>
 <body>
@@ -1483,7 +1501,7 @@ main h1:focus{outline:0}
    </div>
    <div class="sleep-field">
     <label for="sleepHours">Сколько часов спал(а)?</label>
-    <input id="sleepHours" type="number" min="0" max="24" step="0.5" placeholder="Например, 7.5" inputmode="decimal" required>
+    <input id="sleepHours" type="number" min="0" max="24" step="0.5" placeholder="Например, 7.5" inputmode="decimal" aria-describedby="sleepHoursHelp" required><small id="sleepHoursHelp">Можно указывать половину часа, например 7,5.</small>
    </div>
    <div class="sleep-field">
     <label for="sleepQuality">Качество сна</label>
@@ -1512,14 +1530,14 @@ main h1:focus{outline:0}
  <div id="sleepNotice" class="screening-safety" role="status" hidden></div>
  <div class="sleep-chart-wrap">
   <div class="sleep-chart-title"><b>Сон за последние 7 дней</b><small>Высота столбца · до 12 ч.</small></div>
-  <div id="sleepBars" class="sleep-bars" aria-label="Сводка часов сна по дням"></div>
+  <div id="sleepBars" class="sleep-bars" role="group" aria-label="Сон за последние семь дней, с подписями каждого дня"></div>
  </div>
  <p id="sleepSummary" role="status"></p>
  <div class="row" style="justify-content:space-between;margin:18px 0 8px">
   <b>История сна</b>
   <button class="btn sec sm" type="button" id="sleepClearHistory">Удалить все записи</button>
  </div>
- <div id="sleepHistory"></div>
+ <details class="sleep-history-details"><summary>Посмотреть последние записи сна</summary><div id="sleepHistory"></div></details>
  <p class="note">Это дневник самонаблюдения, а не медицинский тест. При необычном сокращении сна в сочетании с высокой энергией, импульсивностью или возбуждением обратись к лечащему врачу. При сильном ухудшении или опасности нужна срочная помощь.</p>
 </section>
 </div>
