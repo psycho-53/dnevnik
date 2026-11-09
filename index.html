@@ -583,6 +583,55 @@ textarea::placeholder{color:#7786aa}
  #nav button{font-size:11px;padding:13px 1px}
 }
 
+
+/* Справочник психического здоровья */
+.guide-entry{display:flex;justify-content:space-between;align-items:center;gap:13px;background:linear-gradient(124deg,rgba(35,53,86,.85),rgba(16,27,51,.92));border-color:rgba(146,183,242,.27)}
+.guide-entry h2{margin:5px 0 8px}
+.guide-entry p{max-width:510px;font-size:13px;color:#b7c7e4;line-height:1.6}
+.guide-entry .btn{flex:0 0 auto}
+.guide-banner{border:1px solid rgba(125,165,233,.24);border-radius:17px;padding:17px;background:radial-gradient(ellipse at 8% 0,rgba(79,124,180,.14),transparent 72%),rgba(16,29,52,.66)}
+.guide-banner p{line-height:1.65;font-size:13px;color:#b7c5e2;margin:9px 0}
+.guide-back{margin-bottom:15px}
+.guide-switch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:14px 0}
+.guide-switch button{font:inherit;color:#c3d1ee;cursor:pointer;text-align:center;border-radius:12px;padding:11px 8px;background:rgba(24,39,67,.86);border:1px solid rgba(152,179,228,.19);font-size:12px;line-height:1.3}
+.guide-switch button[aria-pressed="true"]{color:#fff;background:rgba(88,118,184,.26);border-color:rgba(159,191,246,.76);box-shadow:inset 0 0 0 1px rgba(167,194,245,.1)}
+.guide-search-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0 15px}
+#guideSearch{width:100%;min-width:0;max-width:100%;border:1px solid rgba(151,174,221,.35);border-radius:12px;padding:12px;background:#0d1830;color:#f2f6ff;font:inherit;font-size:14px}
+#guideSearch:focus-visible{outline:2px solid #9fbfff}
+#guideCount{white-space:nowrap;color:#a5b6d8;font-size:12px}
+.guide-card{margin:0 0 9px;border:1px solid rgba(148,171,222,.21);border-radius:15px;background:linear-gradient(135deg,rgba(19,31,56,.94),rgba(11,20,41,.93));overflow:hidden}
+.guide-card[open]{border-color:rgba(147,183,238,.44);box-shadow:0 8px 26px rgba(0,0,0,.13)}
+.guide-card-head{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px}
+.guide-card-head::-webkit-details-marker{display:none}
+.guide-card-head:after{content:"+";flex:0 0 auto;align-self:center;color:#b1c8ec;font-size:23px;font-weight:300}
+.guide-card[open] .guide-card-head:after{content:"−"}
+.guide-card-head:focus-visible{outline:2px solid #afc5ff;outline-offset:-3px}
+.guide-card-heading{display:block;min-width:0}
+.guide-tag{display:block;color:#95bfe6;font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.guide-card-title{display:block;color:#f3f6ff;font-size:15px;line-height:1.4}
+.guide-card-brief{display:block;color:#adc0dd;font-size:12px;line-height:1.5;margin-top:5px}
+.guide-card-body{border-top:1px solid rgba(132,157,208,.17);padding:11px 16px 17px}
+.guide-card-body h3{font-size:13px;color:#dce9ff;margin:14px 0 5px}
+.guide-card-body p{font-size:13px;line-height:1.75;color:#b7c8e5;margin:0 0 9px}
+.guide-steps{padding-left:21px;margin:7px 0 11px;color:#c5d4ed;font-size:13px;line-height:1.75}
+.guide-steps li{padding-left:2px;margin:6px 0}
+.guide-card-body .guide-note{margin-top:13px;padding:10px 12px;border-radius:10px;background:rgba(89,120,181,.1);border:1px solid rgba(142,170,225,.17)}
+.guide-card-body .guide-urgent{margin-top:13px;padding:10px 12px;border-radius:11px;background:rgba(155,79,77,.14);border:1px solid rgba(224,157,148,.35);color:#ffe2d9}
+.guide-sources{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px;font-size:11px;color:#90a6ce}
+.guide-source{display:inline-block;color:#b6d5ff;text-decoration:underline;text-underline-offset:3px}
+.guide-source:hover{color:#e6f1ff}
+.guide-empty{padding:22px 12px;color:#b8c7e6;border:1px dashed rgba(150,178,230,.26);border-radius:14px}
+.guide-note-general{line-height:1.7;font-size:12px;color:#9bb0d2}
+@media(max-width:560px){
+ .guide-entry{align-items:flex-start;flex-direction:column}
+ .guide-entry .btn{width:100%}
+ .guide-switch button{font-size:11px;padding:11px 4px}
+ .guide-card-head{padding:12px}
+ .guide-card-body{padding:9px 12px 14px}
+ .guide-card-title{font-size:14px}
+ .guide-card-brief{font-size:11px}
+}
+
 </style>
 </head>
 <body>
@@ -796,8 +845,40 @@ textarea::placeholder{color:#7786aa}
 </section>
 </div>
 
+<div id="tab-guide" hidden>
+ <button class="btn sec sm guide-back" id="guideBack" type="button">← Назад в «Ещё»</button>
+ <div class="page-head">
+  <div><div class="eyebrow">ПСИХИЧЕСКОЕ ЗДОРОВЬЕ · ПРОСТЫМИ СЛОВАМИ</div><h1>Справочник</h1><p class="sub">Короткие объяснения диагнозов и идеи, которые могут помочь пережить непростые моменты.</p></div>
+  <div class="page-mark" aria-hidden="true">✦</div>
+ </div>
+ <div class="guide-banner">
+  <b>Ты больше, чем диагноз.</b>
+  <p>Похожие симптомы встречаются при разных расстройствах. Определить причину по одному признаку или тесту невозможно. Здесь можно познакомиться с терминами, а индивидуальные вопросы лучше обсуждать с лечащим специалистом.</p>
+  <p><b>Важное о шизоаффективном расстройстве:</b> это отдельный диагноз, включающий симптомы психоза и эпизоды нарушений настроения. Бывают биполярный и депрессивный типы. Ниже есть подробная карточка.</p>
+ </div>
+ <div class="guide-switch" role="group" aria-label="Темы справочника">
+  <button type="button" data-guide-view="conditions" aria-pressed="true">Расстройства</button>
+  <button type="button" data-guide-view="support" aria-pressed="false">Что делать, если…</button>
+  <button type="button" data-guide-view="faq" aria-pressed="false">Вопросы и ответы</button>
+ </div>
+ <div class="guide-search-row">
+  <input type="search" id="guideSearch" placeholder="Поиск: БАР, психоз, тревога..." aria-label="Поиск по справочнику" autocomplete="off">
+  <span id="guideCount" role="status">Тем: 10</span>
+ </div>
+ <div id="guideItems"></div>
+ <section>
+  <h2>Когда нужна срочная помощь</h2>
+  <p class="guide-note-general">Если существует непосредственная опасность причинить вред себе или другим, голоса приказывают совершить опасные действия, возникла сильная спутанность или быстрое ухудшение — обратись в местную экстренную службу (в ЕС — 112) либо в ближайшее отделение неотложной помощи.</p>
+  <p class="guide-note-general">Материалы носят информационный характер и не заменяют диагностику или лечение. Ссылки ведут к NAMI, NIMH и NHS (англоязычные первоисточники). Справочник доступен без интернета, но для открытия источников потребуется подключение.</p>
+ </section>
+</div>
+
 <div id="tab-more" hidden>
 <h1>Ещё</h1>
+<section class="guide-entry">
+ <div><div class="eyebrow">ПОНЯТНЫМИ СЛОВАМИ</div><h2>Справочник психического здоровья</h2><p>Что такое БАР, шизоаффективное расстройство, психоз и другие состояния? Короткие ответы, источники и подсказки, когда трудно.</p></div>
+ <button type="button" class="btn sec" id="openGuide">Открыть справочник</button>
+</section>
 <section>
 <details>
 <summary>Настройка шкал</summary>
@@ -1656,13 +1737,16 @@ $("achOn").addEventListener("change",function(){cfg.achOn=this.checked;saveCfg()
 
 /* ---------- разделы и отчёт ---------- */
 function showTab(n){
- ["today","universe","trend","tests","more"].forEach(function(t){
+ ["today","universe","trend","tests","more","guide"].forEach(function(t){
   $("tab-"+t).hidden=t!==n;
-  document.querySelector('#nav button[data-t="'+t+'"]').setAttribute("aria-current",t===n?"page":"false");
+  var navButton=document.querySelector('#nav button[data-t="'+t+'"]');
+  if(navButton)navButton.setAttribute("aria-current",t===n||(t==="more"&&n==="guide")?"page":"false");
  });
  window.scrollTo(0,0);
 }
 $("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b)showTab(b.dataset.t)});
+$("openGuide").addEventListener("click",function(){showTab("guide")});
+$("guideBack").addEventListener("click",function(){showTab("more")});
 $("openRep").addEventListener("click",function(){$("msg2").textContent="";if(Object.keys(load()).length)unlock(["report"]);var dl=$("repDlg");if(dl.showModal)dl.showModal();else dl.setAttribute("open","")});
 $("closeRep").addEventListener("click",function(){var dl=$("repDlg");if(dl.close)dl.close();else dl.removeAttribute("open")});
 
@@ -1671,5 +1755,6 @@ initAch();initCollection();initSystem();buildScales();renderEditor();renderTagEd
 </script>
 <script src="mood-cosmos.js" defer></script>
 <script src="screenings.js" defer></script>
+<script src="guide.js" defer></script>
 </body>
 </html>
