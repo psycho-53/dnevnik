@@ -1009,6 +1009,51 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
  .test-sleep-shortcut a{width:100%;text-align:center}
 }
 
+
+/* ITERATION 4 / 13: small screens, safe areas, touch targets */
+html{min-width:280px}
+#nav{box-sizing:border-box;max-width:calc(100vw - 16px)}
+#nav button,#nav button .nav-symbol{touch-action:manipulation}
+#nav button{min-width:0;overflow-wrap:normal}
+#tab-today .checkin-primary .row:has(#d){gap:12px}
+#tab-today input[type="date"],#tab-tests input[type="date"]{max-width:100%;min-height:44px}
+#tab-today .chips button,#tab-today .prompt-actions button{min-height:42px}
+#tab-help .help-mode,#tab-tests .screening-switch button{touch-action:manipulation}
+#tab-more details>summary{padding-block:8px}
+#tab-more .guide-entry .btn{min-height:44px}
+#tab-tests .sleep-form-grid>*{min-width:0}
+#tab-tests #sleepHours{width:100%}
+#tab-tests .screening-history-row{flex-wrap:wrap;gap:10px}
+#tab-tests .screening-history-actions{margin-left:auto}
+@media(max-width:400px){
+ main{padding-inline:12px}
+ .app-topbar{padding-inline:14px}
+ .page-mark{width:40px;height:40px;flex-basis:40px}
+ #tab-today .section-head{flex-wrap:wrap}
+ #tab-today .section-head h2{font-size:19px}
+ #tab-today .time-chip{font-size:10px}
+ #tab-today .checkin-primary .row:has(#d){align-items:center}
+ #tab-today .checkin-primary .row:has(#d) input{flex:1;min-width:0}
+ #tab-today .stats-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #tab-today .stat-card{padding:10px 7px}
+ #tab-today .stat-value{font-size:20px}
+ #tab-help .help-session-top{flex-wrap:wrap}
+ #tab-help .help-session-top .btn{margin-left:auto}
+ .sleep-form-grid{grid-template-columns:1fr 1fr}
+ .sleep-history-row,.screening-history-row{flex-wrap:wrap}
+ .wb-med-row{min-width:0}
+ #tab-more .guide-entry .btn{width:100%}
+}
+@media(max-width:330px){
+ .app-private{display:none}
+ .scale.mood-scale .opts button span.mood-label{font-size:10px;word-break:normal}
+ .scale.mood-scale .opts{gap:3px!important}
+ .scale.mood-scale .opts button{min-width:0;overflow:hidden;padding:5px 0}
+ .scale.mood-scale .mood-art{max-width:100%;transform:scale(.66)}
+ #tab-today .stat-label{font-size:10px}
+ #tab-tests .sleep-form-grid{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
