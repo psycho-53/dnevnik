@@ -167,6 +167,7 @@ function render(){
 function updateProgress(){
  var a=answers[active],done=a.filter(function(v){return v!==null}).length;
  document.getElementById("screeningProgress").textContent="Отвечено: "+done+" из "+a.length+". Можно пропустить опросник в любой момент.";
+ document.getElementById("screeningProgressFill").style.width=Math.round(done/a.length*100)+"%";
  var warn=document.getElementById("screeningInlineSafety");
  warn.hidden=!(active==="phq9"&&a[8]!==null&&a[8]>0);
  if(!warn.hidden)warn.textContent=safetyText();
@@ -176,7 +177,7 @@ function renderResult(kind,answersRow){
  var out=document.getElementById("screeningResultSection");
  out.hidden=false;out.textContent="";
  out.appendChild(node("div","eyebrow","РЕЗУЛЬТАТ САМООПРОСА"));
- out.appendChild(node("h2",null,e.title));
+ var resultHeading=node("h2",null,e.title);resultHeading.tabIndex=-1;out.appendChild(resultHeading);
  out.appendChild(node("p","screening-total",kind==="who5"?(total*4+" / 100 баллов"):(total+" / "+(kind==="phq9"?27:kind==="gad7"?21:20)+" баллов")));
  out.appendChild(node("p","note",e.description));
  if(e.urgent){
@@ -224,7 +225,10 @@ function history(){
 function save(){
  var a=answers[active],missing=a.filter(function(v){return v===null}).length;
  if(missing){
-  document.getElementById("screeningValidation").textContent="Пожалуйста, ответьте на все вопросы: осталось "+missing+".";
+  var first=a.findIndex(function(v){return v===null});
+  document.getElementById("screeningValidation").textContent="Осталось ответить на "+missing+" вопрос(ов). Перейди к первому пропущенному.";
+  var question=box.children[first];
+  if(question){question.scrollIntoView({behavior:"smooth",block:"center"});var firstControl=question.querySelector('input[type="radio"]');if(firstControl)firstControl.focus({preventScroll:true})}
   return;
  }
  var rows=fromStorage();
@@ -232,7 +236,9 @@ function save(){
  if(!writeStore(rows)){document.getElementById("screeningValidation").textContent="Не удалось сохранить ответы. Проверьте настройки хранения данных браузера.";return}
  document.getElementById("screeningValidation").textContent="Результат сохранён только в этом браузере.";
  renderResult(active,a);history();
- document.getElementById("screeningResultSection").scrollIntoView({behavior:"smooth",block:"nearest"});
+ var result=document.getElementById("screeningResultSection");
+ result.scrollIntoView({behavior:"smooth",block:"nearest"});
+ var title=result.querySelector("h2");if(title)title.focus({preventScroll:true});
 }
 box.addEventListener("change",function(e){
  var input=e.target;
