@@ -544,6 +544,45 @@ textarea::placeholder{color:#7786aa}
  .solar-system-panel #world>image,.solar-system-panel .central-glow,.solar-system-panel .central-halo{transition:none!important}
 }
 
+
+/* Самоопpосники — отдельный бережный экран */
+.screening-switch{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+.screening-switch button{font:inherit;text-align:left;font-size:13px;line-height:1.5;border:1px solid rgba(154,178,255,.2);border-radius:14px;background:rgba(18,30,58,.84);padding:13px;color:#dce6ff;cursor:pointer}
+.screening-switch button[aria-pressed="true"]{border-color:#9aabff;background:rgba(89,106,177,.24);box-shadow:inset 0 0 0 1px rgba(167,186,255,.15)}
+.screening-switch button b{display:block;font-size:14px}
+.screening-switch button small{display:block;font-size:11px;color:#adbcdb}
+.screening-question{margin:0 0 17px;border:1px solid rgba(152,173,220,.17);border-radius:16px;padding:13px 11px 12px;min-width:0}
+.screening-legend{padding:0 3px;font-size:14px;font-weight:650;line-height:1.5;color:#e8eefe}
+.screening-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:10px}
+#tab-tests .screening-question:has(input[value="4"]){--choice-cols:5}
+#tab-tests .screening-question:has(input[value="4"]) .screening-choices{grid-template-columns:repeat(5,minmax(0,1fr))}
+.screening-choice{position:relative;display:flex;justify-content:center;align-items:center;min-width:0;cursor:pointer}
+.screening-choice input{position:absolute;opacity:0;width:1px;height:1px}
+.screening-choice span{display:flex;align-items:center;justify-content:center;text-align:center;width:100%;min-height:68px;padding:7px 5px;font-size:10px;line-height:1.3;border-radius:11px;border:1px solid rgba(165,182,224,.22);background:rgba(11,21,43,.8);color:#becbea}
+.screening-choice:hover span{border-color:#a8b7e9}
+.screening-choice input:checked+span{color:#fff;border-color:#a8b9ff;background:rgba(93,107,184,.38);box-shadow:inset 0 0 0 1px rgba(171,187,255,.22)}
+.screening-choice input:focus-visible+span{outline:2px solid #a8b9ff;outline-offset:2px}
+.screening-result{border-color:rgba(143,174,235,.32)}
+.screening-total{font-size:27px;font-weight:750;color:#eaf1ff;margin:5px 0 12px}
+.screening-safety{padding:14px 15px;border-radius:14px;border:1px solid rgba(240,177,143,.48);background:rgba(72,45,48,.32);font-size:13px;line-height:1.65;margin:12px 0}
+.screening-history-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 0;border-top:1px solid rgba(142,160,218,.19)}
+.screening-history-row b{display:block;font-size:13px}
+.screening-history-row small{display:block;font-size:11px;color:#a3b4dc;margin-top:4px}
+.screening-history-actions{display:flex;gap:5px;flex-wrap:wrap;flex:0 0 auto}
+.screening-history-actions button{padding:6px 9px!important;font-size:11px!important}
+#tab-tests p.note{line-height:1.65}
+#nav button{font-size:12px}
+@media(max-width:540px){
+ .screening-switch{grid-template-columns:1fr 1fr;gap:7px}
+ .screening-switch button{padding:10px;font-size:11px}
+ .screening-switch button b{font-size:12px}
+ .screening-choice span{font-size:9px;min-height:72px;padding:6px 2px}
+ .screening-choices{gap:4px}
+ .screening-question{padding:12px 7px}
+ #tab-tests .screening-question:has(input[value="4"]) .screening-choices{grid-template-columns:repeat(5,minmax(0,1fr))}
+ #nav button{font-size:11px;padding:13px 1px}
+}
+
 </style>
 </head>
 <body>
@@ -717,6 +756,46 @@ textarea::placeholder{color:#7786aa}
 </section>
 </div>
 
+<div id="tab-tests" hidden>
+<div class="page-head">
+ <div><div class="eyebrow">ДЛЯ САМОНАБЛЮДЕНИЯ</div><h1>Самоопpосники</h1><p class="sub">Можно отметить симптомы, чтобы лучше понять своё состояние и обсудить изменения со специалистом. Проходить необязательно.</p></div>
+ <div class="page-mark" aria-hidden="true">✎</div>
+</div>
+<section>
+ <h2>Что хочешь оценить?</h2>
+ <div class="screening-switch">
+  <button type="button" data-screening-kind="phq9" aria-pressed="true"><b>Депрессивные симптомы</b><small>PHQ-9 · за 2 недели</small></button>
+  <button type="button" data-screening-kind="asrm" aria-pressed="false"><b>Подъём настроения и активности</b><small>По мотивам ASRM · за 7 дней</small></button>
+ </div>
+ <p class="note">Опросники не заменяют консультацию и не ставят диагноз. Ответы и результаты остаются только в браузере этого устройства.</p>
+</section>
+<section>
+ <div class="eyebrow" id="screeningPeriod">За последние две недели</div>
+ <h2 id="screeningTitle">Депрессивные симптомы (PHQ-9)</h2>
+ <p class="note" id="screeningInfo"></p>
+ <div id="screeningQuestions"></div>
+ <div id="screeningInlineSafety" class="screening-safety" role="alert" hidden></div>
+ <p class="note" id="screeningProgress" role="status"></p>
+ <div class="row">
+  <button type="button" class="btn" id="screeningSave">Показать результат и сохранить</button>
+  <button type="button" class="btn sec" id="screeningReset">Сбросить ответы</button>
+ </div>
+ <p class="msg" role="status" id="screeningValidation"></p>
+</section>
+<section class="screening-result" id="screeningResultSection" hidden></section>
+<section id="screeningHistorySection">
+ <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">История результатов</h2><button class="btn sec sm" id="screeningClearHistory" type="button">Очистить историю</button></div>
+ <p class="note">Можно удалить отдельный результат или всю историю. Для динамики сравнивай результаты одного опросника в разные даты, а не между собой.</p>
+ <div id="screeningHistory"></div>
+</section>
+<section>
+ <h2>Об источниках</h2>
+ <p class="note">PHQ-9 — известный инструмент оценки депрессивных симптомов (Kroenke, Spitzer, Williams, 2001). Чек-лист активности основан на пяти областях ASRM (Altman и соавт., 1997); формулировки здесь адаптированы, поэтому баллы следует понимать осторожно.</p>
+ <p class="note">При необычно высокой активности, уменьшении потребности во сне и рискованных решениях лучше обратиться к специалисту. При мыслях о самоповреждении необходима отдельная оценка безопасности независимо от общей суммы.</p>
+ <p class="note"><a href="https://www.phqscreeners.com/" target="_blank" rel="noopener noreferrer">Информация о PHQ</a> · <a href="https://www.psychiatry.org/File%20Library/Psychiatrists/Practice/DSM/DSM-5-TR/APA-DSM5TR-Level2ManiaAdult.pdf" target="_blank" rel="noopener noreferrer">Справка по ASRM (APA)</a></p>
+</section>
+</div>
+
 <div id="tab-more" hidden>
 <h1>Ещё</h1>
 <section>
@@ -781,7 +860,7 @@ textarea::placeholder{color:#7786aa}
 <section class="priv">
 <details>
 <summary>Приватность</summary>
-<p>Все записи хранятся только на вашем устройстве. Страница ничего не отправляет на сервер, не использует аккаунты, аналитику и сторонние сервисы.</p>
+<p>Все записи и ответы на самоопросники хранятся только в браузере этого устройства. Страница ничего не отправляет на сервер, не использует аккаунты, аналитику и сторонние сервисы. Результаты опросников могут содержать очень личную информацию.</p>
 <p>Автор приложения ваших записей не видит и восстановить их не может. Поэтому делайте резервную копию.</p>
 <p>Это дневник самонаблюдения, а не медицинский инструмент и не диагностика. Если вам плохо, обратитесь к врачу или близким.</p>
 </details>
@@ -794,6 +873,7 @@ textarea::placeholder{color:#7786aa}
 <button type="button" data-t="today" aria-current="page">Сегодня</button>
 <button type="button" data-t="universe" aria-current="false">Вселенная</button>
 <button type="button" data-t="trend" aria-current="false">Динамика</button>
+<button type="button" data-t="tests" aria-current="false">Тесты</button>
 <button type="button" data-t="more" aria-current="false">Ещё</button>
 </nav>
 <div class="object-modal-backdrop" id="objectModal" hidden>
@@ -1386,9 +1466,10 @@ $("ics").addEventListener("click",function(){
 /* ---------- резервная копия ---------- */
 $("exp").addEventListener("click",function(){
  var d=load(),n=Object.keys(d).length;
- if(!n){$("msg3").textContent="Пока нечего сохранять: записей нет.";return}
+ var screeningData=window.DnevnikScreenings?window.DnevnikScreenings.exportEntries():[];
+ if(!n&&!screeningData.length){$("msg3").textContent="Пока нет записей или результатов для копирования.";return}
  try{
-  var b=new Blob([JSON.stringify({version:4,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d},null,1)],{type:"application/json"});
+  var b=new Blob([JSON.stringify({version:5,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d,screenings:screeningData},null,1)],{type:"application/json"});
   var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dnevnik-"+iso(new Date())+".json";
   document.body.appendChild(a);a.click();a.remove();
   $("msg3").textContent="Копия сохранена. Записей: "+n+".";unlock(["backup"]);
@@ -1409,9 +1490,11 @@ $("file").addEventListener("change",function(){
    Object.keys(src).forEach(function(k){
     if(/^\d{4}-\d{2}-\d{2}$/.test(k)){var e=normE(src[k]);if(e){add[k]=e;c++}}
    });
-   if(!c){$("msg3").textContent="В файле нет подходящих записей.";return}
-   if(!confirm("Добавить записей: "+c+(ns.length?" и шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
-   var d=load();Object.keys(add).forEach(function(k){d[k]=add[k]});store(d);
+   var importedScreens=Array.isArray(j.screenings)?j.screenings:[];
+   if(!c&&!importedScreens.length){$("msg3").textContent="В файле нет подходящих записей или результатов опросников.";return}
+   if(!confirm("Добавить записей: "+c+(importedScreens.length?", результатов опросников: "+importedScreens.length:"")+(ns.length?", шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
+   var d=load();Object.keys(add).forEach(function(k){d[k]=add[k]});if(c)store(d);
+   var screeningCount=window.DnevnikScreenings?window.DnevnikScreenings.importEntries(importedScreens):0;
    if(j.progress&&typeof j.progress==="object"){
     if(j.progress.ach&&typeof j.progress.ach==="object"){
      if(!cfg.ach)cfg.ach={};
@@ -1425,7 +1508,7 @@ $("file").addEventListener("change",function(){
    }
    if(ns.length){cfg.scales=cfg.scales.concat(ns);saveCfg();renderEditor();buildScales()}
    if(nt.length){cfg.tags=cfg.tags.concat(nt);saveCfg();renderTagEditor();buildChips()}
-   $("msg3").textContent="Загружено записей: "+c+".";render();loadDay();
+   $("msg3").textContent="Загружено записей: "+c+", результатов опросников: "+screeningCount+".";render();loadDay();
   }catch(e){$("msg3").textContent="Не удалось прочитать файл. Нужна копия, скачанная из этого приложения."}
   inp2.value="";
  };
@@ -1573,7 +1656,7 @@ $("achOn").addEventListener("change",function(){cfg.achOn=this.checked;saveCfg()
 
 /* ---------- разделы и отчёт ---------- */
 function showTab(n){
- ["today","universe","trend","more"].forEach(function(t){
+ ["today","universe","trend","tests","more"].forEach(function(t){
   $("tab-"+t).hidden=t!==n;
   document.querySelector('#nav button[data-t="'+t+'"]').setAttribute("aria-current",t===n?"page":"false");
  });
@@ -1587,5 +1670,6 @@ initAch();initCollection();initSystem();buildScales();renderEditor();renderTagEd
 })();
 </script>
 <script src="mood-cosmos.js" defer></script>
+<script src="screenings.js" defer></script>
 </body>
 </html>
