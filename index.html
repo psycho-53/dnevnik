@@ -888,6 +888,69 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,#nav button{transition:none!important}}
 
+
+/* UI/UX iteration 2: clear hierarchy on Today and safe support access */
+.today-support-row{display:flex;align-items:center;justify-content:space-between;gap:16px;
+ padding:13px 16px;margin:0 0 18px;border:1px solid rgba(144,195,191,.23);border-radius:16px;
+ background:linear-gradient(110deg,rgba(71,134,138,.13),rgba(24,43,64,.37))}
+.today-support-row>span{display:grid;gap:3px;min-width:0}
+.today-support-row strong{color:#e1f4f0;font-size:13px;line-height:1.4}
+.today-support-row small{color:#b2c9d5;font-size:12px;line-height:1.45}
+.today-support-button{font:inherit;font-size:12px;font-weight:700;flex:none;
+ color:#c2f1e7;min-height:41px;border-radius:11px;padding:9px 13px;
+ border:1px solid rgba(153,213,199,.4);background:rgba(81,144,141,.12);cursor:pointer}
+.today-support-button:hover{background:rgba(111,182,169,.2)}
+.today-support-button span{padding-left:6px;font-size:14px}
+.checkin-primary{border-color:rgba(160,191,212,.25);box-shadow:0 18px 44px rgba(3,10,25,.22)}
+.checkin-primary .section-head{padding-bottom:14px;border-bottom:1px solid rgba(145,178,204,.15)}
+.checkin-primary .scale{margin:22px 0}
+.checkin-primary .scale:not(.mood-scale){padding-top:17px;border-top:1px solid rgba(143,170,203,.13)}
+.checkin-primary .scale>b{font-weight:740;font-size:15px;color:#eef5ff}
+.checkin-primary .scale>small{color:#b0c3d6;line-height:1.55;font-size:12px}
+.checkin-primary #scales .mood-scale{padding:14px 0 6px;margin-top:18px}
+.checkin-primary #scales .mood-scale>b{font-size:16px}
+.checkin-primary .opts button{min-height:48px;border-color:rgba(160,183,217,.24);background:rgba(29,47,70,.73);border-radius:12px;transition:background-color .15s,border-color .15s}
+.checkin-primary .opts button:hover{border-color:rgba(160,211,212,.6);background:rgba(54,82,101,.75)}
+.checkin-primary .opts button[aria-pressed=true]{background:#396b73;color:#fff;border-color:#94e0d2;box-shadow:inset 0 0 0 1px rgba(214,255,245,.13)}
+.checkin-primary .mood-scale .opts button[aria-pressed=true]{background:rgba(51,97,106,.32);box-shadow:inset 0 0 0 1px rgba(214,255,245,.1)}
+.checkin-primary .chips button{border-color:rgba(158,187,217,.25);background:rgba(35,55,78,.83);color:#d5e5f1}
+.checkin-primary .chips button[aria-pressed=true]{background:rgba(85,157,149,.32);border-color:#94dfcf;color:#effffb}
+.checkin-primary #save{width:100%;min-height:51px;font-size:15px}
+.checkin-primary #addNote{font-size:13px}
+#tab-today .stats-grid .stat-card{box-shadow:none;background:rgba(18,32,50,.77);border:1px solid rgba(144,175,206,.17)}
+#tab-today .stat-value{color:#e8f5ff}
+#tab-help .help-lead{border:1px solid rgba(146,194,193,.27);box-shadow:0 14px 36px rgba(2,14,29,.15)}
+#tab-help .help-modes{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#tab-help .help-mode{align-items:flex-start;padding:16px;min-height:116px;border-radius:15px;gap:12px}
+#tab-help .help-mode-content b{font-size:15px;line-height:1.4}
+#tab-help .help-mode-content small{color:#bed1e0;font-size:12px;line-height:1.5}
+#tab-help .help-mode-icon{flex-basis:40px;width:40px;height:40px;font-size:20px;border-radius:12px}
+#tab-help .help-mode-arrow{display:none}
+#tab-help .help-mode:nth-child(1){border-color:rgba(145,219,210,.53);background:linear-gradient(122deg,rgba(35,73,80,.69),rgba(22,44,56,.8))}
+.help-urgent-shortcut{display:flex;align-items:center;gap:9px;margin:3px 0 19px;padding:11px 13px;
+ border-radius:12px;border:1px solid rgba(222,170,154,.33);background:rgba(117,77,69,.11);
+ font-size:12px;color:#f3d1c8;text-decoration:none;line-height:1.45}
+.help-urgent-shortcut span{font-size:14px;font-weight:800;border:1px solid rgba(235,184,172,.54);
+ display:grid;place-items:center;width:20px;height:20px;flex:none;border-radius:50%}
+#helpEmergency{scroll-margin-top:24px}
+#tab-help .help-safety{border-color:rgba(210,159,146,.31)}
+@media(max-width:600px){
+ .today-support-row{padding:13px;align-items:flex-start;gap:10px}
+ .today-support-row small{font-size:11px}
+ .today-support-button{font-size:11px;padding:8px 10px;max-width:132px}
+ #tab-help .help-modes{grid-template-columns:1fr}
+ #tab-help .help-mode{min-height:84px;align-items:center;padding:13px}
+ #tab-help .help-mode-icon{flex-basis:40px}
+ #tab-help .help-mode-arrow{display:block}
+ .checkin-primary #save{min-height:49px}
+}
+@media(max-width:380px){
+ .today-support-row{flex-direction:column}
+ .today-support-button{width:100%;max-width:none}
+ .scale.mood-scale .opts button span.mood-label{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){.checkin-primary .opts button{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -909,6 +972,10 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
 <div class="card2" id="hint" hidden role="status">
  <p id="hintT"></p><p class="note" style="margin:0">Это не диагноз, а заметка, которую можно показать врачу.</p>
  <div class="row" style="margin-top:8px"><button class="btn sec sm" id="hintX" type="button">Скрыть на сегодня</button></div>
+</div>
+<div class="today-support-row" aria-label="Быстрый доступ к поддержке">
+ <span><strong>Если сегодня особенно трудно</strong><small>Ты можешь обратиться к упражнениям поддержки в любой момент.</small></span>
+ <button type="button" id="todayOpenHelp" class="today-support-button">Открыть помощь <span aria-hidden="true">↗</span></button>
 </div>
 <section class="checkin-primary">
  <div class="section-head"><div><div class="eyebrow">01 / СИГНАЛ ДНЯ</div><h2>Отметь своё состояние</h2></div><span class="time-chip">≈ 1 минута</span></div>
@@ -952,6 +1019,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
   <div class="eyebrow">МОЖНО НАЧАТЬ С ОДНОГО ШАГА</div>
   <h2>Что ты чувствуешь прямо сейчас?</h2>
   <p>Выбери то, что ближе. Дальше будет только одно действие на экране — без спешки. Можно остановиться или выбрать другой режим.</p>
+  <a class="help-urgent-shortcut" href="#helpEmergency"><span aria-hidden="true">!</span> Если сейчас небезопасно — как получить срочную помощь</a>
   <div class="help-modes">
    <button type="button" class="help-mode" data-help-mode="panic"><span class="help-mode-icon" aria-hidden="true">◉</span><span class="help-mode-content"><b>Паника</b><small>Найти опору, мягко дышать, вернуться к окружению</small></span><span class="help-mode-arrow" aria-hidden="true">›</span></button>
    <button type="button" class="help-mode" data-help-mode="anxiety"><span class="help-mode-icon" aria-hidden="true">☁</span><span class="help-mode-content"><b>Тревога</b><small>Снизить перегрузку и выбрать один небольшой шаг</small></span><span class="help-mode-arrow" aria-hidden="true">›</span></button>
@@ -997,7 +1065,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
   <div class="wb-action-row"><button type="button" class="btn sec sm" id="helpFeedbackSkip">Не сохранять</button></div>
   <p class="msg" id="helpFeedbackMessage" role="status"></p>
  </section>
- <section class="help-safety" aria-label="Если сейчас небезопасно">
+ <section class="help-safety" id="helpEmergency" aria-label="Если сейчас небезопасно">
   <h2>Если сейчас небезопасно</h2>
   <p>Если есть непосредственная опасность причинить вред себе или другому человеку, сильная спутанность сознания или голоса приказывают сделать что-то опасное — нужна срочная помощь, а не упражнения в приложении.</p>
   <p>Вызови местную экстренную службу. В странах ЕС можно звонить по номеру 112. Попроси доверенного человека побыть рядом.</p>
@@ -2241,6 +2309,7 @@ function showTab(n){
 }
 $("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b)showTab(b.dataset.t)});
 $("openGuide").addEventListener("click",function(){showTab("guide")});
+$("todayOpenHelp").addEventListener("click",function(){showTab("help")});
 $("guideBack").addEventListener("click",function(){showTab("more")});
 $("openRep").addEventListener("click",function(){$("msg2").textContent="";if(Object.keys(load()).length)unlock(["report"]);var dl=$("repDlg");if(dl.showModal)dl.showModal();else dl.setAttribute("open","")});
 $("closeRep").addEventListener("click",function(){var dl=$("repDlg");if(dl.close)dl.close();else dl.removeAttribute("open")});
