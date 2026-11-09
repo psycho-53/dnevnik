@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Дневник состояния — Моя вселенная</title>
+<title>Дневник состояния — трекер и помощь</title>
 <meta name="theme-color" content="#080d1c">
-<meta name="description" content="Личный дневник самонаблюдения: состояние, динамика и бережные открытия о себе.">
+<meta name="description" content="Личный дневник настроения и сна, самоопросники, поддержка в трудные моменты и справочник психического здоровья. Данные хранятся на устройстве.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">\n<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">\n<link rel="shortcut icon" href="favicon-32.png" type="image/png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -1230,6 +1230,29 @@ main h1:focus{outline:0}
  #tab-more #exp,#tab-more #imp{flex:1;min-width:125px}
 }
 
+
+/* ITERATION 13 / 13: clearer More hierarchy and final responsive polish */
+#tab-more .guide-entry{margin:5px 0 24px;padding:19px}
+#tab-more .guide-entry .eyebrow{margin-bottom:5px}
+#tab-more .guide-entry h2{font-size:18px}
+#tab-more .guide-entry p{font-size:13px;line-height:1.65}
+#tab-more .more-group-title{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#tab-more .more-settings-title>div{min-width:0}
+#tab-more .more-settings-title .btn{white-space:nowrap;min-height:41px;font-size:12px}
+#tab-more section:focus-within{border-color:rgba(147,204,192,.38)}
+#tab-more .wb-section>details>summary,#tab-more>section>details>summary{cursor:pointer}
+#tab-more .wb-section>details>summary:hover,#tab-more>section>details>summary:hover{color:#f1fffa}
+#tab-guide .guide-card-body,#tab-help .help-plan-box,#tab-more .wb-med-info{overflow-wrap:anywhere}
+#tab-tests #screeningHistory,#tab-tests #sleepHistory{overflow-wrap:anywhere}
+:root:not([data-theme="light"]){color-scheme:dark}
+:root[data-theme="light"]{color-scheme:light}
+@media(max-width:520px){
+ #tab-more .more-settings-title{flex-wrap:wrap}
+ #tab-more .more-settings-title .btn{width:100%;margin-top:3px}
+ #tab-more .guide-entry{padding:17px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}#tab-help .help-breath-orb{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -1644,6 +1667,10 @@ main h1:focus{outline:0}
 <div id="tab-more" hidden>
 <div class="page-head more-main-head"><div><div class="eyebrow">ИНСТРУМЕНТЫ И НАСТРОЙКИ</div><h1>Ещё</h1><p class="sub">Справочник, наблюдения и управление своими данными.</p></div><div class="page-mark" aria-hidden="true">⋯</div></div>
 
+<section class="guide-entry">
+ <div><div class="eyebrow">ПОНЯТНЫМИ СЛОВАМИ</div><h2>Справочник психического здоровья</h2><p>Что такое БАР, шизоаффективное расстройство, психоз и другие состояния? Короткие ответы, источники и подсказки, когда трудно.</p></div>
+ <button type="button" class="btn sec" id="openGuide">Открыть справочник</button>
+</section>
 <div id="wellbeingTools">
  <div class="more-group-title"><h2>Мои инструменты</h2><p>Выбирай только то, что сейчас полезно.</p></div>
  <section class="wb-section">
@@ -1707,11 +1734,7 @@ main h1:focus{outline:0}
  </section>
 </div>
 
-<section class="guide-entry">
- <div><div class="eyebrow">ПОНЯТНЫМИ СЛОВАМИ</div><h2>Справочник психического здоровья</h2><p>Что такое БАР, шизоаффективное расстройство, психоз и другие состояния? Короткие ответы, источники и подсказки, когда трудно.</p></div>
- <button type="button" class="btn sec" id="openGuide">Открыть справочник</button>
-</section>
-<div class="more-group-title more-settings-title"><h2>Настройки и данные</h2><p>Шкалы, напоминания, резервные копии и конфиденциальность.</p></div>
+<div class="more-group-title more-settings-title"><div><h2>Настройки и данные</h2><p>Шкалы, напоминания, резервные копии и конфиденциальность.</p></div><button type="button" id="moreBackupShortcut" class="btn sec sm">Резервная копия</button></div>
 <section>
 <details>
 <summary>Настройка шкал</summary>
@@ -2603,6 +2626,7 @@ $("nav").addEventListener("click",function(e){var b=e.target.closest("button");i
 $("openGuide").addEventListener("click",function(){showTab("guide")});
 $("todayOpenHelp").addEventListener("click",function(){showTab("help")});
 $("guideBack").addEventListener("click",function(){showTab("more")});
+$("moreBackupShortcut").addEventListener("click",function(){var panel=$("exp").closest("details");if(panel){panel.open=true;panel.scrollIntoView({behavior:"smooth",block:"start"});$("exp").focus({preventScroll:true})}});
 $("openRep").addEventListener("click",function(){$("msg2").textContent="";if(Object.keys(load()).length)unlock(["report"]);var dl=$("repDlg");if(dl.showModal)dl.showModal();else dl.setAttribute("open","")});
 $("closeRep").addEventListener("click",function(){var dl=$("repDlg");if(dl.close)dl.close();else dl.removeAttribute("open")});
 
