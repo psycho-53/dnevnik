@@ -1083,6 +1083,32 @@ main h1:focus{outline:0}
  transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 
+
+/* ITERATION 6 / 13: mood readability, record status and a simpler check-in */
+.checkin-date{gap:10px}
+.checkin-date label{font-size:13px;color:#c7d8e5}
+.checkin-date input{min-height:45px;border-radius:11px;padding-inline:13px}
+.checkin-record-status{margin:9px 0 0;color:#acc3d4;font-size:12px;line-height:1.55}
+.checkin-kind-note{font-size:12px;color:#b7cfda;line-height:1.5;padding:10px 12px;
+ border-left:2px solid rgba(157,216,206,.6);background:rgba(83,138,145,.09);border-radius:0 10px 10px 0}
+#tab-today .checkin-primary .mood-scale .opts button{border:1px solid rgba(151,181,210,.27);background:rgba(27,46,68,.56)}
+#tab-today .checkin-primary .mood-scale .opts button span.mood-label{color:#d5e6f1;font-weight:620}
+#tab-today .checkin-primary .mood-scale .opts button[aria-pressed="true"] span.mood-label{color:#fff;font-weight:760}
+#tab-today #msg{font-size:13px;line-height:1.5;min-height:24px;font-weight:600}
+@media(max-width:520px){
+ #tab-today .checkin-primary .scale.mood-scale .opts{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:7px!important}
+ #tab-today .checkin-primary .scale.mood-scale .opts button{grid-column:span 2;min-width:0;min-height:97px;
+  padding:7px 3px;gap:4px;border-radius:13px}
+ #tab-today .checkin-primary .scale.mood-scale .opts button:nth-child(n+4){grid-column:span 3}
+ #tab-today .scale.mood-scale .mood-art{margin:-4px -5px;transform:scale(.77)}
+ #tab-today .scale.mood-scale .opts button span.mood-label{font-size:12px;line-height:1.3}
+}
+@media(max-width:330px){
+ #tab-today .scale.mood-scale .opts button span.mood-label{font-size:11px}
+ #tab-today .checkin-primary .scale.mood-scale .opts{gap:5px!important}
+}
+
 </style>
 </head>
 <body>
@@ -1112,8 +1138,10 @@ main h1:focus{outline:0}
 </div>
 <section class="checkin-primary">
  <div class="section-head"><div><div class="eyebrow">01 / СИГНАЛ ДНЯ</div><h2>Отметь своё состояние</h2></div><span class="time-chip">≈ 1 минута</span></div>
- <div class="row"><label for="d"><b>Дата</b></label><input type="date" id="d"></div>
+ <div class="row checkin-date"><label for="d"><b>Дата</b></label><input type="date" id="d"></div>
+ <p class="checkin-record-status" id="todayRecordLabel" role="status">Можно выбрать дату и сохранить хотя бы одну отметку.</p>
  <div id="scales"></div>
+ <p class="checkin-kind-note">Достаточно заполнить одну шкалу. Остальное можно пропустить.</p>
  <div class="scale"><b>Что было сегодня</b><small>Необязательно. По отметкам приложение со временем найдёт совпадения</small><div class="chips" id="chips"></div></div>
  <div class="note-block" id="noteBlock">
   <div class="note-preview" id="notePreview" hidden><div class="note-preview-head"><b>Заметка</b><button class="btn sec sm" id="editNote" type="button">Изменить</button></div><p id="notePreviewText"></p></div>
@@ -1758,6 +1786,7 @@ $("scales").addEventListener("click",function(e){
 });
 function loadDay(){
  var e=load()[dateEl.value];cur={};curT=e?e.g.slice():[];
+ $("todayRecordLabel").textContent=e?"На эту дату запись уже есть. Если сохранить снова, она обновится.":"На эту дату записи пока нет.";
  if(e)cfg.scales.forEach(function(x){if(e.v[x.id])cur[x.id]=conv(e.v[x.id],e.d[x.id],x.n)});
  $("note").value=e?e.note:"";paint();buildChips();setNoteView(false);updateCosmicMood();
 }
@@ -1774,10 +1803,10 @@ $("editNote").addEventListener("click",function(){setNoteView(true);$("note").fo
 $("save").addEventListener("click",function(){
  if(!dateEl.value){$("msg").textContent="Выберите дату.";return}
  if(!cfg.scales.some(function(x){return cur[x.id]})){$("msg").textContent="Отметьте хотя бы одну шкалу, чтобы сохранить запись.";return}
- var d=load(),old=d[dateEl.value]||{v:{},d:{}},v=Object.assign({},old.v),dd=Object.assign({},old.d);
+ var d=load(),existed=!!d[dateEl.value],old=d[dateEl.value]||{v:{},d:{}},v=Object.assign({},old.v),dd=Object.assign({},old.d);
  cfg.scales.forEach(function(x){if(cur[x.id]){v[x.id]=cur[x.id];dd[x.id]=x.n}else{delete v[x.id];delete dd[x.id]}});
  d[dateEl.value]={v:v,d:dd,note:$("note").value.trim().slice(0,500),g:curT.slice()};
- store(d);setNoteView(false);$("msg").textContent="Наблюдение сохранено. Новый сигнал добавлен на твою карту.";render();
+ store(d);setNoteView(false);$("msg").textContent=existed?"Запись за выбранную дату обновлена.":"Наблюдение сохранено."; $("todayRecordLabel").textContent="На эту дату запись уже есть. Если сохранить снова, она обновится.";render();
  try{$("after").scrollIntoView({behavior:"smooth",block:"nearest"})}catch(e){}
 });
 
