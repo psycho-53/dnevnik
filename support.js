@@ -82,6 +82,7 @@
   $("helpFeedbackNote").value="";
   $("helpFeedbackMessage").textContent="";
   $("helpFeedback").scrollIntoView({behavior:"smooth",block:"start"});
+  $("helpFeedbackTitle").focus({preventScroll:true});
  }
  function readPlan(){
   try{var raw=localStorage.getItem(KEY);return validatePlan(raw?JSON.parse(raw):{})||validatePlan({})}
@@ -124,6 +125,7 @@
   $("helpSession").hidden=false;
   renderStep();
   $("helpSession").scrollIntoView({behavior:"smooth",block:"start"});
+  $("helpStepTitle").focus({preventScroll:true});
  }
  function exitMode(){
   stopBreathing();
@@ -132,6 +134,7 @@
   $("helpFeedback").hidden=true;
   $("helpWelcome").hidden=false;
   $("helpWelcome").scrollIntoView({behavior:"smooth",block:"start"});
+  var first=$("helpWelcome").querySelector("[data-help-mode]");if(first)first.focus({preventScroll:true});
  }
  function renderStep(){
   stopBreathing();
@@ -149,6 +152,7 @@
   $("helpProgressFill").style.width=(((state.index+1)/group.steps.length)*100)+"%";
   $("helpProgress").setAttribute("aria-valuenow",String(state.index+1));
   $("helpProgress").setAttribute("aria-valuemax",String(group.steps.length));
+  if(document.activeElement&&($("helpStepNext")===document.activeElement||$("helpStepPrevious")===document.activeElement))$("helpStepTitle").focus({preventScroll:true});
  }
  function setPlanLink(node,name,phone){
   node.textContent="";

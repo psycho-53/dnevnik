@@ -1109,6 +1109,25 @@ main h1:focus{outline:0}
  #tab-today .checkin-primary .scale.mood-scale .opts{gap:5px!important}
 }
 
+
+/* ITERATION 7 / 13: safer step navigation and focus */
+#tab-help .help-step-meta{gap:16px}
+#tab-help .help-session-safety-link{font-size:12px;color:#e6c4bc;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+#tab-help .help-step-body h3:focus,#tab-help #helpFeedbackTitle:focus{outline:none}
+#tab-help .help-actions button{min-height:48px;flex:1}
+#tab-help .help-actions button#helpStepNext{background:#9de1d8;color:#0e2c37}
+#tab-help .help-actions button#helpStepNext:hover{background:#b6f0e4}
+#tab-help .help-breathing{box-shadow:none;border-color:rgba(132,196,187,.28)}
+#tab-help .help-breathing p{font-size:12px;color:#b6cbd4}
+#tab-help .help-breath-orb{max-width:100%}
+#tab-help .help-safety{scroll-margin-top:35px}
+#tab-help .help-urgent-shortcut:hover{background:rgba(152,102,86,.2)}
+@media(max-width:420px){
+ #tab-help .help-step-meta{font-size:11px}
+ #tab-help .help-session-safety-link{font-size:11px}
+ #tab-help .help-actions .btn{padding:11px 9px;min-width:0}
+}
+
 </style>
 </head>
 <body>
@@ -1190,14 +1209,14 @@ main h1:focus{outline:0}
   </div>
   <p class="help-note">Эти упражнения могут поддержать, но не заменяют лечение. Если что-то усиливает дискомфорт, просто пропусти это.</p>
  </section>
- <section id="helpSession" class="help-session" hidden aria-live="polite" aria-atomic="false">
+ <section id="helpSession" class="help-session" hidden>
   <div class="help-session-top">
    <div><div class="eyebrow">НЕ СПЕШИ</div><h2 id="helpModeTitle"></h2><p id="helpModeCaption"></p></div>
    <button class="btn sec sm" id="helpSessionClose" type="button">Выйти</button>
   </div>
-  <div class="help-step-meta"><span id="helpStepCount"></span><span>Можно пропустить</span></div>
+  <div class="help-step-meta"><span id="helpStepCount" aria-live="polite"></span><a href="#helpEmergency" class="help-session-safety-link">Срочная помощь</a></div>
   <div class="help-track" id="helpProgress" role="progressbar" aria-label="Шаги поддержки" aria-valuemin="0" aria-valuemax="5" aria-valuenow="1"><div class="help-fill" id="helpProgressFill"></div></div>
-  <div class="help-step-body"><h3 id="helpStepTitle"></h3><p id="helpStepText"></p></div>
+  <div class="help-step-body"><h3 id="helpStepTitle" tabindex="-1"></h3><p id="helpStepText"></p></div>
   <div id="helpBreathing" class="help-breathing" hidden>
    <div id="helpBreathOrb" class="help-breath-orb" data-breath="idle" aria-hidden="true"></div>
    <span id="helpBreathWord" class="help-breath-word">Можно дышать в своём ритме</span>
@@ -1214,7 +1233,7 @@ main h1:focus{outline:0}
 
  <section id="helpFeedback" class="help-feedback" hidden>
   <div class="eyebrow">БЕЗ ОЦЕНОК И ОБЯЗАТЕЛЬСТВ</div>
-  <h2>Стало ли немного легче?</h2>
+  <h2 id="helpFeedbackTitle" tabindex="-1">Стало ли немного легче?</h2>
   <p>Можешь отметить, помогло ли упражнение. Так постепенно появится твоя собственная подборка. Любой ответ нормален.</p>
   <div class="help-feedback-actions" role="group" aria-label="Помогло ли упражнение">
    <button type="button" data-help-rating="1">Да, немного</button>
