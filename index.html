@@ -758,6 +758,49 @@ textarea::placeholder{color:#7786aa}
 }
 @media(prefers-reduced-motion:reduce){.help-breath-orb,.help-fill{transition:none!important}}
 
+
+/* Самопомощь, заметки об эффекте, медицинские наблюдения */
+.help-feedback{border:1px solid rgba(141,196,184,.33)!important;background:linear-gradient(155deg,rgba(25,52,57,.97),rgba(12,28,43,.97))!important}
+.help-feedback h2{font-size:19px;margin:6px 0}
+.help-feedback p{font-size:13px;color:#c2d7df;line-height:1.6}
+.help-feedback-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.help-feedback-actions button{font:inherit;font-size:12px;padding:12px 7px;border-radius:12px;background:rgba(76,121,132,.22);border:1px solid rgba(132,185,199,.37);color:#e7f6f8;cursor:pointer}
+.help-feedback-actions button:hover{background:rgba(100,154,165,.32)}
+#helpFeedbackNote{width:100%;min-height:60px}
+.help-feedback-item{font-size:13px;line-height:1.5;color:#cad9ef;margin:9px 0}
+.help-feedback-list{margin:12px 0}
+.wb-section details{padding:0}
+.wb-section details summary{font-size:17px;line-height:1.4}
+.wb-intro{font-size:13px;line-height:1.65;color:#aebfda;margin:4px 0 14px}
+.wb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.wb-field{display:grid;gap:5px;min-width:0;margin:9px 0}
+.wb-field label,.wb-label{font-size:12px;font-weight:700;color:#d2e2f8}
+.wb-field input,.wb-field select,.wb-field textarea{width:100%;min-width:0;background:#0c1429;color:#eff3ff;border:1px solid #34436c;border-radius:10px;padding:10px;font:inherit;font-size:13px}
+.wb-field textarea{min-height:62px;resize:vertical}
+.wb-action-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
+.wb-action-row .btn{font-size:13px}
+.wb-med-row{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;padding:12px 0;border-top:1px solid rgba(151,178,229,.17)}
+.wb-med-info{flex:1;min-width:0;overflow-wrap:anywhere}
+.wb-med-info b{font-size:13px;display:block}
+.wb-med-info small{display:block;color:#b1c3df;font-size:11px;line-height:1.6;margin-top:3px}
+.wb-med-actions{display:flex;gap:6px;flex:none}
+.wb-med-actions button{font-size:11px!important;padding:7px 8px!important}
+.wb-warning-result{padding:12px 14px;margin:12px 0;border:1px solid rgba(145,192,207,.25);border-radius:13px;background:rgba(20,42,61,.49)}
+.wb-warning-line{margin:0 0 10px;font-size:13px;line-height:1.7;color:#c4d7e9}
+.wb-warning-line:last-child{margin-bottom:0}
+.wb-check{display:flex;align-items:flex-start;gap:9px;margin:9px 0;font-size:13px;line-height:1.5;color:#d2dff3}
+.wb-check input{width:17px;height:17px;accent-color:#98baff;flex:none;margin-top:2px}
+#doctorPreview{width:100%;min-height:250px;resize:vertical;font:12px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap}
+.wb-privacy{margin:10px 0 0;color:#9fb6d4;font-size:12px;line-height:1.7}
+.guide-switch{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:560px){
+ .wb-grid{grid-template-columns:1fr;gap:0}
+ .wb-med-row{flex-direction:column}
+ .wb-med-actions{align-self:flex-end}
+ .guide-switch{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .help-feedback-actions button{font-size:11px}
+}
+
 </style>
 </head>
 <body>
@@ -821,6 +864,8 @@ textarea::placeholder{color:#7786aa}
    <button type="button" class="help-mode" data-help-mode="panic"><span class="help-mode-icon" aria-hidden="true">◉</span><span class="help-mode-content"><b>Паника</b><small>Найти опору, мягко дышать, вернуться к окружению</small></span><span class="help-mode-arrow" aria-hidden="true">›</span></button>
    <button type="button" class="help-mode" data-help-mode="anxiety"><span class="help-mode-icon" aria-hidden="true">☁</span><span class="help-mode-content"><b>Тревога</b><small>Снизить перегрузку и выбрать один небольшой шаг</small></span><span class="help-mode-arrow" aria-hidden="true">›</span></button>
    <button type="button" class="help-mode" data-help-mode="anger"><span class="help-mode-icon" aria-hidden="true">〰</span><span class="help-mode-content"><b>Злость</b><small>Сделать паузу, уменьшить напряжение, не действовать сгоряча</small></span><span class="help-mode-arrow" aria-hidden="true">›</span></button>
+   <button type="button" class="help-mode" data-help-mode="low"><span class="help-mode-icon" aria-hidden="true">☾</span><span class="help-mode-content"><b>Совсем нет сил</b><small>Маленькие действия без давления и чувства вины</small></span><span class="help-mode-arrow" aria-hidden="true">›</span></button>
+   <button type="button" class="help-mode" data-help-mode="voices"><span class="help-mode-icon" aria-hidden="true">◇</span><span class="help-mode-content"><b>Пугающие переживания</b><small>Если слышишь голоса или чувствуешь сильную подозрительность</small></span><span class="help-mode-arrow" aria-hidden="true">›</span></button>
   </div>
   <p class="help-note">Эти упражнения могут поддержать, но не заменяют лечение. Если что-то усиливает дискомфорт, просто пропусти это.</p>
  </section>
@@ -845,6 +890,21 @@ textarea::placeholder{color:#7786aa}
    <button id="helpStepNext" class="btn" type="button">Дальше →</button>
   </div>
  </section>
+
+ <section id="helpFeedback" class="help-feedback" hidden>
+  <div class="eyebrow">БЕЗ ОЦЕНОК И ОБЯЗАТЕЛЬСТВ</div>
+  <h2>Стало ли немного легче?</h2>
+  <p>Можешь отметить, помогло ли упражнение. Так постепенно появится твоя собственная подборка. Любой ответ нормален.</p>
+  <div class="help-feedback-actions" role="group" aria-label="Помогло ли упражнение">
+   <button type="button" data-help-rating="1">Да, немного</button>
+   <button type="button" data-help-rating="0">Без изменений</button>
+   <button type="button" data-help-rating="-1">Стало хуже</button>
+  </div>
+  <label class="wb-label" for="helpFeedbackNote">Что именно помогло или мешало? (необязательно)</label>
+  <textarea id="helpFeedbackNote" maxlength="160" placeholder="Можно оставить пустым"></textarea>
+  <div class="wb-action-row"><button type="button" class="btn sec sm" id="helpFeedbackSkip">Не сохранять</button></div>
+  <p class="msg" id="helpFeedbackMessage" role="status"></p>
+ </section>
  <section class="help-safety" aria-label="Если сейчас небезопасно">
   <h2>Если сейчас небезопасно</h2>
   <p>Если есть непосредственная опасность причинить вред себе или другому человеку, сильная спутанность сознания или голоса приказывают сделать что-то опасное — нужна срочная помощь, а не упражнения в приложении.</p>
@@ -854,6 +914,13 @@ textarea::placeholder{color:#7786aa}
    <button class="btn sec sm" id="helpOpenPlan" type="button">Мой план поддержки</button>
   </div>
   <p class="help-note">Новые или необычные сильные боли в груди, обморок и проблемы с дыханием тоже требуют медицинской оценки.</p>
+ </section>
+
+ <section id="helpCopingSummary">
+  <div class="eyebrow">ЛИЧНЫЙ ОПЫТ</div><h2>Что мне помогает</h2>
+  <p class="note">После упражнения можно отметить его полезность. Ни один способ не обязан помогать каждый раз.</p>
+  <div id="helpFeedbackHistory" class="help-feedback-list"></div>
+  <button type="button" class="btn sec sm" id="helpClearFeedback">Очистить отметки</button>
  </section>
  <section>
   <details class="help-plan-box" id="helpPlanDetails">
@@ -1118,6 +1185,7 @@ textarea::placeholder{color:#7786aa}
   <button type="button" data-guide-view="conditions" aria-pressed="true">Расстройства</button>
   <button type="button" data-guide-view="support" aria-pressed="false">Что делать, если…</button>
   <button type="button" data-guide-view="faq" aria-pressed="false">Вопросы и ответы</button>
+  <button type="button" data-guide-view="family" aria-pressed="false">Для близких</button>
  </div>
  <div class="guide-search-row">
   <input type="search" id="guideSearch" placeholder="Поиск: БАР, психоз, тревога..." aria-label="Поиск по справочнику" autocomplete="off">
@@ -1133,6 +1201,66 @@ textarea::placeholder{color:#7786aa}
 
 <div id="tab-more" hidden>
 <h1>Ещё</h1>
+
+<div id="wellbeingTools">
+ <section class="wb-section">
+  <details id="warningSection">
+   <summary>Ранние изменения состояния</summary>
+   <p class="wb-intro">Вручную сравни несколько последних дней: сон, энергию и настроение. Этот инструмент не ставит диагноз и не может предсказать эпизод. Признаки лучше заранее обсудить с лечащим врачом.</p>
+   <div class="wb-field"><label for="warningShortHours">Что считать коротким сном (не более, часов)?</label>
+    <select id="warningShortHours"><option value="3">3 часа</option><option value="4">4 часа</option><option value="5">5 часов</option><option value="6">6 часов</option><option value="7">7 часов</option><option value="8">8 часов</option><option value="9">9 часов</option></select>
+   </div>
+   <div class="wb-action-row"><button id="warningSaveSettings" type="button" class="btn sec sm">Сохранить порог</button><button id="warningCheck" type="button" class="btn">Проверить мои записи</button></div>
+   <div id="warningResults" class="wb-warning-result" aria-live="polite"><p class="wb-warning-line">Результат появится только после нажатия кнопки.</p></div>
+   <p class="msg" id="warningMsg" role="status"></p>
+   <p class="wb-privacy">Учитываются только записи этого устройства за последние пять дней. При коротком сне и высокой энергии стоит обсудить изменения с врачом, особенно если потребность во сне уменьшилась. При опасном поведении или сильном ухудшении обращайся за срочной помощью.</p>
+  </details>
+ </section>
+ <section class="wb-section">
+  <details id="medSection">
+   <summary>Лекарства и побочные эффекты</summary>
+   <p class="wb-intro">Личные отметки о назначенном лечении: было ли принято лекарство и появились ли нежелательные ощущения. Приложение не напоминает о дозировках и не советует менять лечение.</p>
+   <form id="medForm">
+    <input type="hidden" id="medEditId">
+    <div class="wb-grid">
+     <div class="wb-field"><label for="medDate">Дата</label><input type="date" id="medDate" required></div>
+     <div class="wb-field"><label for="medName">Название препарата</label><input type="text" id="medName" maxlength="80" autocomplete="off" placeholder="Название по назначению" required></div>
+     <div class="wb-field"><label for="medStatus">Отметка о приёме</label>
+      <select id="medStatus"><option value="taken">Принято по плану</option><option value="missed">Пропущено</option><option value="unsure">Не уверен(а)</option></select>
+     </div>
+     <div class="wb-field"><label for="medEffects">Ощущения / побочные эффекты (необязательно)</label><textarea id="medEffects" maxlength="240" rows="2" placeholder="Что заметил(а) после приёма"></textarea></div>
+    </div>
+    <div class="wb-field"><label for="medNote">Заметка (необязательно)</label><textarea id="medNote" maxlength="240" rows="2" placeholder="Вопрос для врача, обстоятельства"></textarea></div>
+    <div class="wb-action-row"><button class="btn" id="medSave" type="submit">Сохранить отметку</button><button class="btn sec sm" id="medReset" type="button">Очистить форму</button></div>
+    <p class="msg" role="status" id="medMsg"></p>
+   </form>
+   <div class="row" style="justify-content:space-between;align-items:center;margin:15px 0 10px"><b>Последние отметки</b><button class="btn sec sm" id="medClear" type="button">Удалить историю</button></div>
+   <div id="medList"></div>
+   <p class="wb-privacy">При неприятных эффектах обратись к назначившему врачу; не отменяй препараты и не меняй дозы самостоятельно. При тяжёлой реакции нужна срочная медицинская помощь.</p>
+  </details>
+ </section>
+ <section class="wb-section">
+  <details id="doctorSection">
+   <summary>Сводка для врача</summary>
+   <p class="wb-intro">Ты сам(а) выбираешь, что включить. Отчёт создаётся на устройстве, ничего автоматически не отправляется. Перед отправкой проверь содержание.</p>
+   <div class="wb-field"><label for="doctorDays">Период</label><select id="doctorDays"><option value="7">Последние 7 дней</option><option value="14" selected>Последние 14 дней</option><option value="30">Последние 30 дней</option></select></div>
+   <div class="wb-label" style="margin-top:15px">Что включить</div>
+   <label class="wb-check"><input type="checkbox" id="doctorMood" checked> Отметки настроения</label>
+   <label class="wb-check"><input type="checkbox" id="doctorSleep" checked> Часы сна и энергия</label>
+   <label class="wb-check"><input type="checkbox" id="doctorTests" checked> Результаты самоопросников</label>
+   <label class="wb-check"><input type="checkbox" id="doctorMeds"> Лекарства и побочные эффекты</label>
+   <label class="wb-check"><input type="checkbox" id="doctorNotes"> Личные заметки (из включённых разделов)</label>
+   <div class="wb-field"><label for="doctorQuestions">Вопросы врачу (необязательно)</label><textarea id="doctorQuestions" rows="3" maxlength="800" placeholder="Что хочу обсудить на приёме"></textarea></div>
+   <div class="wb-action-row"><button id="doctorGenerate" class="btn" type="button">Подготовить сводку</button></div>
+   <label for="doctorPreview" class="wb-label">Предпросмотр — можно отредактировать</label>
+   <textarea id="doctorPreview" spellcheck="false" placeholder="Здесь появится текст сводки. Он не отправляется автоматически."></textarea>
+   <div class="wb-action-row"><button id="doctorCopy" class="btn sec sm" type="button">Скопировать</button><button id="doctorDownload" class="btn sec sm" type="button">Сохранить .txt</button></div>
+   <p id="doctorMsg" class="msg" role="status"></p>
+   <p class="wb-privacy">Скопированный текст и сохранённый файл могут содержать конфиденциальные сведения. Поделись ими только по собственному решению.</p>
+  </details>
+ </section>
+</div>
+
 <section class="guide-entry">
  <div><div class="eyebrow">ПОНЯТНЫМИ СЛОВАМИ</div><h2>Справочник психического здоровья</h2><p>Что такое БАР, шизоаффективное расстройство, психоз и другие состояния? Короткие ответы, источники и подсказки, когда трудно.</p></div>
  <button type="button" class="btn sec" id="openGuide">Открыть справочник</button>
@@ -1199,7 +1327,7 @@ textarea::placeholder{color:#7786aa}
 <section class="priv">
 <details>
 <summary>Приватность</summary>
-<p>Все записи, ответы на самоопросники, дневник сна и личный план поддержки хранятся только в браузере этого устройства. Страница ничего не отправляет на сервер, не использует аккаунты, аналитику и сторонние сервисы. Результаты опросников могут содержать очень личную информацию.</p>
+<p>Все записи, ответы на самоопросники, дневник сна, личный план поддержки, отметки о лекарствах и оценка упражнений хранятся только в браузере этого устройства. Страница ничего не отправляет на сервер, не использует аккаунты, аналитику и сторонние сервисы. Результаты опросников могут содержать очень личную информацию.</p>
 <p>Автор приложения ваших записей не видит и восстановить их не может. Поэтому делайте резервную копию.</p>
 <p>Это дневник самонаблюдения, а не медицинский инструмент и не диагностика. Если вам плохо, обратитесь к врачу или близким.</p>
 </details>
@@ -1812,9 +1940,11 @@ $("exp").addEventListener("click",function(){
  var sleepData=window.DnevnikSleep?window.DnevnikSleep.exportEntries():{};
  var supportPlan=window.DnevnikSupport?window.DnevnikSupport.exportPlan():{};
  var hasSupportPlan=Object.keys(supportPlan).some(function(k){return !!supportPlan[k]});
- if(!n&&!screeningData.length&&!Object.keys(sleepData).length&&!hasSupportPlan){$("msg3").textContent="Пока нет записей или результатов для копирования.";return}
+ var copingData=window.DnevnikSupport?window.DnevnikSupport.exportFeedback():[];
+ var wellbeingData=window.DnevnikWellbeing?window.DnevnikWellbeing.exportData():{meds:[],settings:{}};
+ if(!n&&!screeningData.length&&!Object.keys(sleepData).length&&!hasSupportPlan&&!copingData.length&&!wellbeingData.meds.length){$("msg3").textContent="Пока нет записей или результатов для копирования.";return}
  try{
-  var b=new Blob([JSON.stringify({version:7,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d,screenings:screeningData,sleep:sleepData,supportPlan:supportPlan},null,1)],{type:"application/json"});
+  var b=new Blob([JSON.stringify({version:8,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d,screenings:screeningData,sleep:sleepData,supportPlan:supportPlan,coping:copingData,wellbeing:wellbeingData},null,1)],{type:"application/json"});
   var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dnevnik-"+iso(new Date())+".json";
   document.body.appendChild(a);a.click();a.remove();
   $("msg3").textContent="Копия сохранена. Записей: "+n+".";unlock(["backup"]);
@@ -1839,12 +1969,17 @@ $("file").addEventListener("change",function(){
    var importedSleep=j&&j.sleep&&typeof j.sleep==="object"&&!Array.isArray(j.sleep)?j.sleep:{};
    var importedPlan=j&&j.supportPlan&&typeof j.supportPlan==="object"&&!Array.isArray(j.supportPlan)?j.supportPlan:{};
    var hasImportedPlan=Object.keys(importedPlan).some(function(k){return !!importedPlan[k]});
-   if(!c&&!importedScreens.length&&!Object.keys(importedSleep).length&&!hasImportedPlan){$("msg3").textContent="В файле нет подходящих записей или результатов опросников.";return}
-   if(!confirm("Добавить записей: "+c+(importedScreens.length?", результатов опросников: "+importedScreens.length:"")+(Object.keys(importedSleep).length?", записей сна: "+Object.keys(importedSleep).length:"")+(hasImportedPlan?", личный план поддержки (заменит текущий)": "")+(ns.length?", шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
+   var importedCoping=Array.isArray(j.coping)?j.coping:[];
+   var importedWellbeing=j&&j.wellbeing&&typeof j.wellbeing==="object"&&!Array.isArray(j.wellbeing)?j.wellbeing:{};
+   var importedMeds=Array.isArray(importedWellbeing.meds)?importedWellbeing.meds:[];
+   if(!c&&!importedScreens.length&&!Object.keys(importedSleep).length&&!hasImportedPlan&&!importedCoping.length&&!importedMeds.length){$("msg3").textContent="В файле нет подходящих записей или результатов опросников.";return}
+   if(!confirm("Добавить записей: "+c+(importedScreens.length?", результатов опросников: "+importedScreens.length:"")+(Object.keys(importedSleep).length?", записей сна: "+Object.keys(importedSleep).length:"")+(hasImportedPlan?", личный план поддержки (заменит текущий)": "")+(importedCoping.length?", оценок помощи: "+importedCoping.length:"")+(importedMeds.length?", отметок о лекарствах: "+importedMeds.length:"")+(ns.length?", шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
    var d=load();Object.keys(add).forEach(function(k){d[k]=add[k]});if(c)store(d);
    var screeningCount=window.DnevnikScreenings?window.DnevnikScreenings.importEntries(importedScreens):0;
    var sleepCount=window.DnevnikSleep?window.DnevnikSleep.importEntries(importedSleep):0;
    var planImported=hasImportedPlan&&window.DnevnikSupport?window.DnevnikSupport.importPlan(importedPlan):false;
+   var copingCount=window.DnevnikSupport?window.DnevnikSupport.importFeedback(importedCoping):0;
+   var wbCount=window.DnevnikWellbeing?window.DnevnikWellbeing.importData(importedWellbeing).meds:0;
    if(j.progress&&typeof j.progress==="object"){
     if(j.progress.ach&&typeof j.progress.ach==="object"){
      if(!cfg.ach)cfg.ach={};
@@ -1858,7 +1993,7 @@ $("file").addEventListener("change",function(){
    }
    if(ns.length){cfg.scales=cfg.scales.concat(ns);saveCfg();renderEditor();buildScales()}
    if(nt.length){cfg.tags=cfg.tags.concat(nt);saveCfg();renderTagEditor();buildChips()}
-   $("msg3").textContent="Загружено записей: "+c+", результатов опросников: "+screeningCount+", записей сна: "+sleepCount+(planImported?", план поддержки сохранён":"")+".";render();loadDay();
+   $("msg3").textContent="Загружено записей: "+c+", результатов опросников: "+screeningCount+", записей сна: "+sleepCount+(planImported?", план поддержки сохранён":"")+", оценок помощи: "+copingCount+", отметок о лекарствах: "+wbCount+".";render();loadDay();
   }catch(e){$("msg3").textContent="Не удалось прочитать файл. Нужна копия, скачанная из этого приложения."}
   inp2.value="";
  };
@@ -2027,5 +2162,6 @@ initAch();initCollection();initSystem();buildScales();renderEditor();renderTagEd
 <script src="sleep.js" defer></script>
 <script src="support.js" defer></script>
 <script src="guide.js" defer></script>
+<script src="wellbeing.js" defer></script>
 </body>
 </html>

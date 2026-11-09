@@ -18,7 +18,8 @@ var SOURCES={
  nhsBPD:{name:"NHS · Borderline personality disorder",url:"https://www.nhs.uk/mental-health/conditions/borderline-personality-disorder/overview/"},
  nhsEating:{name:"NHS · Eating disorders",url:"https://www.nhs.uk/mental-health/feelings-symptoms-behaviours/behaviours/eating-disorders/overview/"},
  nimhADHD:{name:"NIMH · ADHD",url:"https://www.nimh.nih.gov/health/publications/attention-deficit-hyperactivity-disorder-what-you-need-to-know"},
- nhsUrgent:{name:"NHS · Urgent mental health support",url:"https://www.nhs.uk/every-mind-matters/urgent-support/"}
+ nhsUrgent:{name:"NHS · Urgent mental health support",url:"https://www.nhs.uk/every-mind-matters/urgent-support/"},
+ mindPsychosis:{name:"Mind · Helping someone with psychosis",url:"https://www.mind.org.uk/information-support/types-of-mental-health-problems/psychosis/helping-someone-whos-experiencing-psychosis/"}
 };
 var conditions=[
  {
@@ -407,6 +408,28 @@ var faq=[
   summary:"Нет. Помощь имеет смысл искать и на раннем этапе.",
   steps:["Можно обратиться с вопросами о симптомах, побочных эффектах или изменениях сна и поведения.","Записи из дневника могут помочь объяснить врачу то, что трудно вспомнить на приёме."],sources:["nhsPsych","nhsAnxiety"]}
 ];
+var family=[
+ {id:"loved-depression",tag:"Депрессия",title:"Как поддерживать человека с депрессией",
+  summary:"Быть рядом, помогать с повседневным и принимать переживания всерьёз, не требуя «взять себя в руки».",
+  steps:["Спроси, какая помощь была бы сейчас посильной: еда, бытовая задача, совместная прогулка или просто тихое присутствие.","Не спорь с переживаниями и не обесценивай их фразами «другим хуже».","Предложи помочь записаться на приём, но уважай самостоятельность человека.","Если есть разговоры о смерти, прямо спроси о безопасности, помоги связаться со специалистом; при непосредственной опасности вызывай экстренную помощь."],
+  sources:["nimhDepression"]},
+ {id:"loved-mania",tag:"Мания / гипомания",title:"Если близкий необычно активен или почти не спит",
+  summary:"Не спорить и не подталкивать к импульсивным действиям. Приоритет — безопасность и ранний контакт с лечащим специалистом.",
+  steps:["Спокойно назови конкретные изменения, которые заметил(а): часы сна, быстрое принятие решений, непривычные траты или активность.","По возможности помоги сократить перегрузку и отложить большие покупки или важные решения.","Предложи связаться с лечащим врачом, напомни о заранее согласованном плане; не назначай и не меняй дозы самостоятельно.","Если человек не спит несколько ночей, опасно действует, становится сильно возбуждённым или появляются психотические симптомы — обратись за срочной медицинской помощью."],
+  sources:["nimhBipolar"]},
+ {id:"loved-psychosis",tag:"Психоз",title:"Если близкий слышит голоса или чего-то опасается",
+  summary:"Признай, что переживания могут пугать, не подтверждая и не высмеивая необычные убеждения.",
+  steps:["Говори коротко и спокойно, не повышай голос. Можно сказать: «Вижу, что тебе страшно. Я рядом».","Не спорь о том, что реально, и не соглашайся с пугающими убеждениями как с установленными фактами.","Предложи тихое место и помощь с контактом врача или кризисной службы.","Если голоса приказывают причинить вред, состояние быстро ухудшается или появилась сильная спутанность — требуется экстренная помощь."],
+  sources:["mindPsychosis","nhsVoices"]},
+ {id:"loved-panic",tag:"Паника / тревога",title:"Если у близкого паническая атака",
+  summary:"Помогают спокойный тон, возможность выбрать удобный способ поддержки и отсутствие давления.",
+  steps:["Спроси, хочет ли человек, чтобы ты остался рядом. Не трогай без согласия.","Предложи сесть, почувствовать опору или назвать предметы вокруг, но не заставляй дышать по инструкции.","Не говори «прекрати паниковать». Старайся говорить просто и уважительно.","Если физические симптомы необычные, возникли впервые или есть риск для безопасности — нужна медицинская оценка."],
+  sources:["nhsPanic"]},
+ {id:"loved-general",tag:"Для всех",title:"Как поддерживать и беречь себя",
+  summary:"Поддержка не должна превращаться в принуждение или полную ответственность за чужое здоровье.",
+  steps:["Спроси, какие действия помогают человеку, а какие нежелательны; обсудите это в спокойный момент.","Составьте совместный план на случай ухудшения только с согласия человека и, по возможности, с участием лечащего врача.","Уважай конфиденциальность и право человека принимать решения, когда он в состоянии это делать.","Заботься о собственных границах и ищи поддержку при перегрузке. При непосредственной опасности важна экстренная помощь."],
+  sources:["namiSchizo","mindPsychosis"]}
+];
 var active="conditions",query="";
 function E(tag,cls,text){
  var x=document.createElement(tag);if(cls)x.className=cls;if(text!=null)x.textContent=text;return x;
@@ -446,7 +469,7 @@ function renderCard(data,kind){
  d.appendChild(body);
  return d;
 }
-function collection(){return active==="conditions"?conditions:active==="support"?support:faq}
+function collection(){return active==="conditions"?conditions:active==="support"?support:active==="family"?family:faq}
 function searchable(d){
  return [d.title,d.summary,d.tag,d.keywords||"",d.note||"",d.urgent||""].concat((d.parts||[]).flat(),d.steps||[]).join(" ").toLocaleLowerCase("ru");
 }

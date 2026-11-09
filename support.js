@@ -4,7 +4,7 @@
  var host=document.getElementById("tab-help");
  if(!host)return;
  var $=function(id){return document.getElementById(id)};
- var KEY="dnevnik-support-plan-v1";
+ var KEY="dnevnik-support-plan-v1",FEEDBACK_KEY="dnevnik-coping-v1";
  var fields=["signs","helps","trustedName","trustedPhone","doctorName","doctorPhone"];
  var controls={signs:"helpSigns",helps:"helpHelps",trustedName:"helpTrustedName",trustedPhone:"helpTrustedPhone",doctorName:"helpDoctorName",doctorPhone:"helpDoctorPhone"};
  var sessions={
@@ -20,6 +20,18 @@
    {heading:"Дышать мягко, если хочется",text:"Сядь удобнее. Попробуй неторопливое дыхание без задержек. Если упражнение вызывает дискомфорт, пропусти его.",breath:true,hint:"Тебе не нужно попадать в ритм точно."},
    {heading:"Один маленький следующий шаг",text:"Спроси себя: «Что я могу сделать в ближайшие пять минут?» Это может быть вода, перерыв, короткое сообщение или запись тревожной мысли. Остальные вопросы можно отложить.",hint:"Если тревога часто мешает жить, полезна помощь психолога или врача."}
   ]},
+  low:{title:"Когда совсем нет сил",caption:"Одна маленькая задача — уже достаточно.",steps:[
+   {heading:"Не требуй от себя многого",text:"Можно не пытаться делать всё сразу. Отдохни или просто побудь в удобном месте. Это не проверка силы воли.",hint:"Даже если сейчас ничего не получается, помощь всё равно доступна."},
+   {heading:"Один небольшой шаг",text:"Выбери что-то одно по силам: выпить воды, перекусить, умыться или открыть окно. Можно пропустить этот шаг.",hint:"Пять минут — уже неплохой ориентир, но необязательно устанавливать время."},
+   {heading:"Найди поддержку",text:"Если получится, сообщи близкому простыми словами: «Мне сейчас трудно, можешь побыть рядом или помочь с одной задачей?»",hint:"Не нужно подробно объяснять состояние."},
+   {heading:"Проверь, насколько безопасно",text:"Если трудно есть, пить, ухаживать за собой или состояние ухудшается, обратись к специалисту. Если есть мысли о самоповреждении, попроси срочной помощи.",hint:"При непосредственной опасности нужна экстренная помощь, а не упражнения в приложении."}
+  ]},
+  voices:{title:"Когда пугают голоса или необычные переживания",caption:"Сейчас важны спокойная обстановка, безопасность и поддержка.",steps:[
+   {heading:"Найди безопасную опору",text:"Если можешь, перейди в спокойное знакомое место и уменьши шум. Не нужно спорить с переживаниями или пытаться сейчас объяснить их причину.",hint:"То, что происходит, может сильно пугать. Можно просто сконцентрироваться на настоящем."},
+   {heading:"Заметь то, что рядом",text:"Попробуй назвать несколько реальных предметов вокруг, почувствовать ноги на полу, посмотреть на дату и время. Если техника неприятна, пропусти её.",hint:"Не обязательно проверять каждую мысль или ощущение."},
+   {heading:"Свяжись с человеком, которому доверяешь",text:"Попроси близкого побыть рядом. Если голоса новые, усиливаются или мешают, как можно скорее свяжись с лечащим врачом или службой медицинской помощи.",hint:"Не прекращай и не меняй назначенные препараты самостоятельно."},
+   {heading:"Если возникла опасность",text:"Если голоса приказывают причинить вред, есть сильная спутанность, ты не можешь оставаться в безопасности или состояние быстро ухудшается, обратись за экстренной помощью.",hint:"В ЕС экстренный номер — 112. В другой стране звони в местную экстренную службу."}
+  ]},
   anger:{title:"Когда очень злишься",caption:"Главная цель сейчас — не сделать то, о чём потом пожалеешь.",steps:[
    {heading:"Пауза и расстояние",text:"Если возможно, отойди от конфликта и людей, на которых направлен гнев. Временно прекрати переписку. Если ты за рулём, остановись в безопасном месте.",hint:"Можно сказать: «Мне нужна пауза. Я вернусь к разговору позже»."},
    {heading:"Уменьши напряжение",text:"Расслабь кисти и челюсть, почувствуй опору ногами. Попробуй неторопливый выдох. Некоторым помогает спокойная прогулка в безопасном месте.",hint:"Не нужно заставлять себя немедленно успокоиться."},
@@ -34,6 +46,42 @@
   if(!p||typeof p!=="object"||Array.isArray(p))return null;
   var out={};fields.forEach(function(k){out[k]=typeof p[k]==="string"?p[k].trim().slice(0,k.toLowerCase().includes("phone")?40:600):""});
   return out;
+ }
+ function readFeedback(){
+  try{
+   var rows=JSON.parse(localStorage.getItem(FEEDBACK_KEY)||"[]");
+   if(!Array.isArray(rows))return [];
+   return rows.filter(function(x){
+    return x&&typeof x==="object"&&typeof x.date==="string"&& /^\d{4}-\d{2}-\d{2}T/.test(x.date)
+    &&typeof x.mode==="string"&&Object.prototype.hasOwnProperty.call(sessions,x.mode)
+    &&(x.rating===-1||x.rating===0||x.rating===1)
+    &&typeof x.note==="string"&&x.note.length<=160;
+   }).slice(-120).map(function(x){return {date:x.date.slice(0,30),mode:x.mode,rating:x.rating,note:x.note}});
+  }catch(e){return []}
+ }
+ function writeFeedback(rows){try{localStorage.setItem(FEEDBACK_KEY,JSON.stringify(rows.slice(-120)));return true}catch(e){return false}}
+ function renderFeedback(){
+  var list=$("helpFeedbackHistory");list.textContent="";
+  var rows=readFeedback(),groups={};
+  rows.forEach(function(x){if(!groups[x.mode])groups[x.mode]={total:0,helped:0};groups[x.mode].total++;if(x.rating===1)groups[x.mode].helped++});
+  var sorted=Object.keys(groups).sort(function(a,b){return groups[b].helped-groups[a].helped});
+  if(!sorted.length){list.appendChild(elem("p","note","Пока нет оценок. После упражнения можно отметить, было ли оно полезным."));return}
+  sorted.forEach(function(mode){
+   var v=groups[mode],label=elem("p","help-feedback-item",sessions[mode].title+" · помогло "+v.helped+" из "+v.total+" раз (по твоим отметкам)");
+   list.appendChild(label);
+  });
+ }
+ function finishMode(){
+  stopBreathing();
+  var done=state.mode;
+  state.mode=null;state.index=0;
+  $("helpSession").hidden=true;
+  $("helpWelcome").hidden=true;
+  $("helpFeedback").hidden=false;
+  $("helpFeedback").dataset.mode=done;
+  $("helpFeedbackNote").value="";
+  $("helpFeedbackMessage").textContent="";
+  $("helpFeedback").scrollIntoView({behavior:"smooth",block:"start"});
  }
  function readPlan(){
   try{var raw=localStorage.getItem(KEY);return validatePlan(raw?JSON.parse(raw):{})||validatePlan({})}
@@ -72,6 +120,7 @@
   stopBreathing();
   state.mode=mode;state.index=0;
   $("helpWelcome").hidden=true;
+  $("helpFeedback").hidden=true;
   $("helpSession").hidden=false;
   renderStep();
   $("helpSession").scrollIntoView({behavior:"smooth",block:"start"});
@@ -80,6 +129,7 @@
   stopBreathing();
   state.mode=null;state.index=0;
   $("helpSession").hidden=true;
+  $("helpFeedback").hidden=true;
   $("helpWelcome").hidden=false;
   $("helpWelcome").scrollIntoView({behavior:"smooth",block:"start"});
  }
@@ -139,11 +189,27 @@
  });
  $("helpStepNext").addEventListener("click",function(){
   if(!state.mode)return;
-  if(state.index>=sessions[state.mode].steps.length-1)exitMode();
+  if(state.index>=sessions[state.mode].steps.length-1)finishMode();
   else{state.index++;renderStep()}
  });
  $("helpSessionClose").addEventListener("click",exitMode);
  $("helpBreathStart").addEventListener("click",startBreathing);
+ document.querySelectorAll("[data-help-rating]").forEach(function(b){
+  b.addEventListener("click",function(){
+   var mode=$("helpFeedback").dataset.mode;
+   if(!sessions[mode])return;
+   var value=Number(b.dataset.helpRating);if(value!==-1&&value!==0&&value!==1)return;
+   var rows=readFeedback();
+   rows.push({date:new Date().toISOString(),mode:mode,rating:value,note:$("helpFeedbackNote").value.trim().slice(0,160)});
+   if(!writeFeedback(rows)){$("helpFeedbackMessage").textContent="Не удалось сохранить отзыв в браузере.";return}
+   renderFeedback();exitMode();
+  });
+ });
+ $("helpFeedbackSkip").addEventListener("click",exitMode);
+ $("helpClearFeedback").addEventListener("click",function(){
+  if(!confirm("Удалить все отметки о полезности упражнений?"))return;
+  if(writeFeedback([]))renderFeedback();
+ });
  $("helpOpenPlan").addEventListener("click",function(){
   var panel=$("helpPlanDetails");panel.open=true;
   panel.scrollIntoView({behavior:"smooth",block:"start"});
@@ -160,6 +226,21 @@
  });
  window.DnevnikSupport={
   exportPlan:function(){return readPlan()},
+  exportFeedback:function(){return readFeedback()},
+  importFeedback:function(rows){
+   if(!Array.isArray(rows))return 0;
+   var old=readFeedback(),existing={};
+   old.forEach(function(x){existing[x.date+"|"+x.mode]=1});
+   var count=0;
+   rows.slice(-120).forEach(function(x){
+    if(x&&typeof x.date==="string"&&/^\d{4}-\d{2}-\d{2}T/.test(x.date)&&sessions[x.mode]&&(x.rating===-1||x.rating===0||x.rating===1)){
+     var key=x.date+"|"+x.mode;
+     if(!existing[key]){old.push({date:x.date.slice(0,30),mode:x.mode,rating:x.rating,note:typeof x.note==="string"?x.note.slice(0,160):""});existing[key]=1;count++}
+    }
+   });
+   if(count&&!writeFeedback(old))return 0;
+   renderFeedback();return count;
+  },
   importPlan:function(p){
    var data=validatePlan(p);if(!data)return false;
    if(!fields.some(function(k){return data[k]}))return false;
@@ -167,5 +248,5 @@
    populatePlan();return true
   }
  };
- populatePlan();
+ populatePlan();renderFeedback();
 })();
