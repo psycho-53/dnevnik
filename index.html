@@ -801,6 +801,93 @@ textarea::placeholder{color:#7786aa}
  .help-feedback-actions button{font-size:11px}
 }
 
+
+/* UI/UX iteration 1: consistent calm design system, header and bottom navigation */
+:root{
+ --ui-bg:#080f1e;--ui-panel:#121e32;--ui-soft:#17263c;
+ --ui-border:rgba(169,190,221,.18);--ui-text:#eef5fa;
+ --ui-muted:#b0c3d6;--ui-accent:#9de1d8;--ui-accent-deep:#153b43;
+ --ui-shadow:0 12px 38px rgba(2,10,23,.2);
+ --ink:var(--ui-text);--mute:var(--ui-muted);--line:#34465d;
+ --c0:var(--ui-accent);--on:#0e2933;--btn:#1b2b42;
+}
+html{scroll-behavior:smooth}
+body{
+ background:radial-gradient(800px 470px at 9% -130px,rgba(95,131,167,.13),transparent 70%),
+            radial-gradient(680px 400px at 110% 18%,rgba(71,114,123,.11),transparent 68%),
+            var(--ui-bg);
+ color:var(--ui-text);font-size:15px;line-height:1.62;
+}
+main{max-width:804px;padding:12px 22px calc(130px + env(safe-area-inset-bottom,0px))}
+section{
+ background:linear-gradient(152deg,rgba(20,33,53,.98),rgba(15,26,45,.98));
+ border:1px solid var(--ui-border);
+ border-radius:20px;
+ box-shadow:var(--ui-shadow);
+ padding:22px;
+ margin-bottom:16px;
+}
+h1,h2,h3{color:#f1f6ff}
+h1{font-size:clamp(28px,3.8vw,36px);line-height:1.2;letter-spacing:-.045em}
+h2{font-size:19px;line-height:1.4;letter-spacing:-.025em}
+.page-head{margin:16px 0 22px}
+.page-head .sub{color:#bacbe0;line-height:1.68;margin:7px 0 0}
+.eyebrow{color:#a9c8dc;letter-spacing:.145em;font-size:10px}
+.note,.wb-intro,.help-note,.guide-note-general{color:#acbfd5}
+a{color:#afdfed}
+.btn{background:var(--ui-accent);color:#112b34;border-radius:12px;min-height:43px;padding:10px 17px;font-size:14px;font-weight:700;transition:background-color .16s,border-color .16s,transform .16s}
+.btn:hover{background:#b5efe5}
+.btn:active{transform:translateY(1px)}
+.btn.sec{background:rgba(38,58,79,.9);border:1px solid rgba(168,195,222,.24);color:#e0edf7}
+.btn.sec:hover{background:rgba(57,78,100,.94)}
+input,textarea,select{accent-color:#9de1d8}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #b5f0e6;outline-offset:3px}
+.app-topbar{
+ max-width:804px;margin:0 auto;padding:18px 22px 10px;
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.app-brand{display:flex;gap:11px;align-items:center;min-width:0}
+.app-brand-mark{
+ width:43px;height:43px;flex:none;border-radius:14px;display:grid;place-items:center;
+ background:linear-gradient(145deg,rgba(145,218,219,.2),rgba(78,129,162,.17));
+ border:1px solid rgba(149,207,218,.29);color:#b6ede9;font-size:23px;font-weight:400;
+}
+.app-brand-copy{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.app-brand-copy strong{font-size:14px;font-weight:760;letter-spacing:-.025em}
+.app-brand-copy small{font-size:11px;margin-top:3px;color:#9eb9cb}
+.app-private{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;
+ font-size:11px;white-space:nowrap;color:#bad9d6;background:rgba(71,132,131,.08);border:1px solid rgba(122,180,185,.2)}
+.app-private-dot{width:6px;height:6px;border-radius:50%;background:#9de1d8}
+#nav{
+ width:min(570px,calc(100% - 28px));left:50%;right:auto;transform:translateX(-50%);
+ bottom:calc(12px + env(safe-area-inset-bottom,0px));
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;
+ background:rgba(16,29,47,.97);border:1px solid rgba(161,195,221,.26);
+ padding:6px;border-radius:20px;box-shadow:0 16px 54px rgba(0,5,17,.56);
+ backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+}
+#nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+ flex:initial;min-width:0;min-height:57px;margin:0;padding:7px 3px;border:1px solid transparent;
+ border-radius:14px;background:transparent;color:#a7bbcf;font-size:11px;line-height:1.2;font-weight:590;
+ transition:background-color .18s,color .18s,border-color .18s}
+#nav button[hidden]{display:none!important}
+#nav button[aria-current=page]{color:#dffef8;background:rgba(98,175,167,.17);border:1px solid rgba(133,207,194,.25);font-weight:750}
+#nav button:hover:not([aria-current=page]){color:#e5f5fc;background:rgba(127,163,192,.1)}
+#nav .nav-symbol{width:22px;height:22px;display:block;flex:none}
+#toast{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+@media(max-width:560px){
+ .app-topbar{padding:14px 17px 8px}
+ main{padding:10px 15px calc(112px + env(safe-area-inset-bottom,0px))}
+ section{padding:17px;border-radius:17px}
+ .page-head{margin:14px 0 18px}
+ .app-brand-mark{width:39px;height:39px}
+ .app-private{font-size:10px;padding:7px 9px}
+ #nav{bottom:calc(8px + env(safe-area-inset-bottom,0px));width:calc(100% - 18px);border-radius:18px}
+ #nav button{min-height:58px;font-size:11px;padding:7px 0}
+ #toast{bottom:calc(90px + env(safe-area-inset-bottom,0px))}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,#nav button{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -808,6 +895,11 @@ textarea::placeholder{color:#7786aa}
  <p>Сегодня ещё нет записи. Если будет минутка, отметьте состояние. Пропустить тоже нормально.</p>
  <button class="btn sec sm" id="snooze" type="button">Не сейчас</button>
 </div>
+
+<header class="app-topbar" aria-label="Дневник состояния">
+  <div class="app-brand"><span class="app-brand-mark" aria-hidden="true">✳</span><span class="app-brand-copy"><strong>Дневник состояния</strong><small>Твоё пространство</small></span></div>
+  <span class="app-private"><span class="app-private-dot" aria-hidden="true"></span>Лично и локально</span>
+</header>
 <main>
 <div id="tab-today">
 <div class="page-head">
@@ -1337,14 +1429,13 @@ textarea::placeholder{color:#7786aa}
 <div id="repPrint"></div>
 <div id="toast" role="status" hidden></div>
 <nav id="nav" aria-label="Разделы">
-<button type="button" data-t="today" aria-current="page">Сегодня</button>
-<button type="button" data-t="help" aria-current="false">Помощь</button>
-<!-- Скрыто временно: вкладка и её данные сохранены для будущего редизайна. -->
+<button type="button" data-t="today" aria-current="page"><svg class="nav-symbol" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V6m5 12V11m5 7V4m5 14V9"/></svg><span>Сегодня</span></button>
+<button type="button" data-t="help" aria-current="false"><svg class="nav-symbol" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12c0 5-8 9-8 9S4 17 4 12a4 4 0 0 1 8 0 4 4 0 0 1 8 0Z"/></svg><span>Помощь</span></button>
+<!-- Вкладки сохранены для будущего редизайна. -->
 <button type="button" data-t="universe" aria-current="false" hidden>Вселенная</button>
-<!-- Скрыто временно: графики и отчёты остаются в коде. -->
 <button type="button" data-t="trend" aria-current="false" hidden>Динамика</button>
-<button type="button" data-t="tests" aria-current="false">Тесты</button>
-<button type="button" data-t="more" aria-current="false">Ещё</button>
+<button type="button" data-t="tests" aria-current="false"><svg class="nav-symbol" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3v3m6-3v3M9 11h6m-6 4h5"/></svg><span>Тесты</span></button>
+<button type="button" data-t="more" aria-current="false"><svg class="nav-symbol" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span>Ещё</span></button>
 </nav>
 <div class="object-modal-backdrop" id="objectModal" hidden>
  <section class="object-modal" role="dialog" aria-modal="true" aria-labelledby="objectModalTitle">
