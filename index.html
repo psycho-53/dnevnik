@@ -666,7 +666,8 @@ textarea::placeholder{color:#7786aa}
  <h2>Последние 7 дней</h2><div class="wrap"><svg class="chart" id="chart7" viewBox="0 0 640 240" role="img" aria-label="График за последние 7 дней"></svg></div>
  <div class="legend" id="legend7"></div><p class="note" id="wk" style="margin-bottom:0"></p>
 </section>
-<div class="space-hero space-hero-secondary">
+<!-- Скрытый тизер вселенной: вернуть после обновления дизайна. -->
+<div class="space-hero space-hero-secondary" hidden>
  <div class="hero-copy"><div class="hero-label">Тихий визуальный отклик</div><h2>Твоя вселенная</h2><p>Её атмосфера откликается на настроение, а новые открытия появляются постепенно — за твои достижения.</p></div>
  <div class="planet-scene" aria-hidden="true"><div class="planet-orbit"></div><div class="planet-orbit second"></div><div class="planet"></div><div class="planet-moon"></div></div>
 </div>
@@ -848,13 +849,13 @@ textarea::placeholder{color:#7786aa}
 <div id="tab-guide" hidden>
  <button class="btn sec sm guide-back" id="guideBack" type="button">← Назад в «Ещё»</button>
  <div class="page-head">
-  <div><div class="eyebrow">ПСИХИЧЕСКОЕ ЗДОРОВЬЕ · ПРОСТЫМИ СЛОВАМИ</div><h1>Справочник</h1><p class="sub">Короткие объяснения диагнозов и идеи, которые могут помочь пережить непростые моменты.</p></div>
+  <div><div class="eyebrow">ПСИХИЧЕСКОЕ ЗДОРОВЬЕ · ПРОСТЫМИ СЛОВАМИ</div><h1>Справочник</h1><p class="sub">Понятные карточки психических расстройств, практические советы и ответы на частые вопросы.</p></div>
   <div class="page-mark" aria-hidden="true">✦</div>
  </div>
  <div class="guide-banner">
-  <b>Ты больше, чем диагноз.</b>
-  <p>Похожие симптомы встречаются при разных расстройствах. Определить причину по одному признаку или тесту невозможно. Здесь можно познакомиться с терминами, а индивидуальные вопросы лучше обсуждать с лечащим специалистом.</p>
-  <p><b>Важное о шизоаффективном расстройстве:</b> это отдельный диагноз, включающий симптомы психоза и эпизоды нарушений настроения. Бывают биполярный и депрессивный типы. Ниже есть подробная карточка.</p>
+  <b>Психическое здоровье — это больше, чем диагноз.</b>
+  <p>Здесь собрана информация о разных состояниях: что они означают, как могут проявляться и какие шаги иногда помогают. Каждый человек переживает симптомы по-своему. По одной карточке или тесту диагноз определить нельзя — его уточняет специалист.</p>
+  <p>Все темы описаны по одинаковой схеме: признаки, лечение, самопомощь и ситуации, когда стоит обратиться к врачу.</p>
  </div>
  <div class="guide-switch" role="group" aria-label="Темы справочника">
   <button type="button" data-guide-view="conditions" aria-pressed="true">Расстройства</button>
@@ -952,8 +953,10 @@ textarea::placeholder{color:#7786aa}
 <div id="toast" role="status" hidden></div>
 <nav id="nav" aria-label="Разделы">
 <button type="button" data-t="today" aria-current="page">Сегодня</button>
-<button type="button" data-t="universe" aria-current="false">Вселенная</button>
-<button type="button" data-t="trend" aria-current="false">Динамика</button>
+<!-- Скрыто временно: вкладка и её данные сохранены для будущего редизайна. -->
+<button type="button" data-t="universe" aria-current="false" hidden>Вселенная</button>
+<!-- Скрыто временно: графики и отчёты остаются в коде. -->
+<button type="button" data-t="trend" aria-current="false" hidden>Динамика</button>
 <button type="button" data-t="tests" aria-current="false">Тесты</button>
 <button type="button" data-t="more" aria-current="false">Ещё</button>
 </nav>
