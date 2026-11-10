@@ -6,6 +6,7 @@ on:
       - feat/companion-five-tools-20261110
       - feat/ux-3-clarity-20261110
       - feat/ui-polish-20261110
+      - feat/cloudflare-web-analytics-20261110
   pull_request:
     paths:
       - index.html
@@ -54,7 +55,7 @@ jobs:
           assert 'function makeDoctor()' in js
           assert '.companion-shortcuts' in css
           assert "'./companion.js'" in sw and "'./companion.css'" in sw
-          assert 'dnevnik-v45' in sw
+          assert 'dnevnik-v46' in sw
           assert 'checkin.insertAdjacentElement("afterend",box)' in js
           assert 'makeDirectory()' in js and 'makeReturnLinks()' in js
           assert 'companionCalmShortcut' in js
@@ -67,6 +68,13 @@ jobs:
           assert 'polish-page-appear' in polish
           assert '@media(prefers-reduced-motion:reduce)' in polish
           assert 'Keep the view steady after saving' in html
+          assert html.count('static.cloudflareinsights.com/beacon.min.js') == 1
+          assert '342bf07a0bc54c9d8d2e428af5daa254' in html
+          assert '&quot;' not in html.split('data-cf-beacon=')[1].split('</script>')[0]
+          assert '"spa":false' in html
+          assert 'Личные отметки, ответы и заметки не отправляются в статистику посещений' in html
+          assert 'не использует аккаунты, аналитику и сторонние сервисы' not in html
+          assert 'cloudflareinsights.com' not in sw
           print('OK: UX3 and compatibility invariants passed')
           PY
       - name: Mobile browser rendering smoke test
