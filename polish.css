@@ -6,6 +6,9 @@
  to{opacity:1;transform:translate3d(0,0,0)}
 }
 main > div.ui-page-enter:not([hidden]){animation:polish-page-appear 190ms var(--polish-easing) both}
+/* The low-energy screen appears without zoom or sweeping motion. */
+@keyframes polish-calm-open{from{opacity:.45}to{opacity:1}}
+.companion-overlay:not([hidden]){animation:polish-calm-open 150ms ease-out both}
 /* Calm, consistent buttons and active navigation. */
 #nav button{transition:background-color var(--polish-speed),border-color var(--polish-speed),color var(--polish-speed),box-shadow var(--polish-speed)}
 #nav button[aria-current="page"]{box-shadow:inset 0 0 0 1px rgba(174,232,220,.075)}
@@ -73,6 +76,7 @@ button:disabled{cursor:not-allowed;opacity:.55}
 /* Motion sensitivity is a feature, not an edge case. */
 @media(prefers-reduced-motion:reduce){
  :root{--polish-speed:0ms}
+ .companion-overlay:not([hidden]),
  main > div.ui-page-enter:not([hidden]),#toast:not([hidden]),
  #tab-today .quick-save-msg:not(:empty){animation:none!important}
  :is(.btn,.btn.sec,.companion-shortcut,.companion-directory-btn,
