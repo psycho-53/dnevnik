@@ -55,6 +55,7 @@
   var elTarget=target?$(target):null;
   if(elTarget){
    if(elTarget.tagName==="DETAILS")elTarget.open=true;
+   var parentDetails=elTarget.closest("details");if(parentDetails)parentDetails.open=true;
    later(function(){elTarget.scrollIntoView({block:"start",behavior:"smooth"});if(!elTarget.hasAttribute("tabindex"))elTarget.setAttribute("tabindex","-1");elTarget.focus({preventScroll:true})});
   }
  }
@@ -113,7 +114,6 @@
    var btn=modal.querySelector('[data-calm="'+k+'"]');
    btn.insertBefore(icon(k==="checkin"?"chart":k==="helps"?"heart":"phone"),btn.firstChild);
   });
-  modal.querySelector("[data-calm]").focus; // Keep regular tab order; no automatic focus before opening.
   modal.addEventListener("click",function(e){
    var btn=e.target.closest("[data-calm]");if(!btn)return;
    if(btn.dataset.calm==="checkin"){closeCalm();go("today","scales")}
@@ -331,5 +331,7 @@
   return {events:imported};
  }
  buildHome();makeCalm();makeEvents();makeInsights();makeDoctor();
+ document.getElementById("nav").addEventListener("click",function(e){var btn=e.target.closest("button[data-t]");if(btn&&btn.dataset.t==="trend")renderInsights()});
+ document.addEventListener("visibilitychange",function(){if(!document.hidden)renderInsights()});
  window.DnevnikCompanion={exportData:exportData,importData:importData,renderInsights:renderInsights,renderEvents:renderEvents};
 })();
