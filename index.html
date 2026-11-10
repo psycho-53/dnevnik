@@ -1570,6 +1570,7 @@ main h1:focus{outline:0}
 </style>
 <link rel="stylesheet" href="companion.css">
 <link rel="stylesheet" href="polish.css">
+<link rel="stylesheet" href="feedback.css">
 </head>
 <body>
 <a class="skip-to-content" href="#app-main">Перейти к содержимому</a>
@@ -3165,7 +3166,7 @@ $("shareCopy").addEventListener("click",function(){
 $("navAdd").addEventListener("click",function(){
  showTab("today");
  if(!dateEl.value){dateEl.value=iso(new Date());loadDay()}
- var target=$("scales");
+ var target=document.querySelector("#tab-today .checkin-primary");
  target.scrollIntoView({behavior:window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
  target.setAttribute("tabindex","-1");target.focus({preventScroll:true});
 });
