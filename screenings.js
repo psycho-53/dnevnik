@@ -183,7 +183,7 @@ function render(){
  document.getElementById("screeningInfo").textContent=def.note;
  box.textContent="";
  def.items.forEach(function(q,i){
-  if(active==="pcptsd5"&&i>0&&a[0]===0)return;
+  if((active==="pcptsd5"||active==="auditc")&&i>0&&a[0]===0)return;
   var field=node("fieldset","screening-question");
   var legend=node("legend","screening-legend",(i+1)+". "+q);
   field.appendChild(legend);
@@ -208,7 +208,7 @@ function render(){
 }
 function updateProgress(){
  var a=answers[active],done=a.filter(function(v){return v!==null}).length;
- var total=a.length;if(active==="pcptsd5"&&a[0]===0){done=1;total=1}
+ var total=a.length;if((active==="pcptsd5"||active==="auditc")&&a[0]===0){done=1;total=1}
  document.getElementById("screeningProgress").textContent="Отвечено: "+done+" из "+total+". Можно пропустить опросник в любой момент.";
  document.getElementById("screeningProgressFill").style.width=Math.round(done/total*100)+"%";
  var warn=document.getElementById("screeningInlineSafety");
@@ -270,6 +270,7 @@ function history(){
 function save(){
  var a=answers[active].slice();
  if(active==="pcptsd5"&&a[0]===0)a=[0,0,0,0,0,0];
+ if(active==="auditc"&&a[0]===0)a=[0,0,0];
  var missing=a.filter(function(v){return v===null}).length;
  if(missing){
   var first=a.findIndex(function(v){return v===null});
@@ -293,11 +294,11 @@ box.addEventListener("change",function(e){
  var q=Number(input.dataset.question),v=Number(input.value);
  var labels=(defs[active].choices?defs[active].choices[q]:defs[active].options)||[];
  if(q>=0&&q<answers[active].length&&Number.isInteger(v)&&v>=0&&v<labels.length){
-  if(active==="pcptsd5"&&q===0&&answers[active][0]!==v)answers[active]=Array(defs[active].items.length).fill(null);
+  if((active==="pcptsd5"||active==="auditc")&&q===0&&answers[active][0]!==v)answers[active]=Array(defs[active].items.length).fill(null);
   answers[active][q]=v;
   document.getElementById("screeningValidation").textContent="";
   document.getElementById("screeningResultSection").hidden=true;
-  if(active==="pcptsd5"&&q===0)render();else updateProgress();
+  if((active==="pcptsd5"||active==="auditc")&&q===0)render();else updateProgress();
  }
 });
 document.querySelectorAll("[data-screening-kind]").forEach(function(b){
