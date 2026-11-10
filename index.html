@@ -1333,6 +1333,43 @@ main h1:focus{outline:0}
  .scale.mood-scale .opts button:nth-child(2) .mood-art{animation:none!important}
 }
 
+
+/* Screenings catalog v2: ten calm cards, filter chips, licensed-source disclosure */
+.screening-filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 15px}
+.screening-filters button{min-height:41px;border-radius:999px;border:1px solid rgba(153,183,209,.28);padding:8px 13px;font:inherit;font-size:12px;color:#c4d5e4;background:rgba(29,48,70,.75);cursor:pointer}
+.screening-filters button[aria-pressed="true"]{color:#0e2e35;background:#a5e4d9;border-color:#a5e4d9;font-weight:750}
+.screening-filters button:hover:not([aria-pressed="true"]){border-color:rgba(162,216,206,.6);color:#fff}
+.screening-catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.screening-catalog-card{display:flex;flex-direction:column;gap:7px;min-width:0;min-height:205px;align-items:stretch;text-align:left;
+ padding:15px 16px;border:1px solid rgba(142,185,204,.25);border-radius:17px;
+ background:linear-gradient(160deg,rgba(29,52,68,.78),rgba(19,33,54,.93));color:#e9f3fc;font:inherit;
+ box-shadow:none;cursor:pointer;text-decoration:none;transition:background .15s,border-color .15s}
+.screening-catalog-card:hover{background:linear-gradient(160deg,rgba(41,70,83,.85),rgba(28,44,65,.97));border-color:rgba(150,214,203,.55)}
+.screening-catalog-card[aria-pressed="true"]{border-color:#a4e2d5;box-shadow:inset 0 0 0 1px rgba(161,219,213,.2)}
+.screening-catalog-card[hidden]{display:none!important}
+.screening-catalog-top,.screening-catalog-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.screening-catalog-icon{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:12px;border:1px solid rgba(139,198,191,.24);background:rgba(100,155,160,.15);font-size:21px;color:#c9f2ec}
+.screening-availability{display:inline-flex;align-items:center;font-size:10px;line-height:1.35;border-radius:99px;padding:5px 8px;white-space:nowrap}
+.screening-local{color:#c1e9d9;background:rgba(75,134,112,.2)}
+.screening-external{color:#d8d7ef;background:rgba(109,109,154,.2)}
+.screening-catalog-title{font-size:15px;line-height:1.35;font-weight:760;letter-spacing:-.014em;color:#eff9fc}
+.screening-catalog-description{font-size:12px;line-height:1.5;color:#b8cbda;flex:1}
+.screening-catalog-bottom{font-size:11px;color:#a4c0d0;border-top:1px solid rgba(154,187,203,.16);padding-top:10px}
+.screening-catalog-bottom b{color:#d5eeef;font-size:12px}
+.screening-card-action{font-size:12px;color:#b4eee0;font-weight:760}
+.screening-rights-note{font-size:12px;color:#b6c9db;line-height:1.7;margin:14px 2px 10px}
+#screeningTitle{scroll-margin-top:22px}
+#tab-tests .screening-catalog-card:focus-visible,#tab-tests .screening-filters button:focus-visible{outline:3px solid #c1f2e6;outline-offset:3px}
+@media(min-width:820px){.screening-catalog{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:470px){
+ .screening-catalog{grid-template-columns:1fr;gap:9px}
+ .screening-catalog-card{min-height:154px;padding:13px 15px}
+ .screening-catalog-description{font-size:12px}
+ .screening-catalog-title{font-size:15px}
+ .screening-filters{gap:7px}
+ .screening-filters button{font-size:11px;padding:8px 10px}
+}
+
 </style>
 </head>
 <body>
@@ -1620,18 +1657,30 @@ main h1:focus{outline:0}
 
 <div id="tab-tests" hidden>
 <div class="page-head">
- <div><div class="eyebrow">ДЛЯ САМОНАБЛЮДЕНИЯ</div><h1>Самоопросники</h1><p class="sub">Можно отметить симптомы, чтобы лучше понять своё состояние и обсудить изменения со специалистом. Проходить необязательно.</p></div>
+ <div><div class="eyebrow">ДЛЯ САМОНАБЛЮДЕНИЯ</div><h1>Тесты и опросники</h1><p class="sub">Десять направлений для самонаблюдения. Шесть опросников доступны здесь, а для четырёх — проверенные страницы первоисточников.</p></div>
  <div class="page-mark" aria-hidden="true">✎</div>
 </div>
 <section>
  <h2>Что хочешь оценить?</h2>
- <div class="screening-switch">
-  <button type="button" data-screening-kind="phq9" aria-pressed="true"><b>Депрессивные симптомы</b><small>PHQ-9 · за 2 недели</small></button>
-  <button type="button" data-screening-kind="asrm" aria-pressed="false"><b>Подъём настроения и активности</b><small>По мотивам ASRM · за 7 дней</small></button>
-  <button type="button" data-screening-kind="gad7" aria-pressed="false"><b>Тревожность</b><small>GAD-7 · за 2 недели</small></button>
-  <button type="button" data-screening-kind="who5" aria-pressed="false"><b>Благополучие</b><small>По мотивам WHO-5 · за 2 недели</small></button>
+ <div class="screening-filters" role="group" aria-label="Категории опросников">
+  <button type="button" data-screening-filter="all" aria-pressed="true">Все · 10</button>
+  <button type="button" data-screening-filter="mood" aria-pressed="false">Настроение</button>
+  <button type="button" data-screening-filter="anxiety" aria-pressed="false">Тревога и стресс</button>
+  <button type="button" data-screening-filter="sleep" aria-pressed="false">Сон и внимание</button>
+  <button type="button" data-screening-filter="other" aria-pressed="false">Другие темы</button>
  </div>
- <p class="note">Опросники не заменяют консультацию и не ставят диагноз. Ответы и результаты остаются только в браузере этого устройства.</p>
+ <div class="screening-catalog" id="screeningCatalog"><button type="button" class="screening-catalog-card" data-screening-kind="phq9" data-screening-category="mood" aria-pressed="true"><span class="screening-catalog-top"><span class="screening-catalog-icon" aria-hidden="true">◉</span><span class="screening-availability screening-local">В приложении</span></span><span class="screening-catalog-title">Депрессивные симптомы</span><span class="screening-catalog-description">Настроение, интерес к делам, сон и энергия за две недели.</span><span class="screening-catalog-bottom"><b>PHQ-9</b><span>9 вопросов</span></span><span class="screening-card-action">Пройти здесь →</span></button>
+<button type="button" class="screening-catalog-card" data-screening-kind="gad7" data-screening-category="anxiety" aria-pressed="false"><span class="screening-catalog-top"><span class="screening-catalog-icon" aria-hidden="true">≈</span><span class="screening-availability screening-local">В приложении</span></span><span class="screening-catalog-title">Тревожность</span><span class="screening-catalog-description">Беспокойство, напряжение и трудности с расслаблением.</span><span class="screening-catalog-bottom"><b>GAD-7</b><span>7 вопросов</span></span><span class="screening-card-action">Пройти здесь →</span></button>
+<button type="button" class="screening-catalog-card" data-screening-kind="asrm" data-screening-category="mood" aria-pressed="false"><span class="screening-catalog-top"><span class="screening-catalog-icon" aria-hidden="true">✧</span><span class="screening-availability screening-local">В приложении</span></span><span class="screening-catalog-title">Подъём настроения и активности</span><span class="screening-catalog-description">Изменения энергии, сна, уверенности и активности.</span><span class="screening-catalog-bottom"><b>По мотивам ASRM</b><span>5 вопросов</span></span><span class="screening-card-action">Пройти здесь →</span></button>
+<button type="button" class="screening-catalog-card" data-screening-kind="who5" data-screening-category="mood" aria-pressed="false"><span class="screening-catalog-top"><span class="screening-catalog-icon" aria-hidden="true">✦</span><span class="screening-availability screening-local">В приложении</span></span><span class="screening-catalog-title">Психологическое благополучие</span><span class="screening-catalog-description">Положительные переживания и жизненная энергия.</span><span class="screening-catalog-bottom"><b>По мотивам WHO-5</b><span>5 вопросов</span></span><span class="screening-card-action">Пройти здесь →</span></button>
+<a class="screening-catalog-card" data-screening-category="sleep" href="https://eprovide.mapi-trust.org/isi-insomnia-severity-index/" target="_blank" rel="noopener noreferrer" aria-label="Проблемы со сном: открыть сведения и условия использования у первоисточника"><span class="screening-catalog-top"><span class="screening-catalog-icon" aria-hidden="true">☾</span><span class="screening-availability screening-external">Первоисточник</span></span><span class="screening-catalog-title">Проблемы со сном</span><span class="screening-catalog-description">Тяжесть бессонницы и влияние сна на жизнь.</span><span class="screening-catalog-bottom"><b>ISI</b><span>7 вопросов</span></span><span class="screening-card-action">Источник и условия ↗</span></a>
+<a class="screening-catalog-card" data-screening-category="anxiety" href="https://www.cmu.edu/dietrich/psychology/stress-immunity-disease-lab/scales/index.html" target="_blank" rel="noopener noreferrer" aria-label="Воспринимаемый стресс: открыть сведения и условия использования у первоисточника"><span class="screening-catalog-top"><span class="screening-catalog-icon" aria-hidden="true">≋</span><span class="screening-availability screening-external">Первоисточник</span></span><span class="screening-catalog-title">Воспринимаемый стресс</span><span class="screening-catalog-description">Ощущение перегрузки и потери контроля.</span><span class="screening-catalog-bottom"><b>PSS-10</b><span>10 вопросов</span></span><span class="screening-card-action">Источник и условия ↗</span></a>
+<a class="screening-catalog-card" data-screening-category="sleep" href="https://license.tov.med.nyu.edu/product/asrs6Qscreener" target="_blank" rel="noopener noreferrer" aria-label="Внимание и активность: открыть сведения и условия использования у первоисточника"><span class="screening-catalog-top"><span class="screening-catalog-icon" aria-hidden="true">⌁</span><span class="screening-availability screening-external">Первоисточник</span></span><span class="screening-catalog-title">Внимание и активность</span><span class="screening-catalog-description">Скрининг признаков СДВГ у взрослых (18+).</span><span class="screening-catalog-bottom"><b>ASRS v1.1</b><span>6 вопросов</span></span><span class="screening-card-action">Источник и условия ↗</span></a>
+<a class="screening-catalog-card" data-screening-category="other" href="https://doi.org/10.1037/1040-3590.14.4.485" target="_blank" rel="noopener noreferrer" aria-label="Навязчивые мысли и действия: открыть сведения и условия использования у первоисточника"><span class="screening-catalog-top"><span class="screening-catalog-icon" aria-hidden="true">◌</span><span class="screening-availability screening-external">Первоисточник</span></span><span class="screening-catalog-title">Навязчивые мысли и действия</span><span class="screening-catalog-description">Повторяющиеся мысли, проверки и ритуалы.</span><span class="screening-catalog-bottom"><b>OCI-R</b><span>18 вопросов</span></span><span class="screening-card-action">Источник и условия ↗</span></a>
+<button type="button" class="screening-catalog-card" data-screening-kind="pcptsd5" data-screening-category="other" aria-pressed="false"><span class="screening-catalog-top"><span class="screening-catalog-icon" aria-hidden="true">◇</span><span class="screening-availability screening-local">В приложении</span></span><span class="screening-catalog-title">Реакции на травматический опыт</span><span class="screening-catalog-description">Короткий скрининг симптомов после тяжёлых событий.</span><span class="screening-catalog-bottom"><b>PC-PTSD-5</b><span>5 + вводный</span></span><span class="screening-card-action">Пройти здесь →</span></button>
+<button type="button" class="screening-catalog-card" data-screening-kind="auditc" data-screening-category="other" aria-pressed="false"><span class="screening-catalog-top"><span class="screening-catalog-icon" aria-hidden="true">◈</span><span class="screening-availability screening-local">В приложении</span></span><span class="screening-catalog-title">Алкоголь и возможные риски</span><span class="screening-catalog-description">Частота и особенности употребления алкоголя.</span><span class="screening-catalog-bottom"><b>AUDIT-C</b><span>3 вопроса</span></span><span class="screening-card-action">Пройти здесь →</span></button></div>
+ <p class="screening-rights-note">Четыре опросника пока представлены ссылками: для ISI, PSS-10 и OCI-R необходимо разрешение на воспроизведение; ASRS доступен в официальном переводе у правообладателя. Ссылки ведут к источникам и условиям использования, не обязательно к онлайн-тесту.</p>
+ <p class="note">Опросники не ставят диагноз. Оригинальные версии, переводы и условия использования могут различаться. Ответы внутри приложения остаются только на устройстве; внешние ссылки открываются на других сайтах.</p>
  <div class="test-sleep-shortcut"><span class="test-sleep-icon" aria-hidden="true">☾</span><span><strong>Дневник сна</strong><small>Часы сна, энергия и история наблюдений</small></span><a href="#sleepDiarySection">Перейти <span aria-hidden="true">↗</span></a></div>
 </section>
 <section>
@@ -1659,6 +1708,9 @@ main h1:focus{outline:0}
  <p class="note">При необычно высокой активности, уменьшении потребности во сне и рискованных решениях лучше обратиться к специалисту. При мыслях о самоповреждении необходима отдельная оценка безопасности независимо от общей суммы.</p>
  <p class="note"><a href="https://www.phqscreeners.com/" target="_blank" rel="noopener noreferrer">Информация о PHQ</a> · <a href="https://www.psychiatry.org/File%20Library/Psychiatrists/Practice/DSM/DSM-5-TR/APA-DSM5TR-Level2ManiaAdult.pdf" target="_blank" rel="noopener noreferrer">Справка по ASRM (APA)</a></p>
  <p class="note">Источники шкал: <a href="https://www.phqscreeners.com/" target="_blank" rel="noopener noreferrer">PHQ/GAD</a> · <a href="https://www.who.int/publications/m/item/who-ucn-msd-mhe-2024.01" target="_blank" rel="noopener noreferrer">WHO-5, ВОЗ</a>. Формулировки GAD-7 и WHO-5 в приложении адаптированы, не являются официальным русским переводом.</p>
+ <p class="note">PC-PTSD-5: © VA National Center for PTSD, <a href="https://www.ptsd.va.gov/professional/assessment/screens/pc-ptsd.asp" target="_blank" rel="noopener noreferrer">описание и инструкция</a> (общественное достояние). Перевод вопросов внутри приложения адаптирован и отдельно не валидирован.</p>
+ <p class="note">AUDIT-C: <a href="https://www.gov.uk/government/publications/alcohol-use-screening-tests/guidance-on-the-5-alcohol-use-screening-tests" target="_blank" rel="noopener noreferrer">рекомендации по интерпретации</a> (Великобритания). Условия подсчёта различаются в зависимости от системы здравоохранения.</p>
+ <p class="note">ISI и PSS-10 распространяются через Mapi Research Trust; для OCI-R требуется разрешение авторов. ASRS v1.1 (6 вопросов) опубликован NYU в том числе на русском языке: использование разрешено с указанием авторства и без изменения текста. До проверки точной версии эти формы не встроены.</p>
  <p class="note">WHO-5: © World Health Organization 2024. <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/igo/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 3.0 IGO</a>. Русский текст адаптирован авторами приложения, ВОЗ не несёт ответственности за его точность и не поддерживает приложение.</p>
 </div></details></section>
 <section id="sleepDiarySection">
@@ -2705,6 +2757,16 @@ function showTab(n){
 $("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b)showTab(b.dataset.t)});
 $("openGuide").addEventListener("click",function(){showTab("guide")});
 $("todayOpenHelp").addEventListener("click",function(){showTab("help")});
+
+/* Каталог опросников: фильтрация не влияет на прохождение и историю */
+document.querySelectorAll("[data-screening-filter]").forEach(function(b){
+ b.addEventListener("click",function(){
+  var cat=b.dataset.screeningFilter;
+  document.querySelectorAll("[data-screening-filter]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b))});
+  document.querySelectorAll("#screeningCatalog [data-screening-category]").forEach(function(x){x.hidden=cat!=="all"&&x.dataset.screeningCategory!==cat});
+ });
+});
+
 $("guideBack").addEventListener("click",function(){showTab("more")});
 $("moreBackupShortcut").addEventListener("click",function(){var panel=$("exp").closest("details");if(panel){panel.open=true;panel.scrollIntoView({behavior:"smooth",block:"start"});$("exp").focus({preventScroll:true})}});
 $("openRep").addEventListener("click",function(){$("msg2").textContent="";if(Object.keys(load()).length)unlock(["report"]);var dl=$("repDlg");if(dl.showModal)dl.showModal();else dl.setAttribute("open","")});

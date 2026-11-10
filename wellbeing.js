@@ -148,11 +148,17 @@ function buildReport(){
  }
  if($("doctorTests").checked){
   selected++;
-  var records=readArr("dnevnik-screenings-v1"),names={phq9:"PHQ-9",asrm:"Активация (адапт. ASRM)",gad7:"GAD-7",who5:"Благополучие (адапт. WHO-5)"};
+  var records=readArr("dnevnik-screenings-v1"),names={phq9:"PHQ-9",asrm:"Активация (адапт. ASRM)",gad7:"GAD-7",who5:"Благополучие (адапт. WHO-5)",pcptsd5:"PC-PTSD-5 (адапт. перевод)",auditc:"AUDIT-C"};
   lines.push("САМООПРОСНИКИ");
   var qualifying=records.filter(function(r){return r&&Object.prototype.hasOwnProperty.call(names,r.kind)&&typeof r.time==="string"&&dateWithin(r.time.slice(0,10),since)&&Array.isArray(r.answers)&&r.answers.length>0&&r.answers.every(function(x){return Number.isInteger(x)&&x>=0&&x<=5})}).sort(function(a,b){return a.time.localeCompare(b.time)});
   if(!qualifying.length)lines.push("Нет результатов за период.");
-  qualifying.forEach(function(r){var total=r.answers.reduce(function(a,b){return a+b},0),max={phq9:27,asrm:20,gad7:21,who5:100}[r.kind];lines.push(r.time.slice(0,10)+": "+names[r.kind]+" — "+(r.kind==="who5"?total*4:total)+"/"+max)});
+  qualifying.forEach(function(r){
+   var total=r.answers.reduce(function(a,b){return a+b},0);
+   if(r.kind==="pcptsd5")total=r.answers[0]===0?0:r.answers.slice(1).reduce(function(a,b){return a+b},0);
+   if(r.kind==="auditc")total=r.answers.reduce(function(a,b,i){return a+(i===1?Math.max(0,b-1):b)},0);
+   var max={phq9:27,asrm:20,gad7:21,who5:100,pcptsd5:5,auditc:12}[r.kind];
+   lines.push(r.time.slice(0,10)+": "+names[r.kind]+" — "+(r.kind==="who5"?total*4:total)+"/"+max+(r.kind==="pcptsd5"&&r.answers[0]===0?" (вводный ответ «нет»)":""));
+  });
   lines.push("");
  }
  if($("doctorMeds").checked){
