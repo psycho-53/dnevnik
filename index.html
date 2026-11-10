@@ -1580,7 +1580,7 @@ main h1:focus{outline:0}
 
 <header class="app-topbar" aria-label="Дневник состояния">
   <div class="app-brand"><span class="app-brand-mark" aria-hidden="true">✳</span><span class="app-brand-copy"><strong>Дневник состояния</strong><small>Твоё пространство</small></span></div>
-  <span class="app-private"><span class="app-private-dot" aria-hidden="true"></span>Лично и локально</span>
+  <span class="app-private"><span class="app-private-dot" aria-hidden="true"></span>Записи локально</span>
 </header>
 <main id="app-main" tabindex="-1">
 <div id="tab-today">
@@ -2139,7 +2139,8 @@ main h1:focus{outline:0}
 <section class="priv">
 <details>
 <summary>Приватность</summary>
-<p>Все записи, ответы на самоопросники, дневник сна, личный план поддержки, отметки о лекарствах и оценка упражнений хранятся только в браузере этого устройства. Страница ничего не отправляет на сервер, не использует аккаунты, аналитику и сторонние сервисы. Результаты опросников могут содержать очень личную информацию.</p>
+<p>Записи, ответы на самоопросники, дневник сна, личный план поддержки, отметки о лекарствах и оценки упражнений сохраняются в браузере этого устройства. Личные отметки, ответы и заметки не отправляются в статистику посещений.</p>
+<p>Для общей статистики посещений используется Cloudflare Web Analytics: сторонний скрипт получает технические сведения о просмотре страницы и её загрузке. Мы не настраиваем отслеживание нажатий, отдельных разделов, настроения или результатов тестов. Аналитика не нужна для работы дневника, а без интернета приложение продолжает работать.</p>
 <p>Автор приложения ваших записей не видит и восстановить их не может. Поэтому делайте резервную копию.</p>
 <p>Это дневник самонаблюдения, а не медицинский инструмент и не диагностика. Если вам плохо, обратитесь к врачу или близким.</p>
 </details>
@@ -3088,5 +3089,7 @@ initAch();initCollection();initSystem();buildScales();renderEditor();renderTagEd
 <script src="guide.js" defer></script>
 <script src="wellbeing.js" defer></script>
 <script src="companion.js" defer></script>
+<!-- Cloudflare Web Analytics: only page views; no custom events or internal route tracking. -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"342bf07a0bc54c9d8d2e428af5daa254","spa":false}'></script>
 </body>
 </html>
