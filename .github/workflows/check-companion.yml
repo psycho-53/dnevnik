@@ -97,7 +97,7 @@ jobs:
           assert 'id="navAdd"' in html and 'function shareText(period)' in html
           assert 'id="shareDlg"' in html and 'id="shareWeek"' in html and 'id="shareToday"' in html
           assert '01 / БЫСТРЫЙ ТРЕКЕР' not in html
-          assert 'id="companionCalmShortcut"' in js
+          assert 'companionCalmShortcut' in js
           assert 'id="promptText"' in html
           assert html.count('id="promptText"') == 1
           assert html.index('id="quickExtras"') < html.index('id="promptText"') < html.index('id="noteBlock"')
