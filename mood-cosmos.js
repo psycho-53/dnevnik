@@ -18,7 +18,7 @@ var previousMood=-1,active=-1,lastW=0,lastH=0;
 var PALETTES={
  0:["#071025","#0b1530","#09101e","#c3d5fc"],
  1:["#190b1b","#2b0d24","#0b0a1c","#ffd8d9"],
- 2:["#11102b","#1a1040","#080c24","#dbc6ff"],
+ 2:["#231414","#45251b","#1d1015","#ffe1ae"],
  3:["#071528","#0c2340","#061324","#c1e3ff"],
  4:["#06232b","#0c2b3e","#071222","#cbfff1"],
  5:["#1c1221","#36201f","#100e23","#ffedc1"]
@@ -105,16 +105,16 @@ function drawScene(canvas,mood,w,h){
   strokes(ctx,w,h,"#ffb1b8",[ -.08,.65,.20,.28,.27,.68,.54,.29,.76,-.02,.83,.14,1.15,.29 ],.018,.26,.027);
   strokes(ctx,w,h,"#ff648e",[ -.12,.81,.19,.53,.51,.67,.72,.42,.89,.32,1.12,.57 ],.038,.15,.06);
  }else if(mood===2){
-  cloudStream(ctx,w,h,rand,{x:.16,y:.12,dx:.7,dy:.75,wave:-.32,n:125,size:.14,squash:.78,colors:["#8351c0","#b878d9","#534cae","#8d3c9d"],alpha:.20});
-  cloudStream(ctx,w,h,rand,{x:-.19,y:.66,dx:.76,dy:-.7,wave:.16,n:65,size:.16,scatterY:.2,colors:["#7a4fdb","#a165cd","#5845a7"],alpha:.2});
+  cloudStream(ctx,w,h,rand,{x:.16,y:.12,dx:.7,dy:.75,wave:-.32,n:125,size:.14,squash:.78,colors:["#aa582d","#e49a51","#bd7138","#733a29"],alpha:.18});
+  cloudStream(ctx,w,h,rand,{x:-.19,y:.66,dx:.76,dy:-.7,wave:.16,n:65,size:.16,scatterY:.2,colors:["#b45a31","#e3a35c","#86512e"],alpha:.17});
   for(var j=0;j<85;j++){
    var t=j/85,theta=1.2+t*Math.PI*3.2,rr=.04+t*.37;
    var x=w*(.53+Math.cos(theta)*rr*1.32),y=h*(.50+Math.sin(theta)*rr*.82);
    softCloud(ctx,x,y,w*(.025+t*.045),h*(.03+t*.05),theta,
-    j%3===0?"#e2a4f5":"#8154d5",.14+rand()*.1);
+    j%3===0?"#ffd09b":"#a45b32",.14+rand()*.1);
   }
-  strokes(ctx,w,h,"#cca2ff",[.04,.68,.16,.30,.46,.14,.78,.39,.94,.53,.85,.81],.019,.35,.022);
-  softCloud(ctx,w*.48,h*.40,w*.25,h*.25,0,"#bd7ddd",.25);
+  strokes(ctx,w,h,"#ffca89",[.04,.68,.16,.30,.46,.14,.78,.39,.94,.53,.85,.81],.019,.30,.022);
+  softCloud(ctx,w*.48,h*.40,w*.25,h*.25,0,"#d88b4c",.22);
  }else if(mood===3||mood===0){
   cloudStream(ctx,w,h,rand,{x:-.11,y:.55,dx:.91,dy:-.37,wave:.08,n:65,size:.17,squash:.7,colors:["#3973bc","#4a88c7","#4564a8"],alpha:.12});
   cloudStream(ctx,w,h,rand,{x:.45,y:-.2,dx:.48,dy:.6,n:34,size:.14,colors:["#3855a6","#6189c0"],alpha:.14});
