@@ -202,7 +202,7 @@
    var tab=$("tab-"+item[0]),heading=tab&&tab.querySelector("h1");
    if(!heading)return;
    var bar=el("div","companion-return-row");
-   var back=el("button","companion-return-btn","← Сегодня");
+   var back=el("button","companion-return-btn","← Трекер");
    var more=el("button","companion-return-btn","Все инструменты");
    back.type="button";more.type="button";
    back.addEventListener("click",function(){go("today")});
