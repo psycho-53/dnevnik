@@ -1568,6 +1568,7 @@ main h1:focus{outline:0}
 }
 
 </style>
+<link rel="stylesheet" href="companion.css">
 </head>
 <body>
 <a class="skip-to-content" href="#app-main">Перейти к содержимому</a>
@@ -2748,7 +2749,7 @@ function render(){
  var n7=r7.filter(function(s){return d[s]}).length;
  $("after").hidden=!n7;
  if(n7){chart(r7,d,{svg:$("chart7"),legend:$("legend7"),pulse:true});$("wk").textContent="Записей за 7 дней: "+n7+" из 7. Пропуски в порядке вещей."}
- report(r,d);hist(d);renderIns(d);hintUpdate(d);checkAch();checkCollection(d,false);renderCollection();renderJourney(d);updateCosmicMood(d);checkBanner();
+ report(r,d);hist(d);renderIns(d);hintUpdate(d);checkAch();checkCollection(d,false);renderCollection();renderJourney(d);updateCosmicMood(d);checkBanner();if(window.DnevnikCompanion)window.DnevnikCompanion.renderInsights();
  $("sub").textContent=Object.keys(d).length?"Можно отмечать не все шкалы. Пропущенные дни ничего не ломают.":"Отметь состояние в удобном темпе. Пропущенные дни ничего не ломают. Записи хранятся только на твоём устройстве.";
 }
 
@@ -2836,9 +2837,11 @@ $("exp").addEventListener("click",function(){
  var hasSupportPlan=Object.keys(supportPlan).some(function(k){return !!supportPlan[k]});
  var copingData=window.DnevnikSupport?window.DnevnikSupport.exportFeedback():[];
  var wellbeingData=window.DnevnikWellbeing?window.DnevnikWellbeing.exportData():{meds:[],settings:{}};
- if(!n&&!screeningData.length&&!Object.keys(sleepData).length&&!hasSupportPlan&&!copingData.length&&!wellbeingData.meds.length){$("msg3").textContent="Пока нет записей или результатов для копирования.";return}
+  var companionData=window.DnevnikCompanion?window.DnevnikCompanion.exportData():{events:[],home:[],prep:{}};
+  var hasCompanion=companionData.events.length||companionData.prep.changes||companionData.prep.difficult||companionData.prep.ask||(companionData.home.length&&companionData.home.join("|")!=="checkin|low|sleep|records");
+ if(!n&&!screeningData.length&&!Object.keys(sleepData).length&&!hasSupportPlan&&!copingData.length&&!wellbeingData.meds.length&&!hasCompanion){$("msg3").textContent="Пока нет записей или результатов для копирования.";return}
  try{
-  var b=new Blob([JSON.stringify({version:8,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d,screenings:screeningData,sleep:sleepData,supportPlan:supportPlan,coping:copingData,wellbeing:wellbeingData},null,1)],{type:"application/json"});
+  var b=new Blob([JSON.stringify({version:9,scales:cfg.scales,tags:cfg.tags,progress:{ach:cfg.ach||{},collection:cfg.collection||{}},entries:d,screenings:screeningData,sleep:sleepData,supportPlan:supportPlan,coping:copingData,wellbeing:wellbeingData,companion:companionData},null,1)],{type:"application/json"});
   var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="dnevnik-"+iso(new Date())+".json";
   document.body.appendChild(a);a.click();a.remove();
   $("msg3").textContent="Копия сохранена. Записей: "+n+".";unlock(["backup"]);
@@ -2866,14 +2869,17 @@ $("file").addEventListener("change",function(){
    var importedCoping=Array.isArray(j.coping)?j.coping:[];
    var importedWellbeing=j&&j.wellbeing&&typeof j.wellbeing==="object"&&!Array.isArray(j.wellbeing)?j.wellbeing:{};
    var importedMeds=Array.isArray(importedWellbeing.meds)?importedWellbeing.meds:[];
-   if(!c&&!importedScreens.length&&!Object.keys(importedSleep).length&&!hasImportedPlan&&!importedCoping.length&&!importedMeds.length){$("msg3").textContent="В файле нет подходящих записей или результатов опросников.";return}
-   if(!confirm("Добавить записей: "+c+(importedScreens.length?", результатов опросников: "+importedScreens.length:"")+(Object.keys(importedSleep).length?", записей сна: "+Object.keys(importedSleep).length:"")+(hasImportedPlan?", личный план поддержки (заменит текущий)": "")+(importedCoping.length?", оценок помощи: "+importedCoping.length:"")+(importedMeds.length?", отметок о лекарствах: "+importedMeds.length:"")+(ns.length?", шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
+   var importedCompanion=j&&j.companion&&typeof j.companion==="object"&&!Array.isArray(j.companion)?j.companion:{};
+   var hasImportedCompanion=(Array.isArray(importedCompanion.events)&&importedCompanion.events.length>0)||(Array.isArray(importedCompanion.home)&&importedCompanion.home.length>0)||(importedCompanion.prep&&typeof importedCompanion.prep==="object"&&Object.keys(importedCompanion.prep).some(function(k){return !!importedCompanion.prep[k]}));
+   if(!c&&!importedScreens.length&&!Object.keys(importedSleep).length&&!hasImportedPlan&&!importedCoping.length&&!importedMeds.length&&!hasImportedCompanion){$("msg3").textContent="В файле нет подходящих записей или результатов опросников.";return}
+   if(!confirm("Добавить записей: "+c+(importedScreens.length?", результатов опросников: "+importedScreens.length:"")+(Object.keys(importedSleep).length?", записей сна: "+Object.keys(importedSleep).length:"")+(hasImportedPlan?", личный план поддержки (заменит текущий)": "")+(importedCoping.length?", оценок помощи: "+importedCoping.length:"")+(importedMeds.length?", отметок о лекарствах: "+importedMeds.length:"")+(hasImportedCompanion?", дополнительных инструментов: да":"")+(ns.length?", шкал: "+ns.length:"")+". Записи за те же даты будут заменены. Продолжить?"))return;
    var d=load();Object.keys(add).forEach(function(k){d[k]=add[k]});if(c)store(d);
    var screeningCount=window.DnevnikScreenings?window.DnevnikScreenings.importEntries(importedScreens):0;
    var sleepCount=window.DnevnikSleep?window.DnevnikSleep.importEntries(importedSleep):0;
    var planImported=hasImportedPlan&&window.DnevnikSupport?window.DnevnikSupport.importPlan(importedPlan):false;
    var copingCount=window.DnevnikSupport?window.DnevnikSupport.importFeedback(importedCoping):0;
    var wbCount=window.DnevnikWellbeing?window.DnevnikWellbeing.importData(importedWellbeing).meds:0;
+   var companionCount=window.DnevnikCompanion?window.DnevnikCompanion.importData(importedCompanion).events:0;
    if(j.progress&&typeof j.progress==="object"){
     if(j.progress.ach&&typeof j.progress.ach==="object"){
      if(!cfg.ach)cfg.ach={};
@@ -2887,7 +2893,7 @@ $("file").addEventListener("change",function(){
    }
    if(ns.length){cfg.scales=cfg.scales.concat(ns);saveCfg();renderEditor();buildScales()}
    if(nt.length){cfg.tags=cfg.tags.concat(nt);saveCfg();renderTagEditor();buildChips()}
-   $("msg3").textContent="Загружено записей: "+c+", результатов опросников: "+screeningCount+", записей сна: "+sleepCount+(planImported?", план поддержки сохранён":"")+", оценок помощи: "+copingCount+", отметок о лекарствах: "+wbCount+".";render();loadDay();
+   $("msg3").textContent="Загружено записей: "+c+", результатов опросников: "+screeningCount+", записей сна: "+sleepCount+(planImported?", план поддержки сохранён":"")+", оценок помощи: "+copingCount+", отметок о лекарствах: "+wbCount+", событий: "+companionCount+".";render();loadDay();
   }catch(e){$("msg3").textContent="Не удалось прочитать файл. Нужна копия, скачанная из этого приложения."}
   inp2.value="";
  };
@@ -3072,5 +3078,6 @@ initAch();initCollection();initSystem();buildScales();renderEditor();renderTagEd
 <script src="support.js" defer></script>
 <script src="guide.js" defer></script>
 <script src="wellbeing.js" defer></script>
+<script src="companion.js" defer></script>
 </body>
 </html>
