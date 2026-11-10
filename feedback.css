@@ -1,0 +1,73 @@
+/* First beta feedback: simpler tracker, five-item nav and deliberate sharing. */
+#nav{grid-template-columns:repeat(5,minmax(0,1fr))}
+#nav button#navAdd{
+ gap:2px;min-width:0;min-height:58px;padding:4px 2px 5px;
+ border:1px solid transparent;border-radius:14px;
+ color:#dcf8f0;font-size:11px;font-weight:740
+}
+#nav button#navAdd .nav-add-plus{
+ display:grid;place-items:center;width:39px;height:37px;min-height:37px;
+ border-radius:12px;background:linear-gradient(130deg,#b5f0dc,#83d7d1);
+ color:#12383b;font-size:27px;line-height:1;font-weight:400;
+ box-shadow:0 4px 17px rgba(79,193,166,.18)
+}
+#nav button#navAdd:hover .nav-add-plus{background:#c8ffee}
+#nav button#navAdd:active .nav-add-plus{transform:translateY(1px)}
+#nav button#navAdd:focus-visible{outline:3px solid #b5f0e6;outline-offset:-2px}
+#tab-today .quick-head{align-items:flex-start;flex-direction:column;gap:3px}
+#tab-today .quick-head .time-chip{align-self:flex-start;margin-top:5px}
+#tab-today .checkin-date{justify-content:flex-start;align-items:center;gap:12px}
+#tab-today .checkin-date input{flex:0 1 230px;width:min(230px,100%);max-width:230px;min-width:0}
+#tab-today #quickSaveExtras.btn.sec{
+ display:flex;align-items:center;justify-content:center;min-height:57px;
+ border:1px solid rgba(192,255,233,.5);
+ border-radius:14px;background:linear-gradient(105deg,#9be2d6,#b0e8d7)!important;
+ color:#103538!important;font-size:15px;font-weight:760;
+ box-shadow:0 7px 20px rgba(87,164,148,.17)
+}
+#tab-today #quickSaveExtras.btn.sec:hover{background:linear-gradient(105deg,#b2f2e6,#c4f6e5)!important}
+#tab-today .quick-share-today{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin:9px 0 0;max-width:100%;font-size:12px}
+#tab-today #quickExtras .prompt-card{
+ display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;
+ padding:13px 14px;margin:12px 0 16px;background:rgba(40,57,91,.52);
+ border:1px solid rgba(157,183,216,.18);box-shadow:none
+}
+#tab-today #quickExtras .prompt-card > div:first-child{min-width:180px;flex:1}
+#tab-today #quickExtras .prompt-card p{font-size:13px;line-height:1.45}
+#tab-today #quickExtras .prompt-actions{justify-content:flex-start}
+#tab-today #quickExtras .prompt-actions button{min-height:41px}
+#tab-today #quickExtras #usePrompt{background:rgba(107,192,170,.19);border-color:rgba(143,218,192,.4);color:#d4f9ea}
+#tab-today #quickExtras .prompt-actions button:hover{border-color:#a9eddb}
+#after .week-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:11px}
+#after .week-head h2{margin:0}
+#after .week-head button{min-height:43px;font-size:12px}
+#shareDlg{width:min(540px,calc(100vw - 24px));max-height:calc(100dvh - 36px);padding:20px;border-radius:18px}
+#shareDlg h2{margin:0 0 7px}
+#shareDlg .note{margin:0 0 14px;line-height:1.5}
+#shareDlg .share-choices{
+ display:grid;gap:8px;margin:0 0 14px;padding:12px;
+ border:1px solid var(--line);border-radius:12px
+}
+#shareDlg .share-choices legend{padding:0 5px;font-size:13px;color:var(--mute)}
+#shareDlg .share-choices label{display:flex;align-items:center;gap:9px;min-height:36px;font-size:13px;cursor:pointer}
+#shareDlg input[type=radio]{accent-color:#9de1d8;width:18px;height:18px}
+#shareDlg #sharePreview{width:100%;min-height:175px;margin:7px 0 0;padding:12px;white-space:pre-wrap;font-size:13px;line-height:1.5}
+#shareDlg .share-actions{margin-top:11px}
+#shareDlg .share-actions button{min-height:43px}
+@media(max-width:420px){
+ #nav button#navAdd{font-size:10px;gap:1px}
+ #nav button#navAdd .nav-add-plus{width:35px;height:35px;min-height:35px;font-size:25px}
+ #tab-today .checkin-date input{flex:0 1 205px;max-width:205px}
+ #after .week-head button{font-size:11px}
+ #shareDlg{padding:15px}
+ #shareDlg .share-actions button{flex:1;padding:9px 8px;font-size:12px}
+}
+@media(max-width:345px){
+ #nav button{font-size:10px}
+ #nav button#navAdd{font-size:9px}
+ #nav button#navAdd .nav-add-plus{width:31px;height:31px;min-height:31px}
+ #tab-today .checkin-date input{flex:1;width:auto;max-width:calc(100% - 55px)}
+}
+@media(prefers-reduced-motion:reduce){
+ #nav button#navAdd .nav-add-plus{transition:none!important;transform:none!important}
+}
