@@ -1,0 +1,54 @@
+name: Check companion features
+
+on:
+  push:
+    branches:
+      - feat/companion-five-tools-20261110
+  pull_request:
+    paths:
+      - index.html
+      - companion.js
+      - companion.css
+      - sw.js
+      - .github/workflows/check-companion.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: JavaScript syntax
+        run: |
+          node --check companion.js
+          node --check mood-cosmos.js
+          node --check screenings.js
+          node --check sleep.js
+          node --check support.js
+          node --check wellbeing.js
+          node --check guide.js
+          node --check sw.js
+      - name: Integration and compatibility invariants
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          html=Path('index.html').read_text(encoding='utf-8')
+          js=Path('companion.js').read_text(encoding='utf-8')
+          css=Path('companion.css').read_text(encoding='utf-8')
+          sw=Path('sw.js').read_text(encoding='utf-8')
+          assert '<script src="companion.js" defer></script>' in html
+          assert '<link rel="stylesheet" href="companion.css">' in html
+          assert 'var KEY="dnevnik-v1",CK="dnevnik-cfg-v1"' in html
+          assert 'var COLLECTION=' in html
+          assert 'window.DnevnikCompanion.importData(importedCompanion)' in html
+          assert 'companion:companionData' in html
+          assert 'function makeCalm()' in js
+          assert 'function makeEvents()' in js
+          assert 'function makeInsights()' in js
+          assert 'function makeDoctor()' in js
+          assert '.companion-shortcuts' in css
+          assert "'./companion.js'" in sw and "'./companion.css'" in sw
+          print('OK: all integration checks passed')
+          PY
