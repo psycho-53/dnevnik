@@ -7,12 +7,14 @@ on:
       - feat/ux-3-clarity-20261110
       - feat/ui-polish-20261110
       - feat/cloudflare-web-analytics-20261110
+      - feat/first-feedback-ux-share-20261111
   pull_request:
     paths:
       - index.html
       - companion.js
       - companion.css
       - polish.css
+      - feedback.css
       - sw.js
       - .github/workflows/check-companion.yml
 
@@ -34,6 +36,18 @@ jobs:
           node --check wellbeing.js
           node --check guide.js
           node --check sw.js
+      - name: Inline app JavaScript syntax
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html=Path('index.html').read_text(encoding='utf-8')
+          scripts=re.findall(r'<script(?:(?!>).)*>(.*?)</script>',html,re.DOTALL|re.IGNORECASE)
+          inline=[s for s in scripts if 'function showTab(n)' in s]
+          assert len(inline)==1
+          Path('/tmp/dnevnik-app-inline.js').write_text(inline[0],encoding='utf-8')
+          PY
+          node --check /tmp/dnevnik-app-inline.js
       - name: Integration and compatibility invariants
         run: |
           python3 - <<'PY'
@@ -43,6 +57,7 @@ jobs:
           css=Path('companion.css').read_text(encoding='utf-8')
           sw=Path('sw.js').read_text(encoding='utf-8')
           polish=Path('polish.css').read_text(encoding='utf-8')
+          feedback=Path('feedback.css').read_text(encoding='utf-8')
           assert '<script src="companion.js" defer></script>' in html
           assert '<link rel="stylesheet" href="companion.css">' in html
           assert 'var KEY="dnevnik-v1",CK="dnevnik-cfg-v1"' in html
@@ -55,7 +70,7 @@ jobs:
           assert 'function makeDoctor()' in js
           assert '.companion-shortcuts' in css
           assert "'./companion.js'" in sw and "'./companion.css'" in sw
-          assert 'dnevnik-v46' in sw
+          assert 'dnevnik-v47' in sw
           assert 'checkin.insertAdjacentElement("afterend",box)' in js
           assert 'makeDirectory()' in js and 'makeReturnLinks()' in js
           assert 'companionCalmShortcut' in js
@@ -75,6 +90,21 @@ jobs:
           assert 'Личные отметки, ответы и заметки не отправляются в статистику посещений' in html
           assert 'не использует аккаунты, аналитику и сторонние сервисы' not in html
           assert 'cloudflareinsights.com' not in sw
+          assert '<link rel="stylesheet" href="feedback.css">' in html
+          assert "'./feedback.css'" in sw
+          assert '#nav{grid-template-columns:repeat(5' in feedback
+          assert '<span>Трекер</span>' in html
+          assert 'id="navAdd"' in html and 'function shareText(period)' in html
+          assert 'id="shareDlg"' in html and 'id="shareWeek"' in html and 'id="shareToday"' in html
+          assert '01 / БЫСТРЫЙ ТРЕКЕР' not in html
+          assert 'companionCalmShortcut' in js
+          assert 'id="promptText"' in html
+          assert html.count('id="promptText"') == 1
+          assert html.index('id="quickExtras"') < html.index('id="promptText"') < html.index('id="noteBlock"')
+          assert 'notes:' not in html.split('function shareText(period)')[1].split('function updateShare()')[0]
+          assert 'navigator.share({title:' in html
+          assert 'id="quickSaveExtras"' in html
+          assert '#tab-today #quickSaveExtras.btn.sec' in feedback
           print('OK: UX3 and compatibility invariants passed')
           PY
       - name: Mobile browser rendering smoke test
@@ -92,7 +122,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           html=Path('/tmp/dnevnik-ux-mobile.html').read_text(encoding='utf-8')
-          for node in ['id="scales"', 'id="companionHome"', 'id="companionCalmShortcut"', 'id="companionDirectory"', 'id="companionEventSection"', 'id="companionInsightSection"', 'id="companionInsightsEmpty"', 'id="companionDoctorPrep"']:
+          for node in ['id="scales"', 'id="companionHome"', 'id="companionCalmShortcut"', 'id="companionDirectory"', 'id="companionEventSection"', 'id="companionInsightSection"', 'id="companionInsightsEmpty"', 'id="companionDoctorPrep"', 'id="navAdd"', 'id="shareDlg"', 'id="shareWeek"', 'id="shareToday"']:
               assert node in html, f'Missing rendered node: {node}'
           assert html.index('id="scales"') < html.index('id="companionHome"') < html.index('id="after"'), 'Check-in is not before optional shortcuts'
           assert html.index('id="companionDirectory"') < html.index('class="guide-entry"'), 'Directory is not first in More'

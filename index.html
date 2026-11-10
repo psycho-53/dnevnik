@@ -1570,6 +1570,7 @@ main h1:focus{outline:0}
 </style>
 <link rel="stylesheet" href="companion.css">
 <link rel="stylesheet" href="polish.css">
+<link rel="stylesheet" href="feedback.css">
 </head>
 <body>
 <a class="skip-to-content" href="#app-main">Перейти к содержимому</a>
@@ -1597,7 +1598,7 @@ main h1:focus{outline:0}
  <button type="button" id="todayOpenHelp" class="today-support-button">Открыть помощь <span aria-hidden="true">↗</span></button>
 </div>
 <section class="checkin-primary" data-quick-mood="0" aria-label="Быстрый трекер состояния">
- <div class="section-head quick-head"><div><div class="eyebrow">01 / БЫСТРЫЙ ТРЕКЕР</div><h2>Три сигнала о самочувствии</h2><p class="quick-head-hint">Выбери то, что подходит сейчас. Можно пропустить любую шкалу.</p></div><span class="time-chip">Пара касаний</span></div>
+ <div class="section-head quick-head"><div><div class="eyebrow">БЫСТРЫЙ ТРЕКЕР</div><h2>Три сигнала о самочувствии</h2><p class="quick-head-hint">Выбери то, что подходит сейчас. Можно пропустить любую шкалу.</p></div><span class="time-chip">Пара касаний</span></div>
  <div class="row checkin-date"><label for="d"><b>Дата</b></label><input type="date" id="d"></div>
  <p class="checkin-record-status" id="todayRecordLabel" role="status">Можно выбрать дату и сохранить хотя бы одну отметку.</p>
  <div id="scales"></div>
@@ -1605,11 +1606,16 @@ main h1:focus{outline:0}
   <p class="quick-save-progress" id="quickSaveProgress" role="status">Достаточно одного выбора.</p>
   <button class="btn quick-save-btn" id="save" type="button"><span class="quick-save-star" aria-hidden="true">✦</span> <span id="quickSaveLabel">Сохранить состояние</span></button>
   <p class="msg quick-save-msg" id="msg" role="status"></p>
+  <button class="btn sec sm quick-share-today" id="shareToday" type="button">↗ Поделиться состоянием</button>
  </div>
  <details id="quickExtras" class="quick-extra-details">
   <summary><span class="quick-extra-symbol" aria-hidden="true">＋</span><span class="quick-extra-title">Добавить детали <small>По желанию · теги и заметка</small></span><span id="quickExtraBadge" class="quick-extra-badge">Необязательно</span></summary>
   <div class="quick-extra-content">
    <div class="scale quick-extra-tags"><b>Что было сегодня</b><small>Можно выбрать несколько факторов или не выбирать ничего.</small><div class="chips" id="chips"></div></div>
+   <div class="prompt-card">
+    <div><div class="eyebrow">МИНУТА ДЛЯ СЕБЯ</div><p id="promptText">Что сегодня помогло тебе почувствовать себя лучше?</p></div>
+    <div class="prompt-actions"><button type="button" id="nextPrompt">Другой вопрос</button><button type="button" id="usePrompt">В заметку</button></div>
+   </div>
    <div class="note-block" id="noteBlock">
     <div class="note-preview" id="notePreview" hidden><div class="note-preview-head"><b>Заметка</b><button class="btn sec sm" id="editNote" type="button">Изменить</button></div><p id="notePreviewText"></p></div>
     <div id="noteEditor" hidden><div class="note-preview-head"><label for="note"><b>Заметка</b> <span class="note">(необязательно)</span></label></div><textarea id="note" placeholder="Что повлияло: сон, лекарства, события"></textarea></div>
@@ -1621,7 +1627,7 @@ main h1:focus{outline:0}
  </details>
 </section>
 <section id="after" hidden>
- <h2>Последние 7 дней</h2><div class="wrap"><svg class="chart" id="chart7" viewBox="0 0 640 240" role="img" aria-label="График за последние 7 дней"></svg></div>
+ <div class="week-head"><h2>Последние 7 дней</h2><button class="btn sec sm" id="shareWeek" type="button">↗ Поделиться прогрессом</button></div><div class="wrap"><svg class="chart" id="chart7" viewBox="0 0 640 240" role="img" aria-label="График за последние 7 дней"></svg></div>
  <div class="legend" id="legend7"></div><p class="note" id="wk" style="margin-bottom:0"></p>
 </section>
 <!-- Скрытый тизер вселенной: вернуть после обновления дизайна. -->
@@ -1633,10 +1639,6 @@ main h1:focus{outline:0}
  <div class="stat-card"><span class="stat-value" id="totalEntries">0</span><span class="stat-label">дней наблюдений</span></div>
  <div class="stat-card"><span class="stat-value" id="weekEntries">0/7</span><span class="stat-label">за последние 7 дней</span></div>
  <div class="stat-card"><span class="stat-value" id="discoveryCount">0</span><span class="stat-label">достижений</span></div>
-</div>
-<div class="prompt-card">
- <div><div class="eyebrow">МИНУТА ДЛЯ СЕБЯ</div><p id="promptText">Что сегодня помогло тебе почувствовать себя лучше?</p></div>
- <div class="prompt-actions"><button type="button" id="nextPrompt">Другой вопрос</button><button type="button" id="usePrompt">В заметку</button></div>
 </div>
 </div>
 
@@ -2150,8 +2152,9 @@ main h1:focus{outline:0}
 <div id="repPrint"></div>
 <div id="toast" role="status" hidden></div>
 <nav id="nav" aria-label="Разделы">
-<button type="button" data-t="today" aria-current="page"><svg class="nav-symbol" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V6m5 12V11m5 7V4m5 14V9"/></svg><span>Сегодня</span></button>
+<button type="button" data-t="today" aria-current="page"><svg class="nav-symbol" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V6m5 12V11m5 7V4m5 14V9"/></svg><span>Трекер</span></button>
 <button type="button" data-t="help" aria-current="false"><svg class="nav-symbol" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12c0 5-8 9-8 9S4 17 4 12a4 4 0 0 1 8 0 4 4 0 0 1 8 0Z"/></svg><span>Помощь</span></button>
+<button type="button" id="navAdd" class="nav-add" aria-label="Добавить запись"><span class="nav-add-plus" aria-hidden="true">＋</span><span>Добавить</span></button>
 <!-- Вкладки сохранены для будущего редизайна. -->
 <button type="button" data-t="universe" aria-current="false" hidden>Вселенная</button>
 <button type="button" data-t="trend" aria-current="false" hidden>Динамика</button>
@@ -2166,6 +2169,19 @@ main h1:focus{outline:0}
   <div class="object-modal-meta"><span class="object-pill" id="objectModalRarity"></span><span class="object-pill" id="objectModalDate"></span></div>
  </section>
 </div>
+<dialog id="shareDlg" aria-labelledby="shareTitle">
+ <h2 id="shareTitle">Поделиться состоянием</h2>
+ <p class="note">Выбирай, что отправить. Текст создаётся только из сохранённых оценок: без заметок, тегов, лекарств и результатов тестов. Ничего не отправляется автоматически.</p>
+ <fieldset class="share-choices">
+  <legend>Что включить?</legend>
+  <label><input type="radio" name="sharePeriod" value="day" checked> Состояние за выбранную дату</label>
+  <label><input type="radio" name="sharePeriod" value="week"> Прогресс за 7 дней</label>
+ </fieldset>
+ <label for="sharePreview"><b>Предпросмотр сообщения</b></label>
+ <textarea id="sharePreview" rows="9" readonly spellcheck="false" placeholder="Нет сохранённой записи для выбранного периода."></textarea>
+ <p class="msg" id="shareMsg" role="status" aria-live="polite"></p>
+ <div class="row share-actions"><button class="btn" id="shareSend" type="button">Поделиться</button><button class="btn sec" id="shareCopy" type="button">Скопировать</button><button class="btn sec" id="shareClose" type="button">Закрыть</button></div>
+</dialog>
 <dialog id="repDlg" aria-label="Отчёт для врача">
 <h2>Отчёт для врача</h2>
 <p class="note" style="margin-top:0">Сводка за период, выбранный на графике. Скопируйте и отправьте сообщением или распечатайте.</p>
@@ -3061,9 +3077,99 @@ function showTab(n){
  var target=incoming.querySelector("h1");
  if(target){target.setAttribute("tabindex","-1");target.focus({preventScroll:true})}
 }
-$("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b)showTab(b.dataset.t)});
+$("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b&&b.dataset.t)showTab(b.dataset.t)});
 $("openGuide").addEventListener("click",function(){showTab("guide")});
 $("todayOpenHelp").addEventListener("click",function(){showTab("help")});
+
+/* Отправка только выбранных сохранённых оценок, без заметок и других личных данных. */
+function shareLinesForEntry(e){
+ if(!e)return [];
+ return cfg.scales.map(function(x){
+  var v=e.v[x.id],den=e.d[x.id];
+  if(!Number.isInteger(v)||!Number.isInteger(den)||den<2||v<1||v>den)return null;
+  return x.t+": "+v+" из "+den;
+ }).filter(Boolean);
+}
+function shareText(period){
+ var all=load();
+ if(period==="day"){
+  var key=dateEl.value,e=all[key],parts=shareLinesForEntry(e);
+  if(!parts.length)return "";
+  return ["Моё состояние · "+key.split("-").reverse().join("."),parts.join("\n"),"","Из личного дневника состояния"].join("\n");
+ }
+ var dates=range(7),logged=dates.filter(function(k){return shareLinesForEntry(all[k]).length>0});
+ if(!logged.length)return "";
+ var result=["Мой прогресс за 7 дней · "+dates[0].split("-").reverse().join(".")+"–"+dates[6].split("-").reverse().join("."),
+  "Отмечено дней: "+logged.length+" из 7. Пропуски не означают плохих дней.",""];
+ cfg.scales.forEach(function(x){
+  var normalized=[];
+  logged.forEach(function(k){
+   var e=all[k],v=e.v[x.id],den=e.d[x.id];
+   if(Number.isInteger(v)&&Number.isInteger(den)&&den>=2&&v>=1&&v<=den)normalized.push(1+4*(v-1)/(den-1));
+  });
+  if(normalized.length){
+   var avg=normalized.reduce(function(a,b){return a+b},0)/normalized.length;
+   result.push(x.t+": среднее "+avg.toFixed(1).replace(".",",")+" из 5 ("+normalized.length+" дн.)");
+  }
+ });
+ result.push("","Оценки по дням:");
+ logged.forEach(function(k){result.push(k.split("-").reverse().join(".")+": "+shareLinesForEntry(all[k]).join("; "))});
+ result.push("","Из личного дневника состояния");
+ return result.join("\n");
+}
+function updateShare(){
+ var radio=document.querySelector('input[name="sharePeriod"]:checked');
+ var type=radio?radio.value:"day",value=shareText(type);
+ $("sharePreview").value=value;
+ $("shareSend").disabled=!value;$("shareCopy").disabled=!value;
+ $("shareTitle").textContent=type==="week"?"Поделиться прогрессом":"Поделиться состоянием";
+ $("shareMsg").textContent=value?"":"Нет сохранённых оценок за выбранный период.";
+}
+function openShare(period){
+ var opt=document.querySelector('input[name="sharePeriod"][value="'+period+'"]');
+ if(opt)opt.checked=true;
+ updateShare();
+ var modal=$("shareDlg");
+ if(typeof modal.showModal==="function")modal.showModal();else modal.setAttribute("open","");
+}
+function closeShare(){
+ var modal=$("shareDlg");
+ if(typeof modal.close==="function")modal.close();else modal.removeAttribute("open");
+}
+$("shareToday").addEventListener("click",function(){openShare("day")});
+$("shareWeek").addEventListener("click",function(){openShare("week")});
+document.querySelectorAll('input[name="sharePeriod"]').forEach(function(node){node.addEventListener("change",updateShare)});
+$("shareClose").addEventListener("click",closeShare);
+$("shareSend").addEventListener("click",function(){
+ var value=$("sharePreview").value;if(!value)return;
+ if(navigator.share){
+  navigator.share({title:"Мой дневник состояния",text:value}).catch(function(err){
+   if(!err||err.name!=="AbortError")$("shareMsg").textContent="Не удалось открыть меню отправки. Можно скопировать текст.";
+  });
+ }else{
+  $("shareMsg").textContent="Меню отправки недоступно. Используй «Скопировать» и отправь текст самостоятельно.";
+ }
+});
+$("shareCopy").addEventListener("click",function(){
+ var value=$("sharePreview").value;if(!value)return;
+ function fallback(){
+  var input=$("sharePreview");input.focus();input.select();
+  try{
+   if(document.execCommand("copy")){$("shareMsg").textContent="Текст скопирован. Можно отправить его в мессенджер.";return}
+  }catch(e){}
+  $("shareMsg").textContent="Выдели текст в поле выше и скопируй вручную.";
+ }
+ if(navigator.clipboard&&navigator.clipboard.writeText){
+  navigator.clipboard.writeText(value).then(function(){$("shareMsg").textContent="Текст скопирован. Можно отправить его в мессенджер.";},fallback);
+ }else fallback();
+});
+$("navAdd").addEventListener("click",function(){
+ showTab("today");
+ if(!dateEl.value){dateEl.value=iso(new Date());loadDay()}
+ var target=document.querySelector("#tab-today .checkin-primary");
+ target.scrollIntoView({behavior:window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+ target.setAttribute("tabindex","-1");target.focus({preventScroll:true});
+});
 
 /* Каталог опросников: фильтрация не влияет на прохождение и историю */
 document.querySelectorAll("[data-screening-filter]").forEach(function(b){
