@@ -56,7 +56,12 @@
   if(elTarget){
    if(elTarget.tagName==="DETAILS")elTarget.open=true;
    var parentDetails=elTarget.closest("details");if(parentDetails)parentDetails.open=true;
-   later(function(){elTarget.scrollIntoView({block:"start",behavior:"smooth"});if(!elTarget.hasAttribute("tabindex"))elTarget.setAttribute("tabindex","-1");elTarget.focus({preventScroll:true})});
+   later(function(){
+    var motionOff=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    elTarget.scrollIntoView({block:"start",behavior:motionOff?"auto":"smooth"});
+    if(!elTarget.hasAttribute("tabindex"))elTarget.setAttribute("tabindex","-1");
+    elTarget.focus({preventScroll:true});
+   });
   }
  }
  function readHome(){

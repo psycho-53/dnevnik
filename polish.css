@@ -1,0 +1,87 @@
+/* UI polish — gentle feedback without visual noise. Original data and app logic unchanged. */
+:root{--polish-speed:170ms;--polish-easing:cubic-bezier(.22,.7,.25,1)}
+/* Section changes: one brief fade and lift, never a long page animation. */
+@keyframes polish-page-appear{
+ from{opacity:.86;transform:translate3d(0,6px,0)}
+ to{opacity:1;transform:translate3d(0,0,0)}
+}
+main > div.ui-page-enter:not([hidden]){animation:polish-page-appear 190ms var(--polish-easing) both}
+/* The low-energy screen appears without zoom or sweeping motion. */
+@keyframes polish-calm-open{from{opacity:.45}to{opacity:1}}
+.companion-overlay:not([hidden]){animation:polish-calm-open 150ms ease-out both}
+/* Calm, consistent buttons and active navigation. */
+#nav button{transition:background-color var(--polish-speed),border-color var(--polish-speed),color var(--polish-speed),box-shadow var(--polish-speed)}
+#nav button[aria-current="page"]{box-shadow:inset 0 0 0 1px rgba(174,232,220,.075)}
+#nav button[aria-current="page"] .nav-symbol{color:#b6f4e5}
+.btn,.btn.sec,.companion-edit-btn,.companion-secondary,.companion-calm-open,
+.companion-shortcut,.companion-directory-btn,.companion-return-btn,
+.help-mode,.screening-catalog-card,.screening-filters button,
+.tabs button,.chips button,#scales .rating-option{
+ -webkit-tap-highlight-color:transparent;
+ touch-action:manipulation;
+ transition-property:background-color,border-color,color,box-shadow,transform;
+ transition-duration:var(--polish-speed);
+ transition-timing-function:var(--polish-easing)
+}
+@media(hover:hover) and (pointer:fine){
+ .companion-edit-btn:hover,.companion-secondary:hover,
+ .companion-calm-open:hover,.companion-return-btn:hover,
+ .companion-directory-btn:hover,.tabs button:hover:not([aria-pressed="true"]),
+ .chips button:hover:not([aria-pressed="true"]){
+  border-color:rgba(158,218,213,.54);
+  background-color:rgba(54,83,108,.86)
+ }
+ .companion-shortcut:hover,.screening-catalog-card:hover,.help-mode:hover{
+  box-shadow:0 7px 21px rgba(4,14,28,.15)
+ }
+}
+@media(hover:hover) and (pointer:fine){
+ .companion-shortcut:active,.companion-directory-btn:active,
+ .companion-calm-open:active,.companion-secondary:active,
+ .companion-return-btn:active,.btn:active{transform:translateY(1px)}
+}
+button:disabled{cursor:not-allowed;opacity:.55}
+/* Consistent radius and separators across old and new tools. */
+#tab-help > section,#tab-tests > section,#tab-trend > section,#tab-more > section{
+ border-radius:18px
+}
+#tab-more details > summary,#tab-help details > summary{
+ border-radius:10px;
+ transition:color var(--polish-speed) var(--polish-easing)
+}
+#tab-more details > summary:hover,#tab-help details > summary:hover{color:#e8faf7}
+#tab-trend .companion-section,#tab-more .companion-section{
+ border-color:var(--ui-border,var(--line))
+}
+.companion-shortcuts,.companion-directory-grid{align-items:stretch}
+.companion-shortcut,.companion-directory-btn{box-shadow:inset 0 1px 0 rgba(207,238,255,.035)}
+/* Feedback: quiet positive cue, never an attention-demanding popup. */
+#msg:not(:empty),#companionEventMessage:not(:empty),#companionDoctorMessage:not(:empty),
+#companionConfigMessage:not(:empty){overflow-wrap:anywhere}
+#tab-today .quick-save-msg:not(:empty){font-weight:650}
+@keyframes polish-confirm{0%{opacity:.6}100%{opacity:1}}
+#tab-today .quick-save-msg:not(:empty){animation:polish-confirm 200ms ease-out both}
+#toast:not([hidden]){animation:polish-page-appear 170ms var(--polish-easing) both}
+/* Text inputs: unify quiet field focus without changing sizes/values. */
+#tab-more :is(input,select,textarea):focus-visible,
+#tab-tests :is(input,select,textarea):focus-visible,
+#tab-trend :is(input,select,textarea):focus-visible,
+#tab-help :is(input,select,textarea):focus-visible{
+ border-color:#9fddd5;box-shadow:0 0 0 2px rgba(127,213,201,.11)
+}
+@media(max-width:420px){
+ #tab-help > section,#tab-tests > section,#tab-trend > section,#tab-more > section{border-radius:16px}
+ .companion-directory-btn{min-height:48px}
+}
+/* Motion sensitivity is a feature, not an edge case. */
+@media(prefers-reduced-motion:reduce){
+ :root{--polish-speed:0ms}
+ .companion-overlay:not([hidden]),
+ main > div.ui-page-enter:not([hidden]),#toast:not([hidden]),
+ #tab-today .quick-save-msg:not(:empty){animation:none!important}
+ :is(.btn,.btn.sec,.companion-shortcut,.companion-directory-btn,
+ .companion-calm-open,.companion-return-btn,.screening-catalog-card,
+ .help-mode,.tabs button,.chips button,#nav button){
+  transition:none!important;transform:none!important
+ }
+}

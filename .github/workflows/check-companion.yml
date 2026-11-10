@@ -5,11 +5,13 @@ on:
     branches:
       - feat/companion-five-tools-20261110
       - feat/ux-3-clarity-20261110
+      - feat/ui-polish-20261110
   pull_request:
     paths:
       - index.html
       - companion.js
       - companion.css
+      - polish.css
       - sw.js
       - .github/workflows/check-companion.yml
 
@@ -39,6 +41,7 @@ jobs:
           js=Path('companion.js').read_text(encoding='utf-8')
           css=Path('companion.css').read_text(encoding='utf-8')
           sw=Path('sw.js').read_text(encoding='utf-8')
+          polish=Path('polish.css').read_text(encoding='utf-8')
           assert '<script src="companion.js" defer></script>' in html
           assert '<link rel="stylesheet" href="companion.css">' in html
           assert 'var KEY="dnevnik-v1",CK="dnevnik-cfg-v1"' in html
@@ -51,13 +54,19 @@ jobs:
           assert 'function makeDoctor()' in js
           assert '.companion-shortcuts' in css
           assert "'./companion.js'" in sw and "'./companion.css'" in sw
-          assert 'dnevnik-v44' in sw
+          assert 'dnevnik-v45' in sw
           assert 'checkin.insertAdjacentElement("afterend",box)' in js
           assert 'makeDirectory()' in js and 'makeReturnLinks()' in js
           assert 'companionCalmShortcut' in js
           assert 'companionInsightsEmpty' in js
           assert 'n==="trend"||n==="universe"' in html
           assert '.companion-directory-btn' in css
+          assert '<link rel="stylesheet" href="polish.css">' in html
+          assert "'./polish.css'" in sw
+          assert 'ui-page-enter' in html
+          assert 'polish-page-appear' in polish
+          assert '@media(prefers-reduced-motion:reduce)' in polish
+          assert 'Keep the view steady after saving' in html
           print('OK: UX3 and compatibility invariants passed')
           PY
       - name: Mobile browser rendering smoke test

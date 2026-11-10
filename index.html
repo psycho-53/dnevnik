@@ -1569,6 +1569,7 @@ main h1:focus{outline:0}
 
 </style>
 <link rel="stylesheet" href="companion.css">
+<link rel="stylesheet" href="polish.css">
 </head>
 <body>
 <a class="skip-to-content" href="#app-main">Перейти к содержимому</a>
@@ -2381,7 +2382,7 @@ $("save").addEventListener("click",function(){
  if(primary){primary.classList.remove("quick-saved");void primary.offsetWidth;primary.classList.add("quick-saved");
   setTimeout(function(){primary.classList.remove("quick-saved")},1000)}
  updateQuickState();render();
- try{$("after").scrollIntoView({behavior:"smooth",block:"nearest"})}catch(e){}
+ /* Keep the view steady after saving: confirmation appears beside the save button. */
 });
 
 /* ---------- график, записи, отчёт ---------- */
@@ -3042,14 +3043,21 @@ $("achOn").addEventListener("change",function(){cfg.achOn=this.checked;saveCfg()
 
 /* ---------- разделы и отчёт ---------- */
 function showTab(n){
- if(!document.getElementById("tab-"+n))return;
+ var incoming=document.getElementById("tab-"+n);
+ if(!incoming)return;
  ["today","help","universe","trend","tests","more","guide"].forEach(function(t){
   $("tab-"+t).hidden=t!==n;
   var navButton=document.querySelector('#nav button[data-t="'+t+'"]');
   if(navButton)navButton.setAttribute("aria-current",t===n||(t==="more"&&(n==="guide"||n==="trend"||n==="universe"))?"page":"false");
  });
  window.scrollTo(0,0);
- var target=$("tab-"+n).querySelector("h1");
+ incoming.classList.remove("ui-page-enter");
+ /* Reduced-motion users get an immediate section change. */
+ if(!window.matchMedia||!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+  void incoming.offsetWidth;
+  incoming.classList.add("ui-page-enter");
+ }
+ var target=incoming.querySelector("h1");
  if(target){target.setAttribute("tabindex","-1");target.focus({preventScroll:true})}
 }
 $("nav").addEventListener("click",function(e){var b=e.target.closest("button");if(b)showTab(b.dataset.t)});
