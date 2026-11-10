@@ -1517,6 +1517,13 @@ main h1:focus{outline:0}
  #tab-today .quick-extra-symbol,#tab-today .quick-save-btn{transition:none}
 }
 
+
+/* Quick tracker 2.0 polish: visible mood atmosphere and custom-scale safety */
+#tab-today .checkin-primary::before{z-index:0}
+#tab-today .checkin-primary>*{position:relative;z-index:1}
+#tab-today #scales>.scale:not(.mood-scale):not(.quick-meter){grid-column:1/-1}
+#tab-today .quick-extra-details>summary:focus-visible{outline:3px solid #b5eee1;outline-offset:-3px}
+
 </style>
 </head>
 <body>
@@ -2839,9 +2846,9 @@ $("chips").addEventListener("click",function(e){
  var b=e.target.closest("button");if(!b)return;
  if(b.dataset.add){
   var n=(prompt("Название фактора, например «Прогулка»")||"").trim().slice(0,30);if(!n)return;
-  var t={id:"t"+Date.now().toString(36),t:n};cfg.tags.push(t);curT.push(t.id);saveCfg();buildChips();renderTagEditor();return;
+  var t={id:"t"+Date.now().toString(36),t:n};cfg.tags.push(t);curT.push(t.id);saveCfg();buildChips();updateQuickState();renderTagEditor();return;
  }
- var i=curT.indexOf(b.dataset.id);if(i>=0)curT.splice(i,1);else curT.push(b.dataset.id);buildChips();
+ var i=curT.indexOf(b.dataset.id);if(i>=0)curT.splice(i,1);else curT.push(b.dataset.id);buildChips();updateQuickState();
 });
 function renderTagEditor(){
  var b=$("tedit");b.textContent="";
