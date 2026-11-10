@@ -79,9 +79,21 @@
  }
  function buildHome(){
   var box=el("section","companion-section");box.id="companionHome";
-  box.innerHTML='<div class="companion-top"><div><div class="companion-visual-title">МОИ БЫСТРЫЕ ДЕЙСТВИЯ</div><h2>Что сейчас пригодится?</h2><p>Только нужные инструменты. Можно поменять в любой момент.</p></div><button type="button" id="companionConfigToggle" class="companion-edit-btn" aria-expanded="false" aria-controls="companionConfig">Настроить</button></div><div class="companion-shortcuts" id="companionShortcuts"></div><div id="companionConfig" class="companion-config" hidden><p>Выбери от одного до четырёх действий.</p><div id="companionPicks" class="companion-picks"></div><p class="companion-config-message" id="companionConfigMessage" role="status"></p><div class="companion-actions"><button type="button" id="companionConfigSave" class="companion-secondary">Применить</button><button type="button" id="companionConfigReset" class="companion-secondary">Вернуть как было</button></div></div>';
-  var ref=todayPanel.querySelector(".today-support-row");
-  if(ref)todayPanel.insertBefore(box,ref);else todayPanel.appendChild(box);
+  box.innerHTML='<div class="companion-top"><div><div class="companion-visual-title">КОГДА НУЖНО ЧТО-ТО ЕЩЁ</div><h2>Под рукой</h2><p>Твои быстрые переходы. Можно выбрать другие.</p></div><button type="button" id="companionConfigToggle" class="companion-edit-btn" aria-expanded="false" aria-controls="companionConfig">Настроить</button></div><div class="companion-shortcuts" id="companionShortcuts"></div><div id="companionConfig" class="companion-config" hidden><p>Выбери от одного до четырёх действий.</p><div id="companionPicks" class="companion-picks"></div><p class="companion-config-message" id="companionConfigMessage" role="status"></p><div class="companion-actions"><button type="button" id="companionConfigSave" class="companion-secondary">Применить</button><button type="button" id="companionConfigReset" class="companion-secondary">Вернуть как было</button></div></div>';
+  /* Keep the three daily scales first. Support and shortcuts follow the check-in. */
+  var checkin=todayPanel.querySelector(".checkin-primary"),support=todayPanel.querySelector(".today-support-row");
+  if(checkin){
+   checkin.insertAdjacentElement("afterend",box);
+   if(support)checkin.insertAdjacentElement("afterend",support);
+  }else todayPanel.appendChild(box);
+  var header=todayPanel.querySelector(".page-head > div");
+  if(header&&!document.getElementById("companionCalmShortcut")){
+   var calm=el("button","companion-calm-open","♡ Сегодня нет сил");
+   calm.type="button";calm.id="companionCalmShortcut";
+   calm.setAttribute("aria-haspopup","dialog");
+   calm.addEventListener("click",openCalm);
+   header.appendChild(calm);
+  }
   var pickBox=$("companionPicks");
   Object.keys(HOME_ITEMS).forEach(function(k){
    var row=el("label","companion-pick"),inp=el("input");inp.type="checkbox";inp.value=k;inp.checked=readHome().indexOf(k)>=0;row.appendChild(inp);row.appendChild(el("span",null,HOME_ITEMS[k].label));pickBox.appendChild(row);
@@ -148,12 +160,51 @@
   if(id==="low"){openCalm();return}
   if(id==="checkin"){go("today","scales");return}
   if(id==="sleep"){go("tests","sleepDiarySection");return}
-  if(id==="records"){go("trend","hist");return}
+  if(id==="records"){go("trend","companionInsightSection");return}
   if(id==="events"){go("trend","companionEventSection");return}
   if(id==="doctor"){go("more","doctorSection");return}
   if(id==="meds"){go("more","medSection");return}
   if(id==="universe"){go("universe","systemSvg");return}
   if(id==="tests"){go("tests","screeningCatalog");return}
+ }
+ function makeDirectory(){
+  var more=$("tab-more");
+  if(!more)return;
+  var section=el("section","companion-section companion-directory");
+  section.id="companionDirectory";
+  section.innerHTML='<div class="companion-visual-title">БЫСТРАЯ НАВИГАЦИЯ</div><h2>Куда перейти?</h2><p class="companion-micro">Нужные разделы в одно касание, без поиска в длинных настройках.</p><div class="companion-directory-grid" id="companionDirectoryGrid"></div>';
+  var targets=[
+   ["records","Мои записи"],["events","Журнал событий"],["sleep","Дневник сна"],
+   ["meds","Лекарства"],["doctor","Сводка врачу"],["universe","Моя вселенная"]
+  ];
+  var grid=section.querySelector("#companionDirectoryGrid");
+  targets.forEach(function(item){
+   var btn=el("button","companion-directory-btn");
+   btn.type="button";btn.dataset.action=item[0];
+   btn.appendChild(icon(HOME_ITEMS[item[0]].icon));
+   btn.appendChild(el("span",null,item[1]));
+   grid.appendChild(btn);
+  });
+  var guide=more.querySelector(".guide-entry");
+  if(guide)more.insertBefore(section,guide);else more.appendChild(section);
+  grid.addEventListener("click",function(e){
+   var btn=e.target.closest("button[data-action]");
+   if(btn)openShortcut(btn.dataset.action);
+  });
+ }
+ function makeReturnLinks(){
+  [["trend","МОИ ЗАПИСИ"],["universe","МОЯ ВСЕЛЕННАЯ"]].forEach(function(item){
+   var tab=$("tab-"+item[0]),heading=tab&&tab.querySelector("h1");
+   if(!heading)return;
+   var bar=el("div","companion-return-row");
+   var back=el("button","companion-return-btn","← Сегодня");
+   var more=el("button","companion-return-btn","Все инструменты");
+   back.type="button";more.type="button";
+   back.addEventListener("click",function(){go("today")});
+   more.addEventListener("click",function(){go("more","companionDirectory")});
+   bar.appendChild(back);bar.appendChild(more);
+   heading.insertAdjacentElement("afterend",bar);
+  });
  }
  function cleanEvent(row){
   if(!row||typeof row!=="object"||Array.isArray(row))return null;
@@ -252,13 +303,16 @@
   var list=$("companionInsights");if(!list)return;
   list.textContent="";
   insightsText().forEach(function(t){list.appendChild(el("li",null,t))});
+  var empty=$("companionInsightsEmpty");
+  if(empty)empty.hidden=dailyRows(14).length>0;
  }
  function makeInsights(){
   var box=el("section","companion-section");
   box.id="companionInsightSection";
-  box.innerHTML='<div class="companion-visual-title">ДИНАМИКА БЕЗ СЛОЖНЫХ ГРАФИКОВ</div><h2>Что видно в моих записях?</h2><p class="companion-micro">Короткие наблюдения по последним 14 дням. Только то, что ты сам(а) отметил(а), без диагноза или прогнозов.</p><ul id="companionInsights" class="companion-insights" aria-live="polite"></ul><p class="companion-note">Совпадения не доказывают причину. Если тебя что-то беспокоит, покажи данные специалисту.</p>';
+  box.innerHTML='<div class="companion-visual-title">ДИНАМИКА БЕЗ СЛОЖНЫХ ГРАФИКОВ</div><h2>Что видно в моих записях?</h2><p class="companion-micro">Короткие наблюдения по последним 14 дням. Только то, что ты сам(а) отметил(а), без диагноза или прогнозов.</p><ul id="companionInsights" class="companion-insights" aria-live="polite"></ul><div class="companion-empty" id="companionInsightsEmpty" hidden><span>Начни с одной отметки — этого достаточно.</span><button type="button" id="companionEmptyCheckin" class="companion-secondary">Отметить состояние</button></div><p class="companion-note">Совпадения не доказывают причину. Если тебя что-то беспокоит, покажи данные специалисту.</p>';
   var oldInsights=$("ins"),section=oldInsights?oldInsights.closest("section"):null;
   if(section)section.parentNode.insertBefore(box,section);else trendPanel.appendChild(box);
+  $("companionEmptyCheckin").addEventListener("click",function(){go("today","scales")});
   renderInsights();
  }
  function readPrep(){
@@ -330,7 +384,7 @@
   renderEvents();renderInsights();renderHome();
   return {events:imported};
  }
- buildHome();makeCalm();makeEvents();makeInsights();makeDoctor();
+ buildHome();makeCalm();makeDirectory();makeReturnLinks();makeEvents();makeInsights();makeDoctor();
  document.getElementById("nav").addEventListener("click",function(e){var btn=e.target.closest("button[data-t]");if(btn&&btn.dataset.t==="trend")renderInsights()});
  document.addEventListener("visibilitychange",function(){if(!document.hidden)renderInsights()});
  window.DnevnikCompanion={exportData:exportData,importData:importData,renderInsights:renderInsights,renderEvents:renderEvents};

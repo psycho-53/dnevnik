@@ -1,7 +1,7 @@
-/* Дневник состояния · кэш v43
+/* Дневник состояния · кэш v44
    Для HTML сначала сеть: обновления интерфейса не застревают в старом кэше.
    При отсутствии сети — сохранённая страница. */
-const CACHE = 'dnevnik-v43';
+const CACHE = 'dnevnik-v44';
 const PRECACHE = [
   './', './index.html', './universe-prototype.html',
   './manifest.webmanifest', './companion.css', './companion.js', './mood-cosmos.js', './screenings.js', './sleep.js', './support.js', './guide.js', './wellbeing.js', './favicon-32.png', './icon-192.png', './icon-512.png',

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feat/companion-five-tools-20261110
+      - feat/ux-3-clarity-20261110
   pull_request:
     paths:
       - index.html
@@ -50,5 +51,33 @@ jobs:
           assert 'function makeDoctor()' in js
           assert '.companion-shortcuts' in css
           assert "'./companion.js'" in sw and "'./companion.css'" in sw
-          print('OK: all integration checks passed')
+          assert 'dnevnik-v44' in sw
+          assert 'checkin.insertAdjacentElement("afterend",box)' in js
+          assert 'makeDirectory()' in js and 'makeReturnLinks()' in js
+          assert 'companionCalmShortcut' in js
+          assert 'companionInsightsEmpty' in js
+          assert 'n==="trend"||n==="universe"' in html
+          assert '.companion-directory-btn' in css
+          print('OK: UX3 and compatibility invariants passed')
+          PY
+      - name: Mobile browser rendering smoke test
+        run: |
+          set -e
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/dnevnik-ux-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          sleep 2
+          CHROME="$(command -v google-chrome || command -v chromium || true)"
+          if [ -z "$CHROME" ]; then
+            echo "No headless Chromium available"; exit 1
+          fi
+          "$CHROME" --headless --disable-gpu --no-sandbox --disable-dev-shm-usage --virtual-time-budget=4500 --window-size=390,844 --dump-dom http://127.0.0.1:8765/index.html > /tmp/dnevnik-ux-mobile.html
+          python3 - <<'PY'
+          from pathlib import Path
+          html=Path('/tmp/dnevnik-ux-mobile.html').read_text(encoding='utf-8')
+          for node in ['id="scales"', 'id="companionHome"', 'id="companionCalmShortcut"', 'id="companionDirectory"', 'id="companionEventSection"', 'id="companionInsightSection"', 'id="companionInsightsEmpty"', 'id="companionDoctorPrep"']:
+              assert node in html, f'Missing rendered node: {node}'
+          assert html.index('id="scales"') < html.index('id="companionHome"') < html.index('id="after"'), 'Check-in is not before optional shortcuts'
+          assert html.index('id="companionDirectory"') < html.index('class="guide-entry"'), 'Directory is not first in More'
+          print('Rendered mobile DOM passed: check-in is first, all five tools are mounted')
           PY

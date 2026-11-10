@@ -1839,7 +1839,8 @@ main h1:focus{outline:0}
 </div>
 
 <div id="tab-trend" hidden>
-<h1>Динамика</h1>
+<h1>Мои записи</h1>
+<p class="sub">Наблюдения, отдельные события и история отмеченных дней.</p>
 <section>
 <div class="row" style="justify-content:space-between"><h2 style="margin:0">График</h2>
 <div class="tabs row" id="tabs"><button type="button" data-n="7">7 дн.</button><button type="button" data-n="14">14 дн.</button><button type="button" data-n="30">30 дн.</button></div></div>
@@ -3045,7 +3046,7 @@ function showTab(n){
  ["today","help","universe","trend","tests","more","guide"].forEach(function(t){
   $("tab-"+t).hidden=t!==n;
   var navButton=document.querySelector('#nav button[data-t="'+t+'"]');
-  if(navButton)navButton.setAttribute("aria-current",t===n||(t==="more"&&n==="guide")?"page":"false");
+  if(navButton)navButton.setAttribute("aria-current",t===n||(t==="more"&&(n==="guide"||n==="trend"||n==="universe"))?"page":"false");
  });
  window.scrollTo(0,0);
  var target=$("tab-"+n).querySelector("h1");
