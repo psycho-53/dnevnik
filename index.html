@@ -1524,6 +1524,49 @@ main h1:focus{outline:0}
 #tab-today #scales>.scale:not(.mood-scale):not(.quick-meter){grid-column:1/-1}
 #tab-today .quick-extra-details>summary:focus-visible{outline:3px solid #b5eee1;outline-offset:-3px}
 
+
+/* Быстрый чек-ин 2.0: крупные иконки, доступное управление, старый формат данных. */
+#scales .rating-scale{margin:18px 0 20px}
+#scales .rating-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:5px}
+#scales .rating-heading b{font-size:15px;margin:0}
+#scales .rating-current{font-size:12px;font-weight:700;color:#a9b8ea;text-align:right;max-width:45%;line-height:1.35}
+#scales .rating-scale small{margin-bottom:11px;font-size:12px;color:var(--mute)}
+#scales .rating-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+#scales .rating-options .rating-option{
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+ min-width:0;min-height:78px;padding:10px 4px 8px;border-radius:15px;
+ border:1px solid rgba(144,162,220,.26);
+ background:linear-gradient(145deg,rgba(38,50,84,.84),rgba(18,30,58,.84));
+ color:#b5c3e5;cursor:pointer;box-shadow:none;transition:background .16s,border-color .16s,transform .16s,box-shadow .16s;
+ -webkit-tap-highlight-color:transparent
+}
+#scales .rating-options .rating-option .rating-icon{width:34px;height:34px;display:grid;place-items:center;line-height:1}
+#scales .rating-options .rating-option svg{width:30px;height:30px;display:block}
+#scales .rating-options .rating-option .rating-number{display:block;margin:0;font-size:11px;font-weight:800;line-height:1;color:inherit}
+#scales .rating-options .rating-option:hover{border-color:rgba(163,179,255,.55);background:rgba(58,76,119,.45)}
+#scales .rating-options .rating-option[aria-pressed=true]{
+ background:linear-gradient(155deg,rgba(106,126,242,.33),rgba(45,59,118,.45));
+ border-color:#92a3ff;color:#eef2ff;
+ box-shadow:0 0 0 1px rgba(146,163,255,.27),0 6px 18px rgba(45,59,118,.2);
+ transform:translateY(-1px)
+}
+#scales .rating-options[data-id="m"] .rating-option[data-v="1"][aria-pressed=true]{background:rgba(204,44,71,.30);border-color:#fc586f;color:#ffc1ca}
+#scales .rating-options[data-id="m"] .rating-option[data-v="2"][aria-pressed=true]{background:rgba(213,112,33,.28);border-color:#f5a355;color:#ffcf98}
+#scales .rating-options[data-id="m"] .rating-option[data-v="3"][aria-pressed=true]{background:rgba(119,134,163,.24);border-color:#a9bbdb;color:#dae5f7}
+#scales .rating-options[data-id="m"] .rating-option[data-v="4"][aria-pressed=true]{background:rgba(46,149,125,.24);border-color:#6ddac2;color:#b3f0e4}
+#scales .rating-options[data-id="m"] .rating-option[data-v="5"][aria-pressed=true]{background:rgba(55,139,203,.26);border-color:#83cbff;color:#c7eaff}
+#scales .rating-options .rating-option:focus-visible{outline:3px solid #b4c0ff;outline-offset:3px}
+@media(max-width:420px){
+ #scales .rating-options{gap:5px}
+ #scales .rating-options .rating-option{min-height:70px;border-radius:12px;padding:8px 2px}
+ #scales .rating-options .rating-option .rating-icon{width:29px;height:29px}
+ #scales .rating-options .rating-option svg{width:26px;height:26px}
+ #scales .rating-heading{align-items:flex-start}
+}
+@media(prefers-reduced-motion:reduce){
+ #scales .rating-options .rating-option{transition:none;transform:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -2191,50 +2234,84 @@ function store(d){wr(KEY,JSON.stringify(d))}
 var dateEl=$("d");dateEl.value=iso(new Date());dateEl.max=iso(new Date());
 
 /* ---------- экран записи ---------- */
+/* Иконки выполнены встроенным SVG: без внешних загрузок и зависимости от emoji. */
+var RATING_GLYPHS={
+ m:[
+  '<circle cx="12" cy="12" r="9"/><path d="M8 9h.01 M16 9h.01" stroke-width="3"/><path d="M7.5 17q4.5-6 9 0"/>',
+  '<circle cx="12" cy="12" r="9"/><path d="M8 9h.01 M16 9h.01" stroke-width="3"/><path d="M8 16q4-3 8 0"/>',
+  '<circle cx="12" cy="12" r="9"/><path d="M8 9h.01 M16 9h.01" stroke-width="3"/><path d="M8.5 16h7"/>',
+  '<circle cx="12" cy="12" r="9"/><path d="M8 9h.01 M16 9h.01" stroke-width="3"/><path d="M8 15q4 5 8 0"/>',
+  '<circle cx="12" cy="12" r="9"/><path d="M7.5 9l2 1.5 M16.5 9l-2 1.5"/><path d="M7.5 14.5q4.5 7 9 0"/>'
+ ],
+ a:[
+  '<rect x="2" y="6" width="18" height="12" rx="2.5"/><path d="M22 10v4"/><rect x="5" y="9" width="2" height="6" rx=".5" fill="currentColor" stroke="none"/>',
+  '<rect x="2" y="6" width="18" height="12" rx="2.5"/><path d="M22 10v4"/><rect x="5" y="9" width="4" height="6" rx=".7" fill="currentColor" stroke="none"/>',
+  '<rect x="2" y="6" width="18" height="12" rx="2.5"/><path d="M22 10v4"/><rect x="5" y="9" width="7" height="6" rx=".7" fill="currentColor" stroke="none"/>',
+  '<rect x="2" y="6" width="18" height="12" rx="2.5"/><path d="M22 10v4"/><rect x="5" y="9" width="10" height="6" rx=".7" fill="currentColor" stroke="none"/>',
+  '<rect x="2" y="6" width="18" height="12" rx="2.5"/><path d="M22 10v4"/><rect x="5" y="9" width="12" height="6" rx=".7" fill="currentColor" stroke="none"/><path d="M12 3l-1 3 M13 18l-1 3"/>'
+ ],
+ p:[
+  '<path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z"/>',
+  '<path d="M6.5 17c1 1 2.6 1.6 4.6 1.5l3.6-4.1c.7-.8.5-2.1-.5-2.8l-2.4-1.4c-1-.6-2.2-.3-2.8.7l-1.6 2.6"/><circle cx="16.8" cy="5.5" r="1.5"/><path d="M15.5 9l2.4 2.5"/>',
+  '<circle cx="13" cy="4.5" r="2"/><path d="M9 21l2-6 3 2 2 4 M8 12l4-4 3 3 3 1 M12 8l-1.5 6"/>',
+  '<circle cx="14" cy="4.5" r="2"/><path d="M7 21l4-5 3 1 4 4 M7 11l5-4 3 4 4 2 M12 8l-2 6 M10 14l-4 1"/>',
+  '<path d="M3 17h4l3-8 4 11 3-7h4"/><path d="M12 3l1.5 3L17 7.5l-3.5 1.5L12 12l-1.5-3L7 7.5l3.5-1.5Z"/>'
+ ]
+};
+function ratingIcon(id,k){
+ var span=el("span","rating-icon");
+ span.setAttribute("aria-hidden","true");
+ span.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+RATING_GLYPHS[id][k-1]+'</svg>';
+ return span;
+}
 function buildScales(){
  var box=$("scales");box.textContent="";
- var oldMoodLabels=["очень плохо","плохо","так себе","хорошо","отлично"];
- var newMoodLabels=["Очень тяжело","Тяжело","Нейтрально","Хорошо","Отлично"];
+ var previousMoodLabels=["очень плохо","плохо","так себе","хорошо","отлично"];
+ var currentMoodLabels=["Очень тяжело","Тяжело","Нейтрально","Хорошо","Отлично"];
  cfg.scales.forEach(function(x,i){
-  var isMood=x.id==="m"&&x.n===5;
-  var isQuickMeter=(x.id==="a"||x.id==="p")&&x.n===5;
-  var w=el("div","scale"+(isMood?" mood-scale":"")+(isQuickMeter?" quick-meter quick-meter-"+x.id:""));
+  var isVisual=(x.id==="m"||x.id==="a"||x.id==="p")&&x.n===5;
+  var w=el("div","scale"+(isVisual?" rating-scale rating-scale-"+x.id:""));
   w.style.setProperty("--c","var(--c"+i+")");
-  if(isQuickMeter)w.dataset.quickMeter=x.id;
-  if(isQuickMeter){
-   var heading=el("div","quick-meter-heading");
-   var ident=el("span","quick-meter-ident");
-   ident.appendChild(el("span","quick-meter-icon",x.id==="a"?"✧":"↝"));
-   ident.appendChild(el("b",null,x.t));
-   heading.appendChild(ident);
-   heading.appendChild(el("span","quick-meter-current","Выбери"));
+  var label=el("b",null,x.t);
+  if(isVisual){
+   var heading=el("div","rating-heading");
+   heading.appendChild(label);
+   var current=el("span","rating-current","Не отмечено");
+   current.setAttribute("aria-live","polite");
+   heading.appendChild(current);
    w.appendChild(heading);
-  }else w.appendChild(el("b",null,x.t));
-  if(x.s)w.appendChild(el("small",null,x.s));
-  var o=el("div","opts"),lb=labelsFor(x),fl=full(x);
-  o.dataset.id=x.id;o.style.gridTemplateColumns="repeat("+x.n+",1fr)";if(x.n>5)o.style.gap="4px";
+  }else w.appendChild(label);
+  var description=x.s||"";
+  if(x.id==="a"&&description.indexOf("Низкое желание — это апатия")>=0)description="Насколько сегодня хотелось чем-то заниматься?";
+  if(description)w.appendChild(el("small",null,description));
+  var options=el("div","opts"+(isVisual?" rating-options":""));
+  var labels=labelsFor(x),fl=full(x);
+  options.dataset.id=x.id;
+  options.style.gridTemplateColumns="repeat("+x.n+",minmax(0,1fr))";
+  if(x.n>5)options.style.gap="4px";
   for(var k=1;k<=x.n;k++){
-   var label=lb[k-1]||"";
-   if(isMood&&(oldMoodLabels[k-1]===String(label).toLowerCase()||!label))label=newMoodLabels[k-1];
-   var b=el("button",null,isMood?"":String(k));b.type="button";b.dataset.v=k;b.setAttribute("aria-pressed","false");
-   if(isMood){
-    var art=el("span","mood-art");art.setAttribute("aria-hidden","true");
-    art.appendChild(el("i"));art.appendChild(el("b"));art.appendChild(el("em"));
-    b.appendChild(art);b.appendChild(el("span","mood-label",label));
-    b.setAttribute("aria-label",label);b.title=k===1?label+" — горящий красный метеорит":k===2?label+" — рыжая комета":label;
-   }else if(isQuickMeter){
-    b.appendChild(el("span","quick-meter-number",String(k)));
-    b.setAttribute("aria-label",x.t+": "+(lb[k-1]||String(k))+" ("+k+" из "+x.n+")");
-    b.title=lb[k-1]||String(k);
-   }else if(fl)b.appendChild(el("span",null,lb[k-1]));
-   o.appendChild(b);
+   var textLabel=labels[k-1]||"";
+   if(x.id==="m"&&x.n===5&&(previousMoodLabels[k-1]===textLabel.toLowerCase()||!textLabel))textLabel=currentMoodLabels[k-1];
+   var b=el("button",isVisual?"rating-option":null,isVisual?"":String(k));
+   b.type="button";b.dataset.v=k;b.setAttribute("aria-pressed","false");
+   if(isVisual){
+    b.dataset.ratingLabel=textLabel||String(k)+" из "+x.n;
+    b.setAttribute("aria-label",x.t+": "+b.dataset.ratingLabel+" ("+k+" из "+x.n+")");
+    b.title=b.dataset.ratingLabel;
+    b.appendChild(ratingIcon(x.id,k));
+    b.appendChild(el("span","rating-number",String(k)));
+   }else{
+    if(fl)b.appendChild(el("span",null,labels[k-1]));
+    b.setAttribute("aria-label",x.t+": "+(textLabel||k)+" ("+k+" из "+x.n+")");
+   }
+   options.appendChild(b);
   }
-  w.appendChild(o);
-  if(isQuickMeter){
-   var en=el("div","quick-meter-ends"),e2=ends(x);
-   en.appendChild(el("span",null,e2[0]));en.appendChild(el("span",null,e2[1]));
-   w.appendChild(en);
-  }else if(!fl&&!isMood){var en=el("div","ends"),e2=ends(x);en.appendChild(el("span",null,e2[0]));en.appendChild(el("span",null,e2[1]));w.appendChild(en)}
+  w.appendChild(options);
+  if(!isVisual&&!fl){
+   var endsNode=el("div","ends"),edge=ends(x);
+   endsNode.appendChild(el("span",null,edge[0]));endsNode.appendChild(el("span",null,edge[1]));
+   w.appendChild(endsNode);
+  }
   box.appendChild(w);
  });
 }
@@ -2253,17 +2330,13 @@ function updateQuickState(){
  $("quickExtraBadge").textContent=extra.length?extra.join(" · "):"Необязательно";
 }
 function paint(){
- var os=document.querySelectorAll("#scales .opts");
- for(var i=0;i<os.length;i++){
-  var id=os[i].dataset.id,bs=os[i].children,scale=cfg.scales.filter(function(x){return x.id===id})[0];
-  for(var j=0;j<bs.length;j++){
-   var val=+bs[j].dataset.v,chosen=+cur[id]||0;
-   bs[j].setAttribute("aria-pressed",String(val===chosen));
-   if(scale&&((id==="a"||id==="p")&&scale.n===5))bs[j].classList.toggle("quick-meter-filled",val<=chosen);
-  }
-  if(scale&&(id==="a"||id==="p")&&scale.n===5){
-   var status=os[i].parentNode.querySelector(".quick-meter-current");
-   if(status){var labels=labelsFor(scale);status.textContent=cur[id]?(labels[cur[id]-1]||cur[id]+" из "+scale.n):"Выбери"}
+ var options=document.querySelectorAll("#scales .opts");
+ for(var i=0;i<options.length;i++){
+  var id=options[i].dataset.id,buttons=options[i].children,chosen=+cur[id]||0;
+  for(var j=0;j<buttons.length;j++)buttons[j].setAttribute("aria-pressed",String(+buttons[j].dataset.v===chosen));
+  if(options[i].classList.contains("rating-options")){
+   var status=options[i].parentNode.querySelector(".rating-current");
+   if(status)status.textContent=chosen?(buttons[chosen-1].dataset.ratingLabel||chosen+" из "+buttons.length):"Не отмечено";
   }
  }
  updateQuickState();
