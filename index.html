@@ -2204,8 +2204,8 @@ function wr(k,v){memS[k]=v;try{localStorage.setItem(k,v)}catch(e){}}
 /* ---------- шкалы и настройки ---------- */
 function defScales(){return [
  {id:"m",t:"Настроение",s:"Выбери то, что ближе к твоему состоянию сейчас",n:5,l:["очень тяжело","тяжело","нейтрально","хорошо","отлично"]},
- {id:"a",t:"Желание что-то делать",s:"Хотелось ли чем-то заниматься. Низкое желание — это апатия",n:5,l:["совсем нет","мало","немного","есть","сильное"]},
- {id:"p",t:"Физическая активность",s:"Сколько вы двигались, ходили, занимались",n:5,l:["почти нет","мало","немного","достаточно","много"]}
+ {id:"a",t:"Желание что-то делать",s:"Хотелось ли чем-то заниматься. Низкое желание — это апатия",n:5,l:["совсем нет","слабое","умеренное","сильное","очень сильное"]},
+ {id:"p",t:"Физическая активность",s:"Сколько вы двигались, ходили, занимались",n:5,l:["почти нет","лёгкая","умеренная","высокая","очень высокая"]}
 ]}
 function validScale(x){
  if(!x||typeof x.id!=="string"||!/^[\w-]{1,20}$/.test(x.id)||typeof x.t!=="string"||NS.indexOf(x.n)<0)return null;
@@ -2288,7 +2288,9 @@ function buildScales(){
  var box=$("scales");box.textContent="";
  var previousMoodLabels=["очень плохо","плохо","так себе","хорошо","отлично"];
  var currentMoodLabels=["Очень тяжело","Тяжело","Нейтрально","Хорошо","Отлично"];
- var clearRatingLabels={a:["Совсем нет","Слабое","Умеренное","Сильное","Очень сильное"],p:["Почти нет","Немного","Умеренно","Много","Очень много"]};
+ var clearRatingLabels={a:["Совсем нет","Слабое","Умеренное","Сильное","Очень сильное"],p:["Почти нет","Лёгкая","Умеренная","Высокая","Очень высокая"]};
+ var oldRatingLabels={a:["совсем нет","мало","немного","есть","сильное"],p:["почти нет","мало","немного","достаточно","много"]};
+ function hasOldLabels(x){return full(x)&&oldRatingLabels[x.id]&&x.l.every(function(v,i){return v.toLowerCase()===oldRatingLabels[x.id][i]})}
  cfg.scales.forEach(function(x,i){
   var isVisual=(x.id==="m"||x.id==="a"||x.id==="p")&&x.n===5;
   var w=el("div","scale"+(isVisual?" rating-scale rating-scale-"+x.id:""));
@@ -2313,7 +2315,7 @@ function buildScales(){
   for(var k=1;k<=x.n;k++){
    var textLabel=labels[k-1]||"";
    if(x.id==="m"&&x.n===5&&(previousMoodLabels[k-1]===textLabel.toLowerCase()||!textLabel))textLabel=currentMoodLabels[k-1];
-   if(isVisual&&clearRatingLabels[x.id]&&!full(x))textLabel=clearRatingLabels[x.id][k-1];
+   if(isVisual&&clearRatingLabels[x.id]&&(!full(x)||hasOldLabels(x)))textLabel=clearRatingLabels[x.id][k-1];
    var b=el("button",isVisual?"rating-option":null,isVisual?"":String(k));
    b.type="button";b.dataset.v=k;b.setAttribute("aria-pressed","false");
    if(isVisual){
@@ -2322,7 +2324,7 @@ function buildScales(){
     b.title=b.dataset.ratingLabel;
     b.appendChild(ratingIcon(x.id,k));
     b.appendChild(el("span","rating-number",String(k)));
-    if(clearRatingLabels[x.id])b.appendChild(el("span","rating-caption",full(x)?textLabel:clearRatingLabels[x.id][k-1]));
+    if(clearRatingLabels[x.id])b.appendChild(el("span","rating-caption",textLabel));
    }else{
     if(fl)b.appendChild(el("span",null,labels[k-1]));
     b.setAttribute("aria-label",x.t+": "+(textLabel||k)+" ("+k+" из "+x.n+")");
