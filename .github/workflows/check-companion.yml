@@ -8,6 +8,7 @@ on:
       - feat/ui-polish-20261110
       - feat/cloudflare-web-analytics-20261110
       - feat/first-feedback-ux-share-20261111
+      - fix/beta-feedback-screens-20261111
   pull_request:
     paths:
       - index.html
@@ -15,6 +16,7 @@ on:
       - companion.css
       - polish.css
       - feedback.css
+      - screenings.js
       - sw.js
       - .github/workflows/check-companion.yml
 
@@ -70,7 +72,7 @@ jobs:
           assert 'function makeDoctor()' in js
           assert '.companion-shortcuts' in css
           assert "'./companion.js'" in sw and "'./companion.css'" in sw
-          assert 'dnevnik-v47' in sw
+          assert 'dnevnik-v48' in sw
           assert 'checkin.insertAdjacentElement("afterend",box)' in js
           assert 'makeDirectory()' in js and 'makeReturnLinks()' in js
           assert 'companionCalmShortcut' in js
@@ -105,6 +107,19 @@ jobs:
           assert 'navigator.share({title:' in html
           assert 'id="quickSaveExtras"' in html
           assert '#tab-today #quickSaveExtras.btn.sec' in feedback
+          screening=Path('screenings.js').read_text(encoding='utf-8')
+          assert 'makeAlcoholCalculator()' in screening
+          assert 'auditTips(a,points)' in screening
+          assert 'screening-context' in screening
+          assert '10 г чистого алкоголя' in screening
+          assert 'Другие болезненные переживания' in screening
+          assert 'className' not in screening.split('function auditTips(a,points)')[1].split('function render()')[0]
+          assert 'clearRatingLabels' in html
+          assert 'hasStandardLabels(x)' in html
+          assert 'rating-caption' in html and '.rating-caption' in feedback
+          assert 'scheduleSystemRender()' in html
+          assert 'dx*.0055' in html
+          assert 'screening-drink-grid' in feedback
           print('OK: UX3 and compatibility invariants passed')
           PY
       - name: Mobile browser rendering smoke test
@@ -127,4 +142,68 @@ jobs:
           assert html.index('id="scales"') < html.index('id="companionHome"') < html.index('id="after"'), 'Check-in is not before optional shortcuts'
           assert html.index('id="companionDirectory"') < html.index('class="guide-entry"'), 'Directory is not first in More'
           print('Rendered mobile DOM passed: check-in is first, all five tools are mounted')
+          PY
+      - name: Screening feedback interactive browser check
+        run: |
+          set -e
+          python3 - <<'PY'
+          from pathlib import Path
+          page=Path('index.html').read_text(encoding='utf-8')
+          test=r'''<script>
+          setTimeout(function(){
+            var root=document.documentElement;
+            try{
+              function check(ok,msg){if(!ok)throw Error(msg)}
+              function select(kind,i,v){
+                var x=document.querySelector('input[name="screening-'+kind+'-'+i+'"][value="'+v+'"]');
+                check(!!x,'Missing question '+kind+'/'+i);
+                x.checked=true;x.dispatchEvent(new Event('change',{bubbles:true}));
+              }
+              var a=[...document.querySelectorAll('#scales .rating-options[data-id="a"] .rating-caption')].map(x=>x.textContent);
+              var p=[...document.querySelectorAll('#scales .rating-options[data-id="p"] .rating-caption')].map(x=>x.textContent);
+              check(a.length===5&&a[1]==='Слабое'&&a[2]==='Умеренное','Motivation labels unclear');
+              check(p.length===5&&p[1]==='Лёгкая'&&p[2]==='Умеренная','Activity labels unclear');
+              document.querySelector('[data-screening-kind="auditc"]').click();
+              select('auditc',0,2);
+              var calculator=document.querySelector('.screening-drink-helper');
+              check(!!calculator,'Missing alcohol calculator');
+              check(calculator.querySelector('.screening-drink-result').textContent.includes('2,0'),'Wrong 500ml 5% result');
+              var drink=calculator.querySelector('select');drink.value='wine';drink.dispatchEvent(new Event('change'));
+              check(calculator.querySelector('.screening-drink-result').textContent.includes('1,4'),'Wrong wine conversion');
+              select('auditc',1,3);select('auditc',2,3);
+              document.querySelector('#screeningSave').click();
+              check(!!document.querySelector('#screeningResultSection .screening-advice'),'Missing actionable advice');
+              check(document.querySelector('#screeningResultSection').textContent.includes('Что можно понять и сделать дальше'),'Generic result');
+              document.querySelector('[data-screening-kind="pcptsd5"]').click();
+              check(!!document.querySelector('.screening-context'),'Trauma clarification missing');
+              select('pcptsd5',0,0);
+              document.querySelector('#screeningSave').click();
+              check(document.querySelector('#screeningResultSection').textContent.includes('другие тяжёлые переживания'),'Invalidating result');
+              var svg=document.querySelector('#systemSvg');
+              function point(event,x){svg.dispatchEvent(new PointerEvent(event,{bubbles:true,pointerId:17,clientX:x,clientY:90,pointerType:'touch'}))}
+              point('pointerdown',80);point('pointermove',220);point('pointerup',220);
+              var setting=JSON.parse(localStorage.getItem('dnevnik-universe-layout-v1')||'{}');
+              check(setting.yaw>.5,'Universe drag too slow or unresponsive');
+              root.dataset.betaSmoke='ok';
+            }catch(e){root.dataset.betaSmoke='fail';root.dataset.betaError=e.message}
+          },700);
+          </script>'''
+          assert page.count('</body>')==1
+          Path('__beta_smoke.html').write_text(page.replace('</body>',test+'</body>'),encoding='utf-8')
+          PY
+          python3 -m http.server 8766 --bind 127.0.0.1 >/tmp/dnevnik-beta-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          sleep 2
+          CHROME="$(command -v google-chrome || command -v chromium || true)"
+          test -n "$CHROME"
+          "$CHROME" --headless --disable-gpu --no-sandbox --disable-dev-shm-usage --virtual-time-budget=7000 --window-size=390,844 --dump-dom http://127.0.0.1:8766/__beta_smoke.html > /tmp/dnevnik-beta-dom.html
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          out=Path('/tmp/dnevnik-beta-dom.html').read_text(encoding='utf-8')
+          status=re.search(r'<html[^>]*data-beta-smoke="([^"]+)"',out)
+          error=re.search(r'data-beta-error="([^"]*)"',out)
+          assert status and status.group(1)=='ok', f'Interactive check failed: status={status.group(1) if status else "not started"}, error={error.group(1) if error else "unknown"}'
+          print('Beta feedback browser interactions passed')
           PY

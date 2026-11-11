@@ -76,10 +76,10 @@ var defs={
  pcptsd5:{
   shortTitle:"PC-PTSD-5",title:"Реакции на травматический опыт (PC-PTSD-5)",
   period:"За последний месяц (после вводного вопроса о прошлом опыте)",
-  note:"5 вопросов о симптомах + 1 вводный. Русский текст адаптирован и отдельно не валидирован. Можно остановиться в любой момент.",
+  note:"5 вопросов о симптомах + 1 вводный. Скрининг касается определённых тяжёлых событий, но не охватывает весь болезненный жизненный опыт. Русский текст адаптирован и отдельно не валидирован.",
   options:["Нет","Да"],
   items:[
-   "Происходило ли с тобой когда-либо событие, связанное с серьёзной угрозой жизни, физическим или сексуальным насилием, тяжёлой аварией, войной либо похожим травматическим опытом?",
+   "Случалось ли с тобой событие с серьёзной угрозой жизни, тяжёлой травмой, физическим или сексуальным насилием — например, тяжёлая авария, пожар, война, наблюдение тяжёлого ранения или насильственной гибели другого человека?",
    "За последний месяц возникали ли кошмары об этом событии или нежелательные воспоминания о нём?",
    "За последний месяц старался(ась) ли ты не думать о событии или избегать того, что о нём напоминает?",
    "За последний месяц чувствовал(а) ли ты постоянную настороженность, повышенную бдительность или легко пугался(ась)?",
@@ -90,7 +90,7 @@ var defs={
  auditc:{
   shortTitle:"AUDIT-C",title:"Употребление алкоголя и возможные риски (AUDIT-C)",
   period:"Привычки употребления алкоголя за последний год",
-  note:"3 вопроса · 0–12 баллов. Результат не является диагнозом зависимости. Стандартный напиток — порция с определённым количеством чистого алкоголя; в разных странах её размер отличается.",
+  note:"3 вопроса · 0–12 баллов. Здесь одна стандартная порция = 10 г чистого алкоголя (AUDIT ВОЗ), а не любой бокал или бутылка. Ниже есть калькулятор по виду напитка и объёму. Результат не является диагнозом.",
   choices:[
    ["Никогда","Раз в месяц или реже","2–4 раза в месяц","2–3 раза в неделю","4 раза в неделю или чаще"],
    ["0 напитков","1–2 напитка","3–4 напитка","5–6 напитков","7–9 напитков","10 напитков или больше"],
@@ -142,11 +142,11 @@ function dateLabel(v){
 }
 function evaluation(kind,points,a){
  if(kind==="pcptsd5"){
-  if(a[0]===0)return {title:"Вводный вопрос: травматический опыт не отмечен",description:"По инструкции PC-PTSD-5 дальнейшие вопросы пропущены, балл 0. Это не исключает трудностей и не заменяет разговор со специалистом.",urgent:false};
+  if(a[0]===0)return {title:"Опросник завершён после вводного вопроса",description:"По правилам PC-PTSD-5 следующие вопросы пропускаются. Ответ «Нет» не означает, что другие тяжёлые переживания не важны: даже события вне рамок этого скрининга могут влиять на самочувствие. При необходимости можно обсудить их со специалистом независимо от баллов.",urgent:false};
   return {title:"Отмечено симптомов: "+points+" из 5",description:points>=1?"Это самоотчёт о переживаниях за последний месяц. Если симптомы мешают, повторяются или пугают, стоит обсудить их со специалистом. По ответам диагноз не ставится.":"По отмеченным ответам симптомы не выявлены, но опросник не исключает ПТСР и другие состояния.",urgent:false};
  }
  if(kind==="auditc"){
-  return {title:"AUDIT-C: "+points+" из 12",description:points>=5?"Результат указывает на возможный риск для здоровья и повод обсудить привычки употребления со специалистом. Пороговые значения зависят от ситуации.":"Балл описывает ответы на три вопроса. Даже небольшой результат не гарантирует отсутствие связанных с алкоголем рисков.",urgent:false};
+  return {title:"AUDIT-C: "+points+" из 12",description:points>=5?"По ответам есть основания обратить внимание на характер употребления. Высокий балл может указывать на риск для здоровья, но не доказывает зависимость.":"Сумма отражает частоту и количество употребления, но сама по себе не подтверждает отсутствие проблем.",urgent:false};
  }
  if(kind==="phq9"){
   var levels=points<=4?"минимальная":points<=9?"лёгкая":points<=14?"умеренная":points<=19?"выраженная":"очень выраженная";
@@ -173,6 +173,46 @@ function evaluation(kind,points,a){
 function safetyText(){
  return "Вы отметили мысли о смерти или причинении вреда себе. Даже при небольшой общей сумме это важно обсудить со специалистом как можно скорее. Если сейчас есть опасность причинить себе вред, обратитесь в местную экстренную службу (в ЕС — 112) и попросите близкого человека побыть с вами.";
 }
+function makeAlcoholCalculator(){
+ var wrap=node("div","screening-drink-helper");
+ wrap.appendChild(node("b",null,"Сначала выбери напиток, потом объём"));
+ wrap.appendChild(node("p","note","1 стандартная порция по AUDIT ВОЗ = 10 г чистого алкоголя. Бокал или банка могут содержать больше одной порции."));
+ var grid=node("div","screening-drink-grid"),kindLabel=node("label",null,"Напиток"),kind=node("select");
+ [["beer","Пиво"],["wine","Вино"],["cider","Сидр"],["spirits","Крепкий алкоголь"],["other","Другой"]].forEach(function(k){var o=node("option",null,k[1]);o.value=k[0];kind.appendChild(o)});
+ kindLabel.appendChild(kind);grid.appendChild(kindLabel);
+ function numberField(label,value,min,max,step){
+  var w=node("label",null,label),input=node("input");
+  input.type="number";input.inputMode="decimal";input.min=String(min);input.max=String(max);input.step=String(step);input.value=String(value);
+  w.appendChild(input);grid.appendChild(w);return input;
+ }
+ var volume=numberField("Всего за обычный день, мл",500,0,5000,10);
+ var strength=numberField("Крепость, %",5,0,96,.5);
+ wrap.appendChild(grid);
+ var result=node("p","screening-drink-result");result.setAttribute("aria-live","polite");wrap.appendChild(result);
+ wrap.appendChild(node("p","note","Если напитки разные — посчитай каждый отдельно и сложи. Этот расчёт не сохраняется и не выбирает ответ за тебя."));
+ var presets={beer:[500,5],wine:[150,12],cider:[500,5],spirits:[50,40],other:[250,5]};
+ function update(){
+  var ml=Number(volume.value),pct=Number(strength.value);
+  if(volume.value===""||strength.value===""||!Number.isFinite(ml)||!Number.isFinite(pct)||ml<0||ml>5000||pct<0||pct>96){result.textContent="Введи объём от 0 до 5000 мл и крепость от 0 до 96 %.";return}
+  result.textContent="≈ "+(ml*pct*.789/100/10).toFixed(1).replace(".",",")+" стандартных порций.";
+ }
+ kind.addEventListener("change",function(){var preset=presets[kind.value];volume.value=preset[0];strength.value=preset[1];update()});
+ volume.addEventListener("input",update);strength.addEventListener("input",update);update();
+ return wrap;
+}
+function auditTips(a,points){
+ var box=node("div","screening-advice"),list=node("ul");
+ box.appendChild(node("h3",null,"Что можно понять и сделать дальше"));
+ if(a[1]>=2)list.appendChild(node("li",null,"В обычный день отмечено не меньше трёх стандартных порций. Пересчитай реальные объёмы и крепость: большой бокал не обязательно равен одной порции."));
+ if(a[2]>=2)list.appendChild(node("li",null,"Шесть и более порций за один раз бывают хотя бы ежемесячно. Большое количество за один вечер заслуживает внимания, даже если употребление нечастое."));
+ if(a[0]>=3)list.appendChild(node("li",null,"Алкоголь употребляется несколько раз в неделю. Можно заметить, как такие дни сочетаются со сном, настроением и самочувствием утром."));
+ if(!list.children.length)list.appendChild(node("li",null,"Сумма не показывает всех индивидуальных рисков: важны объём, крепость, лекарства, состояние здоровья и последствия употребления."));
+ list.appendChild(node("li",null,"Практический шаг: несколько дней записывай фактические миллилитры и крепость напитков, чтобы лучше понять свой привычный объём."));
+ if(points>=5||a[2]>=2)list.appendChild(node("li",null,"Если употребление мешает жизни, есть потеря контроля или вопросы о совместимости с лекарствами — обсуди ответы с врачом."));
+ box.appendChild(list);
+ box.appendChild(node("p","note","Это подсказки для самонаблюдения, а не диагноз или оценка личности."));
+ return box;
+}
 function render(){
  document.querySelectorAll("[data-screening-kind]").forEach(function(btn){
   btn.setAttribute("aria-pressed",String(btn.dataset.screeningKind===active));
@@ -187,6 +227,9 @@ function render(){
   var field=node("fieldset","screening-question");
   var legend=node("legend","screening-legend",(i+1)+". "+q);
   field.appendChild(legend);
+  if(active==="pcptsd5"&&i===0)field.appendChild(node("p","screening-context","Этот опросник проверяет реакции на определённые особенно тяжёлые события. Другие болезненные переживания тоже могут серьёзно влиять на качество жизни. Ответ «Нет» здесь не обесценивает их и не означает, что помощь не нужна."));
+  if(active==="auditc"&&i===1)field.appendChild(makeAlcoholCalculator());
+  if(active==="auditc"&&i===2)field.appendChild(node("p","screening-context","Шесть стандартных порций — около 60 г чистого алкоголя. Калькулятор выше поможет перевести в понятный объём."));
   var choices=node("div","screening-choices");
   var labels=def.choices?def.choices[i]:def.options;
   labels.forEach(function(label,j){
@@ -223,6 +266,7 @@ function renderResult(kind,answersRow){
  var resultHeading=node("h2",null,e.title);resultHeading.tabIndex=-1;out.appendChild(resultHeading);
  out.appendChild(node("p","screening-total",kind==="who5"?(total*4+" / 100 баллов"):(total+" / "+maxScore(kind)+" баллов")));
  out.appendChild(node("p","note",e.description));
+ if(kind==="auditc")out.appendChild(auditTips(a,total));
  if(e.urgent){
   var notice=node("div","screening-safety");notice.setAttribute("role","alert");notice.textContent=safetyText();out.appendChild(notice);
  }
@@ -231,8 +275,8 @@ function renderResult(kind,answersRow){
  asrm:"Это ориентировочный чек-лист по мотивам ASRM (порог 6 баллов). Русские формулировки не проходили отдельной проверки точности; диагноз по сумме ставить нельзя.",
  gad7:"GAD-7 — скрининг тревожных симптомов (0–4, 5–9, 10–14, 15–21). Русские формулировки адаптированы, результаты не являются диагнозом.",
  who5:"Пять пунктов благополучия, адаптированных по мотивам WHO-5: сумма 0–25 × 4 = 0–100. Порог ≤50 ориентировочный, русская адаптация не является официальной версией ВОЗ.",
- pcptsd5:"PC-PTSD-5: создан VA National Center for PTSD (США), общественное достояние. Русский текст — адаптация, отдельно не проверенная на валидность. При тревожных симптомах важна профессиональная оценка.",
- auditc:"AUDIT-C: короткий алкогольный скрининг ВОЗ. Русские формулировки адаптированы; результат не является диагнозом."
+ pcptsd5:"PC-PTSD-5 разработан VA National Center for PTSD (США). Он охватывает только определённые виды событий — другие переживания тоже могут влиять на здоровье. Русская адаптация отдельно не валидирована.",
+ auditc:"AUDIT-C: короткий алкогольный скрининг ВОЗ. В вопросах о количестве 1 стандартная порция = 10 г чистого алкоголя. Русские формулировки адаптированы; результат не является диагнозом."
  };
  out.appendChild(node("p","note",notes[kind]||"Результат не заменяет профессиональную оценку."));
  if(kind==="asrm")out.appendChild(node("p","note","При резком уменьшении сна, рискованных поступках, сильном возбуждении или необычных убеждениях лучше обратиться за медицинской помощью, даже если сумма невысокая."));
