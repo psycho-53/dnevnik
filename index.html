@@ -2290,7 +2290,7 @@ function buildScales(){
  var currentMoodLabels=["Очень тяжело","Тяжело","Нейтрально","Хорошо","Отлично"];
  var clearRatingLabels={a:["Совсем нет","Слабое","Умеренное","Сильное","Очень сильное"],p:["Почти нет","Лёгкая","Умеренная","Высокая","Очень высокая"]};
  var oldRatingLabels={a:["совсем нет","мало","немного","есть","сильное"],p:["почти нет","мало","немного","достаточно","много"]};
- function hasOldLabels(x){return full(x)&&oldRatingLabels[x.id]&&x.l.every(function(v,i){return v.toLowerCase()===oldRatingLabels[x.id][i]})}
+ function hasStandardLabels(x){return !!(full(x)&&oldRatingLabels[x.id]&&(x.l.every(function(v,i){return v.toLowerCase()===oldRatingLabels[x.id][i]})||x.l.every(function(v,i){return v.toLowerCase()===clearRatingLabels[x.id][i].toLowerCase()})))}
  cfg.scales.forEach(function(x,i){
   var isVisual=(x.id==="m"||x.id==="a"||x.id==="p")&&x.n===5;
   var w=el("div","scale"+(isVisual?" rating-scale rating-scale-"+x.id:""));
@@ -2315,7 +2315,7 @@ function buildScales(){
   for(var k=1;k<=x.n;k++){
    var textLabel=labels[k-1]||"";
    if(x.id==="m"&&x.n===5&&(previousMoodLabels[k-1]===textLabel.toLowerCase()||!textLabel))textLabel=currentMoodLabels[k-1];
-   if(isVisual&&clearRatingLabels[x.id]&&(!full(x)||hasOldLabels(x)))textLabel=clearRatingLabels[x.id][k-1];
+   if(isVisual&&clearRatingLabels[x.id]&&(!full(x)||hasStandardLabels(x)))textLabel=clearRatingLabels[x.id][k-1];
    var b=el("button",isVisual?"rating-option":null,isVisual?"":String(k));
    b.type="button";b.dataset.v=k;b.setAttribute("aria-pressed","false");
    if(isVisual){
