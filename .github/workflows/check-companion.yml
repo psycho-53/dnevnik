@@ -115,7 +115,7 @@ jobs:
           assert 'Другие болезненные переживания' in screening
           assert 'className' not in screening.split('function auditTips(a,points)')[1].split('function render()')[0]
           assert 'clearRatingLabels' in html
-          assert 'hasOldLabels(x)' in html
+          assert 'hasStandardLabels(x)' in html
           assert 'rating-caption' in html and '.rating-caption' in feedback
           assert 'scheduleSystemRender()' in html
           assert 'dx*.0055' in html
