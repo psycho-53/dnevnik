@@ -2288,6 +2288,7 @@ function buildScales(){
  var box=$("scales");box.textContent="";
  var previousMoodLabels=["очень плохо","плохо","так себе","хорошо","отлично"];
  var currentMoodLabels=["Очень тяжело","Тяжело","Нейтрально","Хорошо","Отлично"];
+ var clearRatingLabels={a:["Совсем нет","Слабое","Умеренное","Сильное","Очень сильное"],p:["Почти нет","Немного","Умеренно","Много","Очень много"]};
  cfg.scales.forEach(function(x,i){
   var isVisual=(x.id==="m"||x.id==="a"||x.id==="p")&&x.n===5;
   var w=el("div","scale"+(isVisual?" rating-scale rating-scale-"+x.id:""));
@@ -2312,6 +2313,7 @@ function buildScales(){
   for(var k=1;k<=x.n;k++){
    var textLabel=labels[k-1]||"";
    if(x.id==="m"&&x.n===5&&(previousMoodLabels[k-1]===textLabel.toLowerCase()||!textLabel))textLabel=currentMoodLabels[k-1];
+   if(isVisual&&clearRatingLabels[x.id]&&!full(x))textLabel=clearRatingLabels[x.id][k-1];
    var b=el("button",isVisual?"rating-option":null,isVisual?"":String(k));
    b.type="button";b.dataset.v=k;b.setAttribute("aria-pressed","false");
    if(isVisual){
@@ -2320,6 +2322,7 @@ function buildScales(){
     b.title=b.dataset.ratingLabel;
     b.appendChild(ratingIcon(x.id,k));
     b.appendChild(el("span","rating-number",String(k)));
+    if(clearRatingLabels[x.id])b.appendChild(el("span","rating-caption",full(x)?textLabel:clearRatingLabels[x.id][k-1]));
    }else{
     if(fl)b.appendChild(el("span",null,labels[k-1]));
     b.setAttribute("aria-label",x.t+": "+(textLabel||k)+" ("+k+" из "+x.n+")");
@@ -2522,7 +2525,11 @@ var SYSTEM_KEY="dnevnik-universe-layout-v1";
 var SYSTEM_DEFAULTS={noctis:205,selena:330,auria:330,signal:150};
 var SYSTEM_ORBITS={1:[180,90],2:[265,132],3:[350,175],4:[430,215]};
 var systemYaw=0,systemPitch=.38,systemZoom=1,systemAngles=Object.assign({},SYSTEM_DEFAULTS);
-var activePointer=null,draggingObject=null,dragMoved=false;
+var activePointer=null,draggingObject=null,dragMoved=false,systemDrawFrame=0;
+function scheduleSystemRender(){
+ if(systemDrawFrame)return;
+ systemDrawFrame=requestAnimationFrame(function(){systemDrawFrame=0;renderSystem(false)});
+}
 
 function collectionToast(ids){
  var first=COLLECTION.filter(function(x){return x.id===ids[0]})[0];if(!first)return;
@@ -2634,7 +2641,7 @@ function initSystem(){
  try{
   var saved=JSON.parse(rd(SYSTEM_KEY)||"null");
   if(saved){
-   systemYaw=Math.max(-1,Math.min(1,Number(saved.yaw)||0));
+   systemYaw=Math.max(-1.15,Math.min(1.15,Number(saved.yaw)||0));
    systemPitch=Math.max(.12,Math.min(.9,Number(saved.pitch)||.38));
    systemZoom=Math.max(.72,Math.min(1.35,Number(saved.zoom)||1));
    if(saved.angles&&typeof saved.angles==="object"){
@@ -2649,6 +2656,7 @@ function initSystem(){
  $("resetView").addEventListener("click",function(){systemYaw=0;systemPitch=.38;systemZoom=1;renderSystem(true)});
  var svg=$("systemSvg");
  svg.addEventListener("pointerdown",function(e){
+  if(activePointer!==null)return;
   var obj=e.target.closest(".object");
   if(obj){
    if(!cfg.collection||!cfg.collection[obj.dataset.id]){e.preventDefault();return}
@@ -2659,20 +2667,21 @@ function initSystem(){
    svg.dataset.startX=e.clientX;svg.dataset.startY=e.clientY;
    svg.dataset.startYaw=systemYaw;svg.dataset.startPitch=systemPitch;
   }
+  svg.classList.add("is-interacting");
   try{svg.setPointerCapture(e.pointerId)}catch(_){}
  });
  svg.addEventListener("pointermove",function(e){
   if(activePointer!==e.pointerId)return;
   if(draggingObject){
    var p=systemPoint(e);systemAngles[draggingObject]=angleOnOrbit(p,draggingObject);
-   dragMoved=true;renderSystem(false);
+   dragMoved=true;scheduleSystemRender();
   }else{
    var dx=e.clientX-Number(svg.dataset.startX||e.clientX);
    var dy=e.clientY-Number(svg.dataset.startY||e.clientY);
    if(Math.abs(dx)>3||Math.abs(dy)>3)dragMoved=true;
-   systemYaw=Math.max(-1,Math.min(1,Number(svg.dataset.startYaw||0)+dx*.0025));
-   systemPitch=Math.max(.12,Math.min(.9,Number(svg.dataset.startPitch||.38)-dy*.0022));
-   renderSystem(false);
+   systemYaw=Math.max(-1.15,Math.min(1.15,Number(svg.dataset.startYaw||0)+dx*.0055));
+   systemPitch=Math.max(.12,Math.min(.9,Number(svg.dataset.startPitch||.38)-dy*.0048));
+   scheduleSystemRender();
   }
  });
  function finishPointer(e,cancelled){
@@ -2683,6 +2692,8 @@ function initSystem(){
    if(!cancelled&&!dragMoved)openObject(id);
   }
   try{if(svg.hasPointerCapture(e.pointerId))svg.releasePointerCapture(e.pointerId)}catch(_){}
+  if(systemDrawFrame){cancelAnimationFrame(systemDrawFrame);systemDrawFrame=0;renderSystem(false)}
+  svg.classList.remove("is-interacting");
   saveSystemLayout();activePointer=null;draggingObject=null;dragMoved=false;
  }
  svg.addEventListener("pointerup",function(e){finishPointer(e,false)});
